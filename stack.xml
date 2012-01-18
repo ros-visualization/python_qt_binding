@@ -1,0 +1,24 @@
+<stack>
+  <description brief="python_qt_binding">
+
+This stack provides python bindings for Qt.
+There are two providers: pyqt and pyside.  PyQt is released under the
+GPL, which can be too restrictive.  Therefore this package also
+provides Pyside when available.  Pyside uses the LGPL license, but is
+not available via normal debian package channels on Ubuntu Lucid.
+
+Both the bindings and tools to build bindings are included from each
+available provider.  For PyQt, this is called &quot;SIP&quot;.  For Pyside, it
+is called &quot;Shiboken&quot; (and other tools).
+
+Also provided is adapter code to make the user's python code
+independent of which binding provider was actually used.
+
+  </description>
+  <author>Dave Hershberger, Dirk Thomas</author>
+  <license>BSD,GPL,LGPL</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/python_qt_binding</url>
+  <depend stack="ros" />
+
+</stack>
