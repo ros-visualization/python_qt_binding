@@ -22,4 +22,9 @@ independent of which binding provider was actually used.
 
   <rosdep name="qt4-qmake"/>
   <rosdep name="python-qt-bindings"/>
+
+  <export>
+    <cpp cflags="-I${prefix}/include"/> <!-- hack until catkin and CFG_EXTRA enables to pass package information -->
+  </export>
+
 </package>
