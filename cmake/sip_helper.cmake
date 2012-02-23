@@ -14,6 +14,10 @@ function(build_sip_binding PROJECT_NAME SIP_CONFIGURE SIP_FILE DEPENDED_SIPS HDR
         COMMENT "Running SIP generator for ${PROJECT_NAME} Python bindings..."
     )
 
+    if(NOT EXISTS "${LIBRARY_DIR}")
+        file(MAKE_DIRECTORY ${LIBRARY_DIR})
+    endif()
+
     add_custom_target(lib${PROJECT_NAME}.so ALL
         COMMAND make
         DEPENDS ${SIP_BUILD_DIR}/Makefile
