@@ -1,3 +1,13 @@
+find_program(SIP_EXECUTABLE sip)
+
+if(NOT SIP_EXECUTABLE_NOTFOUND)
+  message("SIP binding generator available.")
+  set(sip_helper_FOUND TRUE)
+else()
+  message(WARNING "SIP binding generator NOT available.")
+  set(sip_helper_NOTFOUND TRUE)
+endif()
+
 function(build_sip_binding PROJECT_NAME SIP_CONFIGURE SIP_FILE DEPENDED_SIPS HDRS SOURCE_DIR LIBRARY_DIR BINARY_DIR)
     set(SIP_BUILD_DIR ${BINARY_DIR}/sip/${PROJECT_NAME})
 

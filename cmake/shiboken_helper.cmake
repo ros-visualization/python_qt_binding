@@ -1,7 +1,15 @@
-find_package(GeneratorRunner REQUIRED)
-find_package(Shiboken REQUIRED)
-find_package(PySide REQUIRED)
-find_package(PythonLibs REQUIRED)
+find_package(GeneratorRunner)
+find_package(Shiboken)
+find_package(PySide)
+find_package(PythonLibs)
+
+if(GeneratorRunner_FOUND AND Shiboken_FOUND AND PySide_FOUND AND PYTHONLIBS_FOUND)
+  message("Shiboken binding generator available.")
+  set(shiboken_helper_FOUND TRUE)
+else()
+  message(WARNING "Shiboken binding generator NOT available.")
+  set(shiboken_helper_NOTFOUND TRUE)
+endif()
 
 
 function(shiboken_generator PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED_SRCS HDRS INCLUDE_PATH BUILD_DIR)

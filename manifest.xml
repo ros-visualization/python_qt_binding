@@ -20,11 +20,14 @@ independent of which binding provider was actually used.
   <review status="unreviewed"/>
   <url>http://ros.org/wiki/python_qt_binding</url>
 
+  <depend package="rosbuild"/>
+
   <rosdep name="qt4-qmake"/>
   <rosdep name="python-qt-bindings"/>
 
   <export>
-    <cpp cflags="-I${prefix}/include"/> <!-- hack until catkin and CFG_EXTRA enables to pass package information -->
+    <rosbuild cmake_directory="${prefix}/cmake"/>
+    <cpp cflags="-I${prefix}/include"/> <!-- hack until catkin and CFG_EXTRA enables to pass path to sip_configure.py -->
   </export>
 
 </package>
