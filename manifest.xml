@@ -1,17 +1,17 @@
 <package>
   <description brief="Python bindings for the Qt widget library, plus helpers for writing other Python bindings.">
 
-This stack provides python bindings for Qt.
+This stack provides Python bindings for Qt.
 There are two providers: pyqt and pyside.  PyQt is released under the
 GPL, which can be too restrictive.  Therefore this package also
-provides Pyside when available.  Pyside uses the LGPL license, but is
-not available via normal debian package channels on Ubuntu Lucid.
+provides PySide when available.  PySide uses the LGPL license, but is
+not available via normal Debian package channels on Ubuntu Lucid.
 
 Both the bindings and tools to build bindings are included from each
-available provider.  For PyQt, this is called "SIP".  For Pyside, it
+available provider.  For PyQt, this is called "SIP".  For PySide, it
 is called "Shiboken" (and other tools).
 
-Also provided is adapter code to make the user's python code
+Also provided is adapter code to make the user's Python code
 independent of which binding provider was actually used.
 
   </description>
