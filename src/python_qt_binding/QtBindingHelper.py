@@ -46,17 +46,19 @@ def select_qt_binding(binding_name=None):
         DEFAULT_BINDING_ORDER = [bindings[binding_name]]
 
     # try to load preferred bindings
+    errors = {}
     for binding in DEFAULT_BINDING_ORDER:
         try:
             QT_BINDING_VERSION = binding()
             QT_BINDING = binding.__name__
             break
-        except ImportError:
-            pass
+        except ImportError, e:
+            errors[binding.__name__] = e
 
     if QT_BINDING is None:
         bindings = [binding.__name__ for binding in DEFAULT_BINDING_ORDER]
-        raise ImportError('Could not find Qt binding (looked for "%s")' % bindings)
+        error_msgs = ['  ImportError for "%s": %s' % (binding, errors[binding]) for binding in bindings]
+        raise ImportError('Could not find Qt binding (looked for "%s"):\n%s' % (bindings, '\n'.join(error_msgs)))
 
 
 def pyqt():
