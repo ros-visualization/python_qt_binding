@@ -1,9 +1,16 @@
-find_package(GeneratorRunner)
 find_package(Shiboken)
 find_package(PySide)
 find_package(PythonLibs)
 
-if(GeneratorRunner_FOUND AND Shiboken_FOUND AND PySide_FOUND AND PYTHONLIBS_FOUND)
+if(Shiboken_FOUND AND (Shiboken_VERSION VERSION_GREATER "1.1.0"))
+  # starting from version 1.1.1 shiboken brings along it's own generator binary
+  set(GeneratorRunner_FOUND TRUE)
+  set(GENERATORRUNNER_BINARY ${SHIBOKEN_BINARY})
+else()
+  find_package(GeneratorRunner)
+endif()
+
+if(GeneratorRunner_FOUND AND PySide_FOUND AND PYTHONLIBS_FOUND)
   message("Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
 else()
