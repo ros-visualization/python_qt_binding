@@ -67,13 +67,16 @@ def pyqt():
 
     # select PyQt4 API, see http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/incompatible_apis.html
     import sip
-    sip.setapi('QDate', 2)
-    sip.setapi('QDateTime', 2)
-    sip.setapi('QString', 2)
-    sip.setapi('QTextStream', 2)
-    sip.setapi('QTime', 2)
-    sip.setapi('QUrl', 2)
-    sip.setapi('QVariant', 2)
+    try:
+        sip.setapi('QDate', 2)
+        sip.setapi('QDateTime', 2)
+        sip.setapi('QString', 2)
+        sip.setapi('QTextStream', 2)
+        sip.setapi('QTime', 2)
+        sip.setapi('QUrl', 2)
+        sip.setapi('QVariant', 2)
+    except ValueError, e:
+        raise RuntimeError('Could not set API version (%s): did you imported PyQt4 directly?' % e)
 
     # register PyQt4 modules
     import PyQt4.QtCore, PyQt4.QtGui, PyQt4.QtOpenGL, PyQt4.QtSvg
