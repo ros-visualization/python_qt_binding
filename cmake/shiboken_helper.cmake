@@ -2,7 +2,15 @@ find_package(Shiboken)
 find_package(PySide)
 find_package(PythonLibs)
 
-if(PySide_FOUND AND PYTHONLIBS_FOUND)
+if(Shiboken_FOUND AND (Shiboken_VERSION VERSION_GREATER "1.1.0"))
+  # starting from version 1.1.1 shiboken brings along it's own generator binary
+  set(GeneratorRunner_FOUND TRUE)
+  set(GENERATORRUNNER_BINARY ${SHIBOKEN_BINARY})
+else()
+  find_package(GeneratorRunner)
+endif()
+
+if(GeneratorRunner_FOUND AND PySide_FOUND AND PYTHONLIBS_FOUND)
   message("Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
 else()
@@ -17,7 +25,7 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
     foreach(dir ${QT_INCLUDE_DIR})
         set(QT_INCLUDE_DIR_WITH_COLONS "${QT_INCLUDE_DIR_WITH_COLONS}:${dir}")
     endforeach()
-    set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --include-paths=${INCLUDE_PATH}:${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
+    set(${VAR} ${GENERATORRUNNER_BINARY} --generatorSet=shiboken --include-paths=${INCLUDE_PATH}:${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
 endmacro()
 
 

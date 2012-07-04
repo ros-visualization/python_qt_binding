@@ -13,8 +13,7 @@ macro(shiboken_check_compiles VAR SOURCE_HEADER GLOBAL_HEADER TYPESYSTEM_XML)
     set(GLOBAL_HEADER "${GLOBAL_HEADER}\n#include <source.h>\n")
 
     file(WRITE "${_PATH}/source.h" "${SOURCE_HEADER}")
-    file(WRITE "${_PATH}/global.h" "${GLOBAL_HEADER}
-        #include \"source.h\"")
+    file(WRITE "${_PATH}/global.h" "${GLOBAL_HEADER}")
     file(WRITE "${_PATH}/typesystem.xml" "${TYPESYSTEM_XML}")
 
     message(STATUS "Performing Test ${VAR}")
