@@ -30,7 +30,9 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os, sys
+import os
+import sys
+
 
 def select_qt_binding(binding_name=None):
     global QT_BINDING, QT_BINDING_VERSION
@@ -45,11 +47,30 @@ def select_qt_binding(binding_name=None):
             raise ImportError('Qt binding "%s" is unknown' % binding_name)
         DEFAULT_BINDING_ORDER = [bindings[binding_name]]
 
+    required_modules = [
+        'QtCore',
+        'QtGui'
+    ]
+    optional_modules = [
+        'QtDeclarative',
+        'QtMultimedia',
+        'QtNetwork',
+        'QtOpenGL',
+        'QtOpenVG',
+        'QtScript',
+        'QtScriptTools'
+        'QtSql',
+        'QtSvg',
+        'QtWebKit',
+        'QtXml',
+        'QtXmlPatterns',
+    ]
+
     # try to load preferred bindings
     errors = {}
     for binding in DEFAULT_BINDING_ORDER:
         try:
-            QT_BINDING_VERSION = binding()
+            QT_BINDING_VERSION = binding(required_modules, optional_modules)
             QT_BINDING = binding.__name__
             break
         except ImportError, e:
@@ -61,8 +82,26 @@ def select_qt_binding(binding_name=None):
         raise ImportError('Could not find Qt binding (looked for "%s"):\n%s' % (bindings, '\n'.join(error_msgs)))
 
 
-def pyqt():
-    # set enviroment variable QT_API for matplotlib
+def _named_import(name):
+    import __builtin__
+    parts = name.split('.')
+    assert(len(parts) >= 2)
+    module = __builtin__.__import__(name)
+    for m in parts[1:]:
+        module = module.__dict__[m]
+    sys.modules[parts[-1]] = module
+    QT_BINDING_MODULES.append(parts[-1])
+
+
+def _named_optional_import(name):
+    try:
+        _named_import(name)
+    except ImportError:
+        pass
+
+
+def pyqt(required_modules, optional_modules):
+    # set environment variable QT_API for matplotlib
     os.environ['QT_API'] = 'pyqt'
 
     # select PyQt4 API, see http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/incompatible_apis.html
@@ -78,12 +117,11 @@ def pyqt():
     except ValueError, e:
         raise RuntimeError('Could not set API version (%s): did you imported PyQt4 directly?' % e)
 
-    # register PyQt4 modules
-    import PyQt4.QtCore, PyQt4.QtGui, PyQt4.QtOpenGL, PyQt4.QtSvg
-    sys.modules['QtCore'] = PyQt4.QtCore
-    sys.modules['QtGui'] = PyQt4.QtGui
-    sys.modules['QtOpenGL'] = PyQt4.QtOpenGL
-    sys.modules['QtSvg'] = PyQt4.QtSvg
+    # register required and optional PyQt4 modules
+    for module_name in required_modules:
+        _named_import('PyQt4.%s' % module_name)
+    for module_name in optional_modules:
+        _named_optional_import('PyQt4.%s' % module_name)
 
     # set some names for compatibility with PySide
     sys.modules['QtCore'].Signal = sys.modules['QtCore'].pyqtSignal
@@ -94,10 +132,12 @@ def pyqt():
     try:
         import PyQt4.Qwt5
         sys.modules['Qwt'] = PyQt4.Qwt5
+        QT_BINDING_MODULES.append('Qwt')
     except ImportError:
         pass
 
     global loadUi
+
     def loadUi(uifile, baseinstance=None, custom_widgets=None):
         from PyQt4 import uic
         return uic.loadUi(uifile, baseinstance=baseinstance)
@@ -110,16 +150,16 @@ def pyqt():
     return PyQt4.QtCore.PYQT_VERSION_STR
 
 
-def pyside():
-    # set enviroment variable QT_API for matplotlib
+def pyside(required_modules, optional_modules):
+    # set environment variable QT_API for matplotlib
     os.environ['QT_API'] = 'pyside'
 
-    # register PySide modules
-    import PySide.QtCore, PySide.QtGui, PySide.QtOpenGL, PySide.QtSvg
-    sys.modules['QtCore'] = PySide.QtCore
-    sys.modules['QtGui'] = PySide.QtGui
-    sys.modules['QtOpenGL'] = PySide.QtOpenGL
-    sys.modules['QtSvg'] = PySide.QtSvg
+    # register required and optional PySide modules
+    import PySide
+    for module_name in required_modules:
+        _named_import('PySide.%s' % module_name)
+    for module_name in optional_modules:
+        _named_optional_import('PySide.%s' % module_name)
 
     # set some names for compatibility with PyQt4
     sys.modules['QtCore'].pyqtSignal = sys.modules['QtCore'].Signal
@@ -130,10 +170,12 @@ def pyside():
     try:
         import PySideQwt
         sys.modules['Qwt'] = PySideQwt
+        QT_BINDING_MODULES.append('Qwt')
     except ImportError:
         pass
 
     global loadUi
+
     def loadUi(uifile, baseinstance=None, custom_widgets=None):
         from PySide.QtUiTools import QUiLoader
         from PySide.QtCore import QMetaObject
@@ -183,7 +225,7 @@ def pyside():
 
 
 QT_BINDING = None
+QT_BINDING_MODULES = []
 QT_BINDING_VERSION = None
 
 select_qt_binding(getattr(sys, 'SELECT_QT_BINDING', None))
-
