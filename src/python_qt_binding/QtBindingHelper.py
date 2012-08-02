@@ -147,6 +147,7 @@ def pyqt(required_modules, optional_modules):
     QFileDialog.getOpenFileName = QFileDialog.getOpenFileNameAndFilter
     QFileDialog.getSaveFileName = QFileDialog.getSaveFileNameAndFilter
 
+    import PyQt4.QtCore
     return PyQt4.QtCore.PYQT_VERSION_STR
 
 
