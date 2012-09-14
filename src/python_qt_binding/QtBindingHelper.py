@@ -32,7 +32,7 @@
 
 import os
 import sys
-
+import __builtin__
 
 def select_qt_binding(binding_name=None):
     global QT_BINDING, QT_BINDING_VERSION
@@ -81,23 +81,30 @@ def select_qt_binding(binding_name=None):
         error_msgs = ['  ImportError for "%s": %s' % (binding, errors[binding]) for binding in bindings]
         raise ImportError('Could not find Qt binding (looked for "%s"):\n%s' % (bindings, '\n'.join(error_msgs)))
 
+def _register_binding_module(module_name, module):
+    # register module using only its own name
+    sys.modules[module_name] = module
+    # register module as sub module of current module (QtBindingHelper) 
+    sys.modules[__name__ + '.' + module_name] = module
+    # add module to namespace of current module (QtBindingHelper)
+    setattr(sys.modules[__name__], module_name, module)
+    # add module to the binding modules
+    QT_BINDING_MODULES[module_name] = module
 
 def _named_import(name):
-    import __builtin__
     parts = name.split('.')
     assert(len(parts) >= 2)
     module = __builtin__.__import__(name)
     for m in parts[1:]:
         module = module.__dict__[m]
-    sys.modules[parts[-1]] = module
-    QT_BINDING_MODULES.append(parts[-1])
-
+    module_name = parts[-1]
+    _register_binding_module(module_name, module)
 
 def _named_optional_import(name):
     try:
         _named_import(name)
-    except ImportError:
-        pass
+    except ImportError, e:
+        print 'QtBindingHelper: could not import "%s": %s' % (name, e)
 
 
 def pyqt(required_modules, optional_modules):
@@ -115,7 +122,7 @@ def pyqt(required_modules, optional_modules):
         sip.setapi('QUrl', 2)
         sip.setapi('QVariant', 2)
     except ValueError, e:
-        raise RuntimeError('Could not set API version (%s): did you imported PyQt4 directly?' % e)
+        raise RuntimeError('Could not set API version (%s): did you import PyQt4 directly?' % e)
 
     # register required and optional PyQt4 modules
     for module_name in required_modules:
@@ -131,8 +138,7 @@ def pyqt(required_modules, optional_modules):
     # try to register PyQt4.Qwt5 module
     try:
         import PyQt4.Qwt5
-        sys.modules['Qwt'] = PyQt4.Qwt5
-        QT_BINDING_MODULES.append('Qwt')
+        _register_binding_module('Qwt', PyQt4.Qwt5)
     except ImportError:
         pass
 
@@ -156,7 +162,6 @@ def pyside(required_modules, optional_modules):
     os.environ['QT_API'] = 'pyside'
 
     # register required and optional PySide modules
-    import PySide
     for module_name in required_modules:
         _named_import('PySide.%s' % module_name)
     for module_name in optional_modules:
@@ -170,8 +175,7 @@ def pyside(required_modules, optional_modules):
     # try to register PySideQwt module
     try:
         import PySideQwt
-        sys.modules['Qwt'] = PySideQwt
-        QT_BINDING_MODULES.append('Qwt')
+        _register_binding_module('Qwt', PySideQwt)
     except ImportError:
         pass
 
@@ -222,11 +226,12 @@ def pyside(required_modules, optional_modules):
         QMetaObject.connectSlotsByName(ui)
         return ui
 
+    import PySide
     return PySide.__version__
 
 
 QT_BINDING = None
-QT_BINDING_MODULES = []
+QT_BINDING_MODULES = {}
 QT_BINDING_VERSION = None
 
 select_qt_binding(getattr(sys, 'SELECT_QT_BINDING', None))
