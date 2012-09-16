@@ -101,7 +101,8 @@ def _named_optional_import(name):
     try:
         _named_import(name)
     except ImportError, e:
-        print 'QtBindingHelper: could not import "%s": %s' % (name, e)
+        #print 'QtBindingHelper: could not import "%s": %s' % (name, e)
+        pass
 
 
 def _load_pyqt(required_modules, optional_modules):
