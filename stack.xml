@@ -19,9 +19,9 @@ independent of which binding provider was actually used.
   </description>
   
   <author>Dave Hershberger</author>
-  <author email="dthomas@willowgarage.com">Dirk Thomas</author>
   <author>Dorian Scholz</author>
-  <copyright>Willow Garage</copyright>
+  <author email="dthomas@willowgarage.com">Dirk Thomas</author>
+  <copyright>TU Darmstadt</copyright>
   <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
   <license>BSD, LGPL, GPL</license>
   <url>http://ros.org/wiki/python_qt_binding</url>

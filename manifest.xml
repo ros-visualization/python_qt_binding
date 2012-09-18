@@ -15,7 +15,7 @@ Also provided is adapter code to make the user's Python code
 independent of which binding provider was actually used.
 
   </description>
-  <author>Dave Hershberger, Dirk Thomas</author>
+  <author>Dave Hershberger, Dorian Scholz, Dirk Thomas</author>
   <license>BSD, LGPL, GPL</license>
   <review status="unreviewed"/>
   <url>http://ros.org/wiki/python_qt_binding</url>
