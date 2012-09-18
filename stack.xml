@@ -1,4 +1,6 @@
 <stack>
+  <name>python_qt_binding</name>
+  <version>0.2.0</version>
   <description brief="python_qt_binding">
 
 This stack provides Python bindings for Qt.
@@ -15,9 +17,17 @@ Also provided is adapter code to make the user's Python code
 independent of which binding provider was actually used.
 
   </description>
-  <author>Dave Hershberger, Dirk Thomas</author>
+  
+  <author>Dave Hershberger</author>
+  <author>Dirk Thomas</author>
+  <author>Dorian Scholz</author>
+  <copyright>Willow Garage</copyright>
+  <maintainer>Dirk Thomas</maintainer>
   <license>BSD, LGPL, GPL</license>
-  <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/python_qt_binding</url>
 
+  <build_depends>catkin</build_depends>
+  <build_depends>qt4-qmake</build_depends>
+  <build_depends>python-qt-bindings</build_depends>
+  <depends>python-qt-bindings</depends>
 </stack>
