@@ -19,10 +19,10 @@ independent of which binding provider was actually used.
   </description>
   
   <author>Dave Hershberger</author>
-  <author>Dirk Thomas</author>
+  <author email="dthomas@willowgarage.com">Dirk Thomas</author>
   <author>Dorian Scholz</author>
   <copyright>Willow Garage</copyright>
-  <maintainer>Dirk Thomas</maintainer>
+  <maintainer email="dthomas@willowgarage.com">Dirk Thomas</maintainer>
   <license>BSD, LGPL, GPL</license>
   <url>http://ros.org/wiki/python_qt_binding</url>
 
