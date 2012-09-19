@@ -1,6 +1,6 @@
 <stack>
   <name>python_qt_binding</name>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
   <description brief="python_qt_binding">
 
 This stack provides Python bindings for Qt.
