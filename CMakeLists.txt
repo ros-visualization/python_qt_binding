@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(python_qt_bindings)
+project(python_qt_binding)
 find_package(catkin)
 catkin_stack()
 catkin_project(${PROJECT_NAME})
