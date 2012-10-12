@@ -1,4 +1,4 @@
-<stack>
+<package>
   <name>python_qt_binding</name>
   <version>0.2.1</version>
   <description brief="python_qt_binding">
@@ -26,8 +26,6 @@ independent of which binding provider was actually used.
   <license>BSD, LGPL, GPL</license>
   <url>http://ros.org/wiki/python_qt_binding</url>
 
-  <build_depends>catkin</build_depends>
-  <build_depends>qt4-qmake</build_depends>
-  <build_depends>python-qt-bindings</build_depends>
-  <depends>python-qt-bindings</depends>
-</stack>
+  <build_depend>catkin</build_depend>
+  <build_depend>qt4-qmake</build_depend>
+</package>

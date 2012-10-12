@@ -1,21 +1,10 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 from distutils.core import setup
-import sys
-from xml.etree.ElementTree import ElementTree
+from catkin_pkg.package import parse_package_for_distutils
 
-try:
-    root = ElementTree(None, 'stack.xml')
-    version = root.findtext('version')
-except Exception as e:
-    print('Could not extract version from your stack.xml:\n%s' % e, file=sys.stderr)
-    sys.exit(-1)
+d = parse_package_for_distutils()
+d['packages'] = ['python_qt_binding']
+d['package_dir'] = {'': 'src'}
 
-
-setup(name='Python Qt binding',
-      version=version,
-      description='Qt bindings for ROS',
-      packages=['python_qt_binding'],
-      package_dir={'':'src'}
-)
+setup(**d)
