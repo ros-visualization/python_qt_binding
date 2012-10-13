@@ -1,0 +1,5 @@
+if(@BUILDSPACE@)
+ set(python_qt_binding_EXTRAS_DIR @CMAKE_CURRENT_SOURCE_DIR@/cmake)
+else()
+ set(python_qt_binding_EXTRAS_DIR @CMAKE_INSTALL_PREFIX@/@CATKIN_PACKAGE_SHARE_DESTINATION@/cmake)
+endif()
