@@ -5,7 +5,7 @@
 #  <global_header>  - source code of global.h, the inldue for the file containing source_header is appended internally
 #  <typesystem_xml> - typesystem xml
 
-include(shiboken_helper)
+include(${python_qt_binding_EXTRAS_DIR}/shiboken_helper.cmake)
 
 macro(shiboken_check_compiles VAR SOURCE_HEADER GLOBAL_HEADER TYPESYSTEM_XML)
     set(_PATH "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/shiboken_check_compiles")

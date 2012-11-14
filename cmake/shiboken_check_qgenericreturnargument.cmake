@@ -5,7 +5,7 @@
 find_package(Qt4 REQUIRED COMPONENTS QtCore)
 include(${QT_USE_FILE})
 
-include(shiboken_check_compiles)
+include(${python_qt_binding_EXTRAS_DIR}/shiboken_check_compiles.cmake)
 
 macro(shiboken_check_qgenericreturnargument SHIBOKEN_QGENERICRETURNARGUMENT_SUPPORT)
   set(SOURCE_HEADER "#include <QGenericReturnArgument>

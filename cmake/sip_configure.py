@@ -48,6 +48,14 @@ makefile = pyqtconfig.QtGuiModuleMakefile(
   build_file=build_file
 )
 
+# hack to override makefile behavior which always prepend -l to libraries which is wrong for absolute paths
+default_platform_lib_function = pyqtconfig.QtGuiModuleMakefile.platform_lib
+def custom_platform_lib_function(self, clib, framework=0):
+    if os.path.isabs(clib):
+        return clib
+    return default_platform_lib_function(self, clib, framework)
+pyqtconfig.QtGuiModuleMakefile.platform_lib = custom_platform_lib_function
+
 for include_dir in include_dirs.split(' '):
     makefile.extra_include_dirs.append(include_dir)
 for lib in libs.split(' '):

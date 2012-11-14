@@ -2,8 +2,9 @@ find_package(Shiboken)
 find_package(PySide)
 find_package(PythonLibs)
 
-if(Shiboken_FOUND AND (Shiboken_VERSION VERSION_GREATER "1.1.0"))
+if(Shiboken_FOUND AND (NOT Shiboken_VERSION VERSION_LESS "1.1.0"))
   # starting from version 1.1.1 shiboken brings along it's own generator binary
+  # still under Ubuntu precise it also works with shiboken 1.1.0
   set(GeneratorRunner_FOUND TRUE)
   set(GENERATORRUNNER_BINARY ${SHIBOKEN_BINARY})
 else()
@@ -11,7 +12,7 @@ else()
 endif()
 
 if(GeneratorRunner_FOUND AND PySide_FOUND AND PYTHONLIBS_FOUND)
-  message("Shiboken binding generator available.")
+  message(STATUS "Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
 else()
   message(WARNING "Shiboken binding generator NOT available.")

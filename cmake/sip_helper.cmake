@@ -140,7 +140,7 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
 endif()
 
 if(NOT SIP_EXECUTABLE_NOTFOUND)
-  message("SIP binding generator available.")
+  message(STATUS "SIP binding generator available.")
   set(sip_helper_FOUND TRUE)
 else()
   message(WARNING "SIP binding generator NOT available.")
