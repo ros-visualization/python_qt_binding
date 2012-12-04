@@ -1,12 +1,10 @@
 import os
 import sys
-import roslib
-import sipconfig
 from PyQt4 import pyqtconfig
 
 if len(sys.argv) != 8:
-  print 'usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % (sys.argv[0])
-  exit(1)
+    print 'usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % (sys.argv[0])
+    exit(1)
 
 # The SIP build folder, the SIP file, the output directory, the include directories, the libraries, the library directories and the linker flags.
 build_dir, sip_file, output_dir, include_dirs, libs, lib_dirs, ldflags = sys.argv[1:]
@@ -23,9 +21,9 @@ config = pyqtconfig.Configuration()
 qt_sip_flags = config.pyqt_sip_flags
 
 try:
-  os.makedirs(build_dir)
+    os.makedirs(build_dir)
 except OSError:
-  pass
+    pass
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
@@ -50,6 +48,8 @@ makefile = pyqtconfig.QtGuiModuleMakefile(
 
 # hack to override makefile behavior which always prepend -l to libraries which is wrong for absolute paths
 default_platform_lib_function = pyqtconfig.QtGuiModuleMakefile.platform_lib
+
+
 def custom_platform_lib_function(self, clib, framework=0):
     if os.path.isabs(clib):
         return clib
