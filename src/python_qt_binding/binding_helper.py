@@ -154,8 +154,9 @@ def _load_pyqt(required_modules, optional_modules):
                              If specified then the user interface is created in
                              it. Otherwise a new instance of the base class is
                              automatically created.
-        @param custom_widgets: Unlike pyside binding, this argument won't be
-                               used. Ref: http://answers.ros.org/question/56382/what-does-python_qt_bindingloaduis-3rd-arg-do-in-pyqt-binding/
+        @param custom_widgets: Unlike the method with the same name in pyside
+                               binding, this argument won't be used. Ref:
+                               http://answers.ros.org/question/56382/what-does-python_qt_bindingloaduis-3rd-arg-do-in-pyqt-binding/
         """
         from PyQt4 import uic
         return uic.loadUi(uifile, baseinstance=baseinstance)
