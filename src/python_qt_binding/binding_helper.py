@@ -42,7 +42,7 @@ def _select_qt_binding(binding_name=None):
     DEFAULT_BINDING_ORDER = ['pyqt', 'pyside']
 
     # determine binding preference
-    if binding_name is not None:
+    if binding_name:
         if binding_name not in DEFAULT_BINDING_ORDER:
             raise ImportError('Qt binding "%s" is unknown' % binding_name)
         DEFAULT_BINDING_ORDER = [binding_name]
@@ -71,7 +71,7 @@ def _select_qt_binding(binding_name=None):
     for binding_name in DEFAULT_BINDING_ORDER:
         try:
             binding_loader = getattr(sys.modules[__name__], '_load_%s' % binding_name, None)
-            if binding_loader is not None:
+            if binding_loader:
                 QT_BINDING_VERSION = binding_loader(required_modules, optional_modules)
                 QT_BINDING = binding_name
                 break
@@ -80,7 +80,7 @@ def _select_qt_binding(binding_name=None):
         except ImportError, e:
             error_msgs.append('  ImportError for "%s": %s' % (binding_name, e))
 
-    if QT_BINDING is None:
+    if not QT_BINDING:
         raise ImportError('Could not find Qt binding (looked for "%s"):\n%s' % (DEFAULT_BINDING_ORDER, '\n'.join(error_msgs)))
 
 
@@ -198,7 +198,7 @@ def _load_pyside(required_modules, optional_modules):
 
             def createWidget(self, class_name, parent=None, name=''):
                 # don't create the top-level widget, if a base instance is set
-                if self._base_instance is not None and parent is None:
+                if self._base_instance and not parent:
                     return self._base_instance
 
                 if class_name in self._custom_widgets:
@@ -209,7 +209,7 @@ def _load_pyside(required_modules, optional_modules):
                 if str(type(widget)).find(self.class_aliases.get(class_name, class_name)) < 0:
                     sys.modules['QtCore'].qDebug(str('PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' % (class_name, type(widget))))
 
-                if self._base_instance is not None:
+                if self._base_instance:
                     setattr(self._base_instance, name, widget)
 
                 return widget
