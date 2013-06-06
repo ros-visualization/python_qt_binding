@@ -143,21 +143,9 @@ def _load_pyqt(required_modules, optional_modules):
     except ImportError:
         pass
 
-    global loadUi
+    global _loadUi
 
-    def loadUi(uifile, baseinstance=None, custom_widgets=None):
-        """
-        @type uifile: str
-        @param uifile: Absolute path of .ui file
-        @type baseinstance: QWidget
-        @param baseinstance: the optional instance of the Qt base class.
-                             If specified then the user interface is created in
-                             it. Otherwise a new instance of the base class is
-                             automatically created.
-        @param custom_widgets: Unlike the method with the same name in pyside
-                               binding, this argument won't be used. Ref:
-                               http://answers.ros.org/question/56382/what-does-python_qt_bindingloaduis-3rd-arg-do-in-pyqt-binding/
-        """
+    def _loadUi(uifile, baseinstance=None, custom_widgets_=None):
         from PyQt4 import uic
         return uic.loadUi(uifile, baseinstance=baseinstance)
 
@@ -192,22 +180,9 @@ def _load_pyside(required_modules, optional_modules):
     except ImportError:
         pass
 
-    global loadUi
+    global _loadUi
 
-    def loadUi(uifile, baseinstance=None, custom_widgets=None):
-        """
-        @type uifile: str
-        @param uifile: Absolute path of .ui file
-        @type baseinstance: QWidget
-        @param baseinstance: the optional instance of the Qt base class.
-                             If specified then the user interface is created in
-                             it. Otherwise a new instance of the base class is
-                             automatically created.
-        @type custom_widgets: dict of {str:QWidget}
-        @param custom_widgets: Class name and type of the custom classes used
-                               in uifile if any. This can be None if no custom
-                               class is in use.
-        """
+    def _loadUi(uifile, baseinstance=None, custom_widgets=None):
         from PySide.QtUiTools import QUiLoader
         from PySide.QtCore import QMetaObject
 
@@ -254,6 +229,26 @@ def _load_pyside(required_modules, optional_modules):
 
     import PySide
     return PySide.__version__
+
+
+def loadUi(uifile, baseinstance=None, custom_widgets=None):
+    """
+    @type uifile: str
+    @param uifile: Absolute path of .ui file
+    @type baseinstance: QWidget
+    @param baseinstance: the optional instance of the Qt base class.
+                         If specified then the user interface is created in
+                         it. Otherwise a new instance of the base class is
+                         automatically created.
+    @type custom_widgets: dict of {str:QWidget}
+    @param custom_widgets: Class name and type of the custom classes used
+                           in uifile if any. This can be None if no custom
+                           class is in use. (Note: this is only necessary
+                           for PySide, see
+                           http://answers.ros.org/question/56382/what-does-python_qt_bindingloaduis-3rd-arg-do-in-pyqt-binding/
+                           for more information)
+    """
+    return _loadUi(uifile, baseinstance, custom_widgets)
 
 
 QT_BINDING = None
