@@ -4,24 +4,8 @@ try:
 except ImportError:
     from distutils.core import setup
 
-setup(
-    name='python_qt_binding',
-    version='0.2.10',
-    description='''This stack provides Python bindings for Qt.
-    There are two providers: pyside and pyqt.  PySide is released under
-    the LGPL.  PyQt is released under the GPL.
-
-    Both the bindings and tools to build bindings are included from each
-    available provider.  For PySide, it is called "Shiboken".  For PyQt,
-    this is called "SIP".
-
-    Also provided is adapter code to make the user's Python code
-    independent of which binding provider was actually used which makes
-    it very easy to switch between these.''',
-    author='Dave Hershberger, Dorian Scholz, Dirk Thomas',
-    packages=['python_qt_binding'],
-    package_dir={'': 'src'},
-    
+setup_opts = dict(
+	package_dir={'': 'src'},
     classifiers = [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -33,3 +17,29 @@ setup(
         'License :: OSI Approved :: GNU General Public License (GPL)',
     ]
 )
+	
+try:
+	from catkin_pkg.python_setup import generate_distutils_setup
+except ImportError:
+	import xml.etree.ElementTree as ET
+	tree = ET.parse('package.xml')
+
+	root = tree.getroot()
+
+	setup_opts['name'] = root.find("./name").text
+	setup_opts['version'] = root.find("./version").text
+	setup_opts['description'] = root.find("./description").text.strip()
+	setup_opts['url'] = root.find("./url").text
+	setup_opts['author'] = ', '.join([x.text for x in root.findall("./author")])
+	setup_opts['packages'] = [setup_opts['name']]
+	
+	mt = root.find("./maintainer")
+	setup_opts['maintainer'] = mt.text
+	setup_opts['maintainer_email'] = mt.attrib['email']
+
+	setup(**setup_opts)
+else:
+	d = generate_distutils_setup(**setup_opts)
+	setup(**d)
+	
+
