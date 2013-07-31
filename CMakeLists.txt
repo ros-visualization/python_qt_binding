@@ -6,5 +6,8 @@ catkin_package(CFG_EXTRAS python_qt_binding-extras.cmake)
 
 catkin_python_setup()
 
-install(DIRECTORY cmake
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(FILES
+  cmake/shiboken_helper.cmake
+  cmake/sip_configure.py
+  cmake/sip_helper.cmake
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake)
