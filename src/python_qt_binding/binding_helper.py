@@ -30,22 +30,28 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import __builtin__
 import os
 import sys
-import __builtin__
 
 
-def _select_qt_binding(binding_name=None):
+QT_BINDING = None
+QT_BINDING_MODULES = {}
+QT_BINDING_VERSION = None
+
+
+def _select_qt_binding(binding_name=None, binding_order=None):
     global QT_BINDING, QT_BINDING_VERSION
 
     # order of default bindings can be changed here
     DEFAULT_BINDING_ORDER = ['pyqt', 'pyside']
+    binding_order = binding_order or DEFAULT_BINDING_ORDER
 
     # determine binding preference
     if binding_name:
-        if binding_name not in DEFAULT_BINDING_ORDER:
-            raise ImportError('Qt binding "%s" is unknown' % binding_name)
-        DEFAULT_BINDING_ORDER = [binding_name]
+        if binding_name not in binding_order:
+            raise ImportError("Qt binding '%s' is unknown" % binding_name)
+        binding_order = [binding_name]
 
     required_modules = [
         'QtCore',
@@ -68,7 +74,7 @@ def _select_qt_binding(binding_name=None):
 
     # try to load preferred bindings
     error_msgs = []
-    for binding_name in DEFAULT_BINDING_ORDER:
+    for binding_name in binding_order:
         try:
             binding_loader = getattr(sys.modules[__name__], '_load_%s' % binding_name, None)
             if binding_loader:
@@ -76,12 +82,12 @@ def _select_qt_binding(binding_name=None):
                 QT_BINDING = binding_name
                 break
             else:
-                error_msgs.append('  Binding loader "_load_%s" not found.' % binding_name)
-        except ImportError, e:
-            error_msgs.append('  ImportError for "%s": %s' % (binding_name, e))
+                error_msgs.append("  Binding loader '_load_%s' not found." % binding_name)
+        except ImportError as e:
+            error_msgs.append("  ImportError for '%s': %s" % (binding_name, e))
 
     if not QT_BINDING:
-        raise ImportError('Could not find Qt binding (looked for "%s"):\n%s' % (DEFAULT_BINDING_ORDER, '\n'.join(error_msgs)))
+        raise ImportError("Could not find Qt binding (looked for: %s):\n%s" % (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
 def _register_binding_module(module_name, module):
@@ -112,7 +118,7 @@ def _load_pyqt(required_modules, optional_modules):
     # set environment variable QT_API for matplotlib
     os.environ['QT_API'] = 'pyqt'
 
-    # select PyQt4 API, see http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/incompatible_apis.html
+    # select PyQt4 API, see http://pyqt.sourceforge.net/Docs/PyQt4/incompatible_apis.html
     import sip
     try:
         sip.setapi('QDate', 2)
@@ -122,7 +128,7 @@ def _load_pyqt(required_modules, optional_modules):
         sip.setapi('QTime', 2)
         sip.setapi('QUrl', 2)
         sip.setapi('QVariant', 2)
-    except ValueError, e:
+    except ValueError as e:
         raise RuntimeError('Could not set API version (%s): did you import PyQt4 directly?' % e)
 
     # register required and optional PyQt4 modules
@@ -251,8 +257,7 @@ def loadUi(uifile, baseinstance=None, custom_widgets=None):
     return _loadUi(uifile, baseinstance, custom_widgets)
 
 
-QT_BINDING = None
-QT_BINDING_MODULES = {}
-QT_BINDING_VERSION = None
-
-_select_qt_binding(getattr(sys, 'SELECT_QT_BINDING', None))
+_select_qt_binding(
+    getattr(sys, 'SELECT_QT_BINDING', None),
+    getattr(sys, 'SELECT_QT_BINDING_ORDER', None),
+)

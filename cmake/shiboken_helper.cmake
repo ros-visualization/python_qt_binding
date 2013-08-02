@@ -1,3 +1,8 @@
+if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
+  return()
+endif()
+set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
+
 find_package(Shiboken)
 find_package(PySide)
 find_package(PythonLibs)
@@ -30,6 +35,27 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
 endmacro()
 
 
+#
+# Run the Shiboken generator.
+#
+# :param PROJECT_NAME: The name of the shiboken project is only use for
+#   the custom command comment
+# :type PROJECT_NAME: string
+# :param GLOBAL: the SIP file
+# :type GLOBAL: string
+# :param TYPESYSTEM: the typesystem file
+# :type TYPESYSTEM: string
+# :param WORKING_DIR: the working directory
+# :type WORKING_DIR: string
+# :param GENERATED_SRCS: the generated source files
+# :type GENERATED_SRCS: list of strings
+# :param HDRS: the processed header files
+# :type HDRS: list of strings
+# :param INCLUDE_PATH: the include path
+# :type INCLUDE_PATH: list of strings
+# :param BUILD_DIR: the build directory
+# :type BUILD_DIR: string
+#
 function(shiboken_generator PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED_SRCS HDRS INCLUDE_PATH BUILD_DIR)
     _shiboken_generator_command(COMMAND "${GLOBAL}" "${TYPESYSTEM}" "${INCLUDE_PATH}" "${BUILD_DIR}")
     add_custom_command(
@@ -42,6 +68,14 @@ function(shiboken_generator PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED
 endfunction()
 
 
+#
+# Add the Shiboken/PySide specific include directories.
+#
+# :param PROJECT_NAME: The namespace of the binding
+# :type PROJECT_NAME: string
+# :param QT_COMPONENTS: the Qt components
+# :type QT_COMPONENTS: list of strings
+#
 function(shiboken_include_directories PROJECT_NAME QT_COMPONENTS)
     set(shiboken_INCLUDE_DIRECTORIES
         ${PYTHON_INCLUDE_DIR}
@@ -59,13 +93,21 @@ function(shiboken_include_directories PROJECT_NAME QT_COMPONENTS)
 endfunction()
 
 
+#
+# Add the Shiboken/PySide specific link libraries.
+#
+# :param PROJECT_NAME: The target name of the binding library
+# :type PROJECT_NAME: string
+# :param QT_COMPONENTS: the Qt components
+# :type QT_COMPONENTS: list of strings
+#
 function(shiboken_target_link_libraries PROJECT_NAME QT_COMPONENTS)
     set(shiboken_LINK_LIBRARIES
         ${SHIBOKEN_PYTHON_LIBRARIES}
         ${SHIBOKEN_LIBRARY}
         ${PYSIDE_LIBRARY}
     )
- 
+
     foreach(component ${QT_COMPONENTS})
         string(TOUPPER ${component} component)
         set(shiboken_LINK_LIBRARIES ${shiboken_LINK_LIBRARIES} ${QT_${component}_LIBRARY})
