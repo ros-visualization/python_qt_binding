@@ -29,6 +29,7 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+
 """
 Abstraction for different Python Qt bindings.
 
@@ -38,7 +39,16 @@ The Qt modules can be imported like this:
 from python_qt_binding.QtCore import QObject
 from python_qt_binding import QtGui, loadUi
 
-All available modules are listed in QT_BINDING_MODULES.
+The name of the selected binding is available in QT_BINDING.
+The version of the selected binding is available in QT_BINDING_VERSION.
+All available Qt modules are listed in QT_BINDING_MODULES.
+
+The default binding order ('pyqt', 'pyside') can be overridden with a
+SELECT_QT_BINDING_ORDER attribute on sys:
+  setattr(sys, 'SELECT_QT_BINDING_ORDER', [FIRST_NAME, NEXT_NAME, ..])
+
+A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
+  setattr(sys, 'SELECT_QT_BINDING', MY_BINDING_NAME)
 """
 
 import sys

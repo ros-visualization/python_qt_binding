@@ -3,7 +3,19 @@ if(__PYTHON_QT_BINDING_SIP_HELPER_INCLUDED)
 endif()
 set(__PYTHON_QT_BINDING_SIP_HELPER_INCLUDED TRUE)
 
+set(__PYTHON_QT_BINDING_SIP_HELPER_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+find_package(PythonInterp REQUIRED)
+assert(PYTHON_EXECUTABLE)
+
 find_program(SIP_EXECUTABLE sip)
+if(NOT SIP_EXECUTABLE_NOTFOUND)
+  message(STATUS "SIP binding generator available.")
+  set(sip_helper_FOUND TRUE)
+else()
+  message(WARNING "SIP binding generator NOT available.")
+  set(sip_helper_NOTFOUND TRUE)
+endif()
 
 # Provide cmake_parse_arguments() for versions of cmake before 2.8.3.
 if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
@@ -139,28 +151,39 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
   endfunction(CMAKE_PARSE_ARGUMENTS _options _singleArgs _multiArgs)
 endif()
 
-if(NOT SIP_EXECUTABLE_NOTFOUND)
-  message(STATUS "SIP binding generator available.")
-  set(sip_helper_FOUND TRUE)
-else()
-  message(WARNING "SIP binding generator NOT available.")
-  set(sip_helper_NOTFOUND TRUE)
-endif()
-
+#
+# Run the SIP generator and compile the generated code into a library.
+#
+# .. note:: The target lib${PROJECT_NAME} is created.
+#
+# :param PROJECT_NAME: The name of the sip project
+# :type PROJECT_NAME: string
+# :param SIP_FILE: the SIP file to be processed
+# :type SIP_FILE: string
+#
+# The following options can be used to override the default behavior:
+#   SIP_CONFIGURE: the used configure script for SIP
+#     (default: sip_configure.py in the same folder as this file)
+#   SOURCE_DIR: the source dir (default: ${PROJECT_SOURCE_DIR}/src)
+#   LIBRARY_DIR: the library dir (default: ${PROJECT_SOURCE_DIR}/src)
+#   BINARY_DIR: the binary dir (default: ${PROJECT_BINARY_DIR})
+#
+# The following keywords arguments can be used to specify:
+#   DEPENDS: depends for the custom command
+#     (should list all sip and header files)
+#   DEPENDENCIES: target dependencies
+#     (should list the library for which SIP generates the bindings)
+#
 function(build_sip_binding PROJECT_NAME SIP_FILE)
-    set(oneValueArgs SIP_CONFIGURE SOURCE_DIR LIBRARY_DIR BINARY_DIR)
-    set(multiValueArgs DEPENDS DEPENDENCIES)
-    cmake_parse_arguments(sip "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments(sip "" "SIP_CONFIGURE;SOURCE_DIR;LIBRARY_DIR;BINARY_DIR" "DEPENDS;DEPENDENCIES" ${ARGN})
     if(sip_UNPARSED_ARGUMENTS)
         message(WARNING "build_sip_binding(${PROJECT_NAME}) called with unused arguments: ${sip_UNPARSED_ARGUMENTS}")
     endif()
 
     # set default values for optional arguments
     if(NOT sip_SIP_CONFIGURE)
-        # without catkin and CFG_EXTRAS the variable can not be set inside that script
-        message(FATAL_ERROR "build_sip_binding(${PROJECT_NAME}) missing argument: SIP_CONFIGURE")
-        # in the future set default value to sip_configure.py in this directory
-        #set(sip_SIP_CONFIGURE ${python_qt_binding_SOURCE_DIR}/cmake/sip_configure.py)
+        # default to sip_configure.py in this directory
+        set(sip_SIP_CONFIGURE ${__PYTHON_QT_BINDING_SIP_HELPER_DIR}/sip_configure.py)
     endif()
     if(NOT sip_SOURCE_DIR)
         set(sip_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
@@ -179,7 +202,6 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
 
-    assert(PYTHON_EXECUTABLE)
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
         COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR} \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
