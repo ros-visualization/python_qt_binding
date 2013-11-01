@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from PyQt4 import pyqtconfig
 
@@ -56,17 +57,25 @@ def custom_platform_lib_function(self, clib, framework=0):
     return default_platform_lib_function(self, clib, framework)
 pyqtconfig.QtGuiModuleMakefile.platform_lib = custom_platform_lib_function
 
-for include_dir in include_dirs.split(' '):
+# split paths on whitespace
+# while dealing with whitespaces within the paths if they are escaped with backslashes
+def split_paths(paths):
+  paths = re.split('(?<=[^\\\\]) ', paths)
+  return paths
+
+for include_dir in split_paths(include_dirs):
+    include_dir = include_dir.replace('\\', '')
     makefile.extra_include_dirs.append(include_dir)
-for lib in libs.split(' '):
+for lib in split_paths(libs):
     makefile.extra_libs.append(lib)
-for lib_dir in lib_dirs.split(' '):
+for lib_dir in split_paths(lib_dirs):
+    lib_dir = lib_dir.replace('\\', '')
     makefile.extra_lib_dirs.append(lib_dir)
 for ldflag in ldflags.split('\\ '):
     makefile.LFLAGS.append(ldflag)
 
 # redirect location of generated library
-makefile._target = os.path.join(output_dir, makefile._target)
+makefile._target = '"%s"' % os.path.join(output_dir, makefile._target)
 
 # Generate the Makefile itself
 makefile.generate()
