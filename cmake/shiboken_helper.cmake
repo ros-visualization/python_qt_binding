@@ -3,6 +3,7 @@ if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
 endif()
 set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 
+set(PYTHON_SUFFIX -python2.7)
 find_package(Shiboken)
 find_package(PySide)
 find_package(PythonLibs)
