@@ -29,22 +29,22 @@ except OSError:
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
 os.system(' '.join([
-  config.sip_bin,
-  '-c', build_dir,
-  '-b', os.path.join(build_dir, build_file),
-  '-I', config.pyqt_sip_dir,
-  '-w',
-  qt_sip_flags,
-  sip_file
+    config.sip_bin,
+    '-c', build_dir,
+    '-b', os.path.join(build_dir, build_file),
+    '-I', config.pyqt_sip_dir,
+    '-w',
+    qt_sip_flags,
+    sip_file
 ]))
 
 # Create the Makefile.  The QtModuleMakefile class provided by the
 # pyqtconfig module takes care of all the extra preprocessor, compiler and
 # linker flags needed by the Qt library.
 makefile = pyqtconfig.QtGuiModuleMakefile(
-  dir=build_dir,
-  configuration=config,
-  build_file=build_file
+    dir=build_dir,
+    configuration=config,
+    build_file=build_file
 )
 
 # hack to override makefile behavior which always prepend -l to libraries which is wrong for absolute paths
@@ -57,11 +57,12 @@ def custom_platform_lib_function(self, clib, framework=0):
     return default_platform_lib_function(self, clib, framework)
 pyqtconfig.QtGuiModuleMakefile.platform_lib = custom_platform_lib_function
 
+
 # split paths on whitespace
 # while dealing with whitespaces within the paths if they are escaped with backslashes
 def split_paths(paths):
-  paths = re.split('(?<=[^\\\\]) ', paths)
-  return paths
+    paths = re.split('(?<=[^\\\\]) ', paths)
+    return paths
 
 for include_dir in split_paths(include_dirs):
     include_dir = include_dir.replace('\\', '')
