@@ -4,8 +4,8 @@ import sys
 from PyQt4 import pyqtconfig
 
 if len(sys.argv) != 8:
-    print 'usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % (sys.argv[0])
-    exit(1)
+    print('usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % sys.argv[0])
+    sys.exit(1)
 
 # The SIP build folder, the SIP file, the output directory, the include directories, the libraries, the library directories and the linker flags.
 build_dir, sip_file, output_dir, include_dirs, libs, lib_dirs, ldflags = sys.argv[1:]
