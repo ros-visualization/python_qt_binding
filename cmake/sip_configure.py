@@ -1,5 +1,6 @@
 import os
 import re
+import subprocess
 import sys
 from PyQt4 import pyqtconfig
 
@@ -28,15 +29,16 @@ except OSError:
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
-os.system(' '.join([
+cmd = [
     config.sip_bin,
     '-c', build_dir,
     '-b', os.path.join(build_dir, build_file),
     '-I', config.pyqt_sip_dir,
-    '-w',
-    qt_sip_flags,
-    sip_file
-]))
+    '-w'
+]
+cmd += qt_sip_flags.split(' ')
+cmd.append(sip_file)
+subprocess.check_call(cmd)
 
 # Create the Makefile.  The QtModuleMakefile class provided by the
 # pyqtconfig module takes care of all the extra preprocessor, compiler and
