@@ -2,6 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix sip arguments when path contains spaces
+
 0.2.12 (2014-01-08)
 -------------------
 * python 3 compatibility
