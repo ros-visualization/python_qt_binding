@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.13 (2014-05-07)
+-------------------
 * fix sip arguments when path contains spaces
 
 0.2.12 (2014-01-08)
