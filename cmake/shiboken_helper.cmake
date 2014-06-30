@@ -22,8 +22,8 @@ find_package(PySide)
 if(PYSIDE_LIBRARY)
   message("Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
 endif()
-set(PythonLibs_FIND_VERSION "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-find_package(PythonLibs)
+set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 if(Shiboken_FOUND AND (NOT Shiboken_VERSION VERSION_LESS "1.1.0"))
   # starting from version 1.1.1 shiboken brings along it's own generator binary
