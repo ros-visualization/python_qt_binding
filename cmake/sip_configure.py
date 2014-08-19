@@ -13,7 +13,7 @@ except ImportError:
         """The class that represents PyQt configuration values.
         """
         def __init__(self):
-            qtconfig = subprocess.check_output(["qmake-qt4", "-query"])
+            qtconfig = subprocess.check_output(["qmake-qt4", "-query"], universal_newlines=True)
             qtconfig = dict(x.split(":", 1) for x in qtconfig.splitlines())
             
             pyqtconfig = {
