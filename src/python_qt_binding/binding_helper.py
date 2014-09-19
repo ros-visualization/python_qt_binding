@@ -30,7 +30,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import __builtin__
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
 import os
 import sys
 
@@ -100,7 +103,7 @@ def _register_binding_module(module_name, module):
 def _named_import(name):
     parts = name.split('.')
     assert(len(parts) >= 2)
-    module = __builtin__.__import__(name)
+    module = builtins.__import__(name)
     for m in parts[1:]:
         module = module.__dict__[m]
     module_name = parts[-1]
