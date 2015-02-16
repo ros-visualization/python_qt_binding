@@ -37,14 +37,14 @@ Example use:
     from python_qt_binding.loadqrc import loadqrc
     loadqrc('myresource.qrc')
 
-Should work for both Python 2 and 3.
+This module should be compatible with both Python 2.7 and Python 3.x.
 """
 import sys
 import os
 import imp
 import subprocess
 
-from .binding_helper import QT_BINDING, QT_BINDING_VERSION
+from .binding_helper import QT_BINDING, QT_BINDING_VERSION, QT_BINDING_MODULES
 
 
 def import_from_string(module_name, string):
@@ -70,29 +70,54 @@ def import_from_string(module_name, string):
 
 def loadqrc(qrcfile, rcc=None):
     """Compiles `qrcfile` on the fly and imports it.  A reference to the
-    new module is returned.
+    new module is returned.  None is returned if the resource compiler
+    cannot be located.
 
     The resource compiler is determined from the current qt bindings and
-    python version, but can be specified manually with the rcc argument.
+    python version, but can be specified manually with the `rcc` argument.
     """
     module_name = os.path.splitext(os.path.basename(qrcfile))[0]
     if module_name in sys.modules:
         return sys.modules[module_name]
 
+    qtdir = os.path.dirname(QT_BINDING_MODULES['QtCore'].__file__)
+
+    extra_paths = []  # Search paths for resource compiler in addition to PATH
     if not rcc:
         if QT_BINDING == 'pyqt':
+            extra_paths = [qtdir]
             rcc = 'pyrcc4' if QT_BINDING_VERSION.startswith('4') else 'pyrcc'
         elif QT_BINDING == 'pyside':
+            extra_paths = [os.path.join(qtdir, 'PySide')]
             rcc = 'pyside-rcc'
         else:
             raise ValueError(
                 '`qt_binding` must be either "pyqt" or "pyside. Got %r"' %
-                qt_binding)
+                QT_BINDING)
 
-    cmd = '%s -py%d %s' % (rcc, sys.version_info.major, qrcfile)
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-    string = p.communicate()[0]
-    return import_from_string(module_name, string)
+    isexe = lambda path: os.path.isfile(path) and os.access(path, os.X_OK)
 
+    if not isexe(rcc):
+        paths = extra_paths + os.environ['PATH'].split(os.pathsep)
+        for path in paths:
+            f = os.path.join(path, rcc)
+            for ext in '', '.exe':
+                path = f + ext
+                print(path, os.path.isfile(path), os.access(path, os.X_OK))
+                if isexe(path):
+                    p = subprocess.Popen(
+                        [path, '-py%d' % sys.version_info.major, qrcfile], 
+                        stdout=subprocess.PIPE)
+                    string = p.communicate()[0]
+                    return import_from_string(module_name, string)
+                    
+    # Qt applications runs without resources, so we just writes an error
+    # and returns None
+    if os.path.isabs(rcc):
+        sys.stderr.write('No such file: %s\n' % rcc)
+    else:
+        sys.stderr.write('Could not find %r in path: %s\n' % (
+                         rcc, os.pathsep.join(paths)))
+    return None
     
         
