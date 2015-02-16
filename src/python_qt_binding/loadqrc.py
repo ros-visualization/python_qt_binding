@@ -103,7 +103,6 @@ def loadqrc(qrcfile, rcc=None):
             f = os.path.join(path, rcc)
             for ext in '', '.exe':
                 path = f + ext
-                print(path, os.path.isfile(path), os.access(path, os.X_OK))
                 if isexe(path):
                     p = subprocess.Popen(
                         [path, '-py%d' % sys.version_info.major, qrcfile], 
