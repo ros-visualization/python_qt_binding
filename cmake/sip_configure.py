@@ -1,3 +1,4 @@
+from copy import copy
 import os
 import re
 import subprocess
@@ -12,7 +13,10 @@ except ImportError:
 
     class Configuration(sipconfig.Configuration):
         def __init__(self):
-            qtconfig = subprocess.check_output(['qmake-qt4', '-query'], universal_newlines=True)
+            env = copy(os.environ)
+            env['QT_SELECT'] = '4'
+            qtconfig = subprocess.check_output(
+                ['qmake', '-query'], env=env, universal_newlines=True)
             qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
             pyqtconfig = {
                 'qt_archdata_dir': qtconfig['QT_INSTALL_DATA'],
