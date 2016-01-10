@@ -16,8 +16,6 @@
   </description>
   <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
   <license>BSD</license>
-  <license>LGPL</license>
-  <license>GPL</license>
 
   <url>http://ros.org/wiki/python_qt_binding</url>
   <author>Dave Hershberger</author>
