@@ -5,36 +5,33 @@ import subprocess
 import sys
 
 import sipconfig
-try:
-    from PyQt4.pyqtconfig import Configuration
-except ImportError:
-    # PyQt >= 4.11 has no pyqtconfig module if built with configure-ng.py
-    from PyQt4 import QtCore
+from PyQt5 import QtCore
 
-    class Configuration(sipconfig.Configuration):
-        def __init__(self):
-            env = copy(os.environ)
-            env['QT_SELECT'] = '4'
-            qtconfig = subprocess.check_output(
-                ['qmake', '-query'], env=env, universal_newlines=True)
-            qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
-            pyqtconfig = {
-                'qt_archdata_dir': qtconfig['QT_INSTALL_DATA'],
-                'qt_data_dir': qtconfig['QT_INSTALL_DATA'],
-                'qt_dir': qtconfig['QT_INSTALL_PREFIX'],
-                'qt_inc_dir': qtconfig['QT_INSTALL_HEADERS'],
-                'qt_lib_dir': qtconfig['QT_INSTALL_LIBS'],
-                'qt_threaded': 1,
-                'qt_version': QtCore.QT_VERSION,
-                'qt_winconfig': 'shared',
-            }
-            sipconfig.Configuration.__init__(self, [pyqtconfig])
 
-            macros = sipconfig._default_macros.copy()
-            macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
-            macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
-            macros['MOC'] = 'moc-qt4'
-            self.set_build_macros(macros)
+class Configuration(sipconfig.Configuration):
+    def __init__(self):
+        env = copy(os.environ)
+        env['QT_SELECT'] = '5'
+        qtconfig = subprocess.check_output(
+            ['qmake', '-query'], env=env, universal_newlines=True)
+        qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
+        pyqtconfig = {
+            'qt_archdata_dir': qtconfig['QT_INSTALL_DATA'],
+            'qt_data_dir': qtconfig['QT_INSTALL_DATA'],
+            'qt_dir': qtconfig['QT_INSTALL_PREFIX'],
+            'qt_inc_dir': qtconfig['QT_INSTALL_HEADERS'],
+            'qt_lib_dir': qtconfig['QT_INSTALL_LIBS'],
+            'qt_threaded': 1,
+            'qt_version': QtCore.QT_VERSION,
+            'qt_winconfig': 'shared',
+        }
+        sipconfig.Configuration.__init__(self, [pyqtconfig])
+
+        macros = sipconfig._default_macros.copy()
+        macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
+        macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
+        macros['MOC'] = 'moc-qt5'
+        self.set_build_macros(macros)
 
 if len(sys.argv) != 8:
     print('usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % sys.argv[0])
@@ -57,7 +54,7 @@ try:
     sip_flags = config.pyqt_sip_flags
 except AttributeError:
     # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags attribute
-    sip_dir = sipconfig._pkg_config['default_sip_dir'] + '/PyQt4'
+    sip_dir = sipconfig._pkg_config['default_sip_dir'] + '/PyQt5'
     sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
 try:
