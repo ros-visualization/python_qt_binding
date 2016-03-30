@@ -11,7 +11,7 @@ assert(PYTHON_EXECUTABLE)
 find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQUIRED)
 
 find_program(SIP_EXECUTABLE sip)
-if(NOT SIP_EXECUTABLE_NOTFOUND)
+if(SIP_EXECUTABLE)
   message(STATUS "SIP binding generator available.")
   set(sip_helper_FOUND TRUE)
 else()
