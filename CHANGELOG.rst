@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.19 (2016-03-31)
+-------------------
 * add QtWidgets for forward compatibility with Qt5, it only allows writing plugins targeting both version but not to make this branch compatible with Qt5 (`#31 <https://github.com/ros-visualization/python_qt_binding/issues/31>`_)
 * fix check if sip is available
 * print full stacktrace
