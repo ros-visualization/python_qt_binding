@@ -86,6 +86,8 @@ def _select_qt_binding(binding_name=None, binding_order=None):
             if binding_loader:
                 QT_BINDING_VERSION = binding_loader(required_modules, optional_modules)
                 QT_BINDING = binding_name
+                # provide QtWidgets module for forward compatibility with Qt5
+                QT_BINDING_MODULES['QtWidgets'] = QT_BINDING_MODULES['QtGui']
                 break
             else:
                 error_msgs.append("  Binding loader '_load_%s' not found." % binding_name)
