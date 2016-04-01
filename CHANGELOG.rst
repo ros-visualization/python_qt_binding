@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.0 (2016-04-01)
+------------------
 * switch to Qt5 (`#30 <https://github.com/ros-visualization/python_qt_binding/issues/30>`_)
 * print full stacktrace
 
