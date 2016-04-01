@@ -61,7 +61,8 @@ def _select_qt_binding(binding_name=None, binding_order=None):
 
     required_modules = [
         'QtCore',
-        'QtGui'
+        'QtGui',
+        'QtWidgets',
     ]
     optional_modules = [
         'QtDeclarative',
@@ -124,50 +125,32 @@ def _load_pyqt(required_modules, optional_modules):
     # set environment variable QT_API for matplotlib
     os.environ['QT_API'] = 'pyqt'
 
-    # select PyQt4 API, see http://pyqt.sourceforge.net/Docs/PyQt4/incompatible_apis.html
-    import sip
-    try:
-        sip.setapi('QDate', 2)
-        sip.setapi('QDateTime', 2)
-        sip.setapi('QString', 2)
-        sip.setapi('QTextStream', 2)
-        sip.setapi('QTime', 2)
-        sip.setapi('QUrl', 2)
-        sip.setapi('QVariant', 2)
-    except ValueError as e:
-        raise RuntimeError('Could not set API version (%s): did you import PyQt4 directly?' % e)
-
-    # register required and optional PyQt4 modules
+    # register required and optional PyQt modules
     for module_name in required_modules:
-        _named_import('PyQt4.%s' % module_name)
+        _named_import('PyQt5.%s' % module_name)
     for module_name in optional_modules:
-        _named_optional_import('PyQt4.%s' % module_name)
+        _named_optional_import('PyQt5.%s' % module_name)
 
     # set some names for compatibility with PySide
     sys.modules['QtCore'].Signal = sys.modules['QtCore'].pyqtSignal
     sys.modules['QtCore'].Slot = sys.modules['QtCore'].pyqtSlot
     sys.modules['QtCore'].Property = sys.modules['QtCore'].pyqtProperty
 
-    # try to register PyQt4.Qwt5 module
+    # try to register Qwt module
     try:
-        import PyQt4.Qwt5
-        _register_binding_module('Qwt', PyQt4.Qwt5)
+        import PyQt5.Qwt5
+        _register_binding_module('Qwt', PyQt5.Qwt5)
     except ImportError:
         pass
 
     global _loadUi
 
     def _loadUi(uifile, baseinstance=None, custom_widgets_=None):
-        from PyQt4 import uic
+        from PyQt5 import uic
         return uic.loadUi(uifile, baseinstance=baseinstance)
 
-    # override specific function to improve compatibility between different bindings
-    from QtGui import QFileDialog
-    QFileDialog.getOpenFileName = QFileDialog.getOpenFileNameAndFilter
-    QFileDialog.getSaveFileName = QFileDialog.getSaveFileNameAndFilter
-
-    import PyQt4.QtCore
-    return PyQt4.QtCore.PYQT_VERSION_STR
+    import PyQt5.QtCore
+    return PyQt5.QtCore.PYQT_VERSION_STR
 
 
 def _load_pyside(required_modules, optional_modules):
@@ -176,11 +159,11 @@ def _load_pyside(required_modules, optional_modules):
 
     # register required and optional PySide modules
     for module_name in required_modules:
-        _named_import('PySide.%s' % module_name)
+        _named_import('PySide2.%s' % module_name)
     for module_name in optional_modules:
-        _named_optional_import('PySide.%s' % module_name)
+        _named_optional_import('PySide2.%s' % module_name)
 
-    # set some names for compatibility with PyQt4
+    # set some names for compatibility with PyQt
     sys.modules['QtCore'].pyqtSignal = sys.modules['QtCore'].Signal
     sys.modules['QtCore'].pyqtSlot = sys.modules['QtCore'].Slot
     sys.modules['QtCore'].pyqtProperty = sys.modules['QtCore'].Property
@@ -195,8 +178,8 @@ def _load_pyside(required_modules, optional_modules):
     global _loadUi
 
     def _loadUi(uifile, baseinstance=None, custom_widgets=None):
-        from PySide.QtUiTools import QUiLoader
-        from PySide.QtCore import QMetaObject
+        from PySide2.QtUiTools import QUiLoader
+        from PySide2.QtCore import QMetaObject
 
         class CustomUiLoader(QUiLoader):
             class_aliases = {
@@ -239,8 +222,8 @@ def _load_pyside(required_modules, optional_modules):
         QMetaObject.connectSlotsByName(ui)
         return ui
 
-    import PySide
-    return PySide.__version__
+    import PySide2
+    return PySide2.__version__
 
 
 def loadUi(uifile, baseinstance=None, custom_widgets=None):
