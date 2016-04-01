@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* switch to Qt5 (`#30 <https://github.com/ros-visualization/python_qt_binding/issues/30>`_)
+* print full stacktrace
+
 0.2.18 (2016-03-17)
 -------------------
 * remove LGPL and GPL from licenses, all code is BSD (`#27 <https://github.com/ros-visualization/python_qt_binding/issues/27>`_)
