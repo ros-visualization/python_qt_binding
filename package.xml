@@ -1,6 +1,6 @@
 <package>
   <name>python_qt_binding</name>
-  <version>0.3.0</version>
+  <version>0.3.1</version>
   <description>
     This stack provides Python bindings for Qt.
     There are two providers: pyside and pyqt.  PySide is released under
