@@ -2,6 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* support for the Qt 5 modules QtWebEngine and QtWebKitWidgets (`#37 <https://github.com/ros-visualization/python_qt_binding/issues/37>`_)
+
 0.3.0 (2016-04-01)
 ------------------
 * switch to Qt5 (`#30 <https://github.com/ros-visualization/python_qt_binding/issues/30>`_)
