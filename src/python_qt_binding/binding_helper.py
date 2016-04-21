@@ -74,7 +74,8 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtScriptTools'
         'QtSql',
         'QtSvg',
-        'QtWebKit',
+        'QtWebEngine',  # Qt 5.6 and higher
+        'QtWebKitWidgets', # Qt 5.0 - 5.5
         'QtXml',
         'QtXmlPatterns',
     ]
