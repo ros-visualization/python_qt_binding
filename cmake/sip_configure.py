@@ -25,6 +25,8 @@ class Configuration(sipconfig.Configuration):
             'qt_version': QtCore.QT_VERSION,
             'qt_winconfig': 'shared',
         }
+        if sys.platform == 'darwin':
+            pyqtconfig['qt_framework'] = 1
         sipconfig.Configuration.__init__(self, [pyqtconfig])
 
         macros = sipconfig._default_macros.copy()
