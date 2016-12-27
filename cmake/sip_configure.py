@@ -24,6 +24,7 @@ class Configuration(sipconfig.Configuration):
             'qt_threaded': 1,
             'qt_version': QtCore.QT_VERSION,
             'qt_winconfig': 'shared',
+            'qt_framework': 1,
         }
         sipconfig.Configuration.__init__(self, [pyqtconfig])
 
