@@ -118,5 +118,8 @@ for ldflag in ldflags.split('\\ '):
 # redirect location of generated library
 makefile._target = '"%s"' % os.path.join(output_dir, makefile._target)
 
+# Force c++11 for qt5
+makefile.extra_cxxflags.append('-std=c++11')
+
 # Generate the Makefile itself
 makefile.generate()
