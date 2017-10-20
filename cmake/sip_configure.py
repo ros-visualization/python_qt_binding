@@ -1,4 +1,5 @@
 from copy import copy
+from distutils.spawn import find_executable
 import os
 import re
 import subprocess
@@ -12,8 +13,9 @@ class Configuration(sipconfig.Configuration):
     def __init__(self):
         env = copy(os.environ)
         env['QT_SELECT'] = '5'
+        qmake_exe = 'qmake-qt5' if find_executable('qmake-qt5') else 'qmake'
         qtconfig = subprocess.check_output(
-            ['qmake', '-query'], env=env, universal_newlines=True)
+            [qmake_exe, '-query'], env=env, universal_newlines=True)
         qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
         pyqtconfig = {
             'qt_archdata_dir': qtconfig['QT_INSTALL_DATA'],
