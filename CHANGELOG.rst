@@ -2,6 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Prefer qmake-qt5 over qmake when available (`#43 <https://github.com/ros-visualization/python_qt_binding/issues/43>`_)
+
 0.3.2 (2017-01-23)
 ------------------
 * Fix problems on OS X (`#40 <https://github.com/ros-visualization/python_qt_binding/pull/40>`_)
