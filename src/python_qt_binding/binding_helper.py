@@ -65,17 +65,38 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtWidgets',
     ]
     optional_modules = [
-        'QtDeclarative',
+        'QtBluetooth',
+        'QtDBus',
+        'QtDeclarative',  # Qt 4.x
+        'QtDesigner',
+        'QtHelp',
+        'QtLocation',
         'QtMultimedia',
+        'QtMultimediaWidgets',
         'QtNetwork',
+        'QNetworkAuth',
+        'QtNfc',
         'QtOpenGL',
-        'QtOpenVG',
+        'QtOpenVG',  # Qt 4.x
+        'QtPositioning',
+        'QtPrintSupport',
+        'QtQml',
+        'QtQuick',
+        'QtQuickWidgets',
         'QtScript',
         'QtScriptTools'
+        'QtSensors',
+        'QtSerialPort',
         'QtSql',
         'QtSvg',
+        'QtTest',
+        'QtWebChannel',
         'QtWebEngine',  # Qt 5.6 and higher
+        'QtWebEngineCore',
+        'QtWebEngineWidgets',
         'QtWebKitWidgets', # Qt 5.0 - 5.5
+        'QtWebSockets',
+        'QtX11Extras',
         'QtXml',
         'QtXmlPatterns',
     ]
