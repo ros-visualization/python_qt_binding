@@ -67,7 +67,6 @@ def _select_qt_binding(binding_name=None, binding_order=None):
     optional_modules = [
         'QtBluetooth',
         'QtDBus',
-        'QtDeclarative',  # Qt 4.x
         'QtDesigner',
         'QtHelp',
         'QtLocation',
@@ -77,7 +76,6 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QNetworkAuth',
         'QtNfc',
         'QtOpenGL',
-        'QtOpenVG',  # Qt 4.x
         'QtPositioning',
         'QtPrintSupport',
         'QtQml',
