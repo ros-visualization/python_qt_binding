@@ -2,6 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* add support for additional Qt5 modules (`#45 <https://github.com/ros-visualization/python_qt_binding/issues/45>`_)
+
 0.3.3 (2017-10-25)
 ------------------
 * Prefer qmake-qt5 over qmake when available (`#43 <https://github.com/ros-visualization/python_qt_binding/issues/43>`_)
