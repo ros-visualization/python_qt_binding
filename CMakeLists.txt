@@ -1,13 +1,19 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(python_qt_binding)
 
-find_package(catkin REQUIRED)
-catkin_package(CFG_EXTRAS python_qt_binding-extras.cmake)
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 
-catkin_python_setup()
+ament_python_install_package(${PROJECT_NAME})
+
+install(TARGETS ${_library_name}
+  DESTINATION "${PYTHON_INSTALL_DIR}/${PROJECT_NAME}"
+)
 
 install(FILES
   cmake/shiboken_helper.cmake
   cmake/sip_configure.py
   cmake/sip_helper.cmake
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cmake)
+  DESTINATION $SHARE_PYTHON_QT_BINDING)
+
+  ament_package(CONFIG_EXTRAS cmake/python_qt_binding-extras.cmake)

@@ -31,7 +31,7 @@ except ImportError:
 
 d.update({
     'packages': [d['name']],
-    'package_dir': {'': 'src'},
+    'package_dir': {'': 'python_qt_binding'},
     'classifiers': [
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
