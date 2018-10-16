@@ -37,6 +37,7 @@ class Configuration(sipconfig.Configuration):
         macros['MOC'] = 'moc-qt5'
         self.set_build_macros(macros)
 
+
 if len(sys.argv) != 8:
     print('usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' % sys.argv[0])
     sys.exit(1)
@@ -97,6 +98,8 @@ def custom_platform_lib_function(self, clib, framework=0):
     if os.path.isabs(clib):
         return clib
     return default_platform_lib_function(self, clib, framework)
+
+
 sipconfig.SIPModuleMakefile.platform_lib = custom_platform_lib_function
 
 
@@ -105,6 +108,7 @@ sipconfig.SIPModuleMakefile.platform_lib = custom_platform_lib_function
 def split_paths(paths):
     paths = re.split('(?<=[^\\\\]) ', paths)
     return paths
+
 
 for include_dir in split_paths(include_dirs):
     include_dir = include_dir.replace('\\', '')
