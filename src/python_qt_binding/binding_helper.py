@@ -114,8 +114,9 @@ def _select_qt_binding(binding_name=None, binding_order=None):
             error_msgs.append("  ImportError for '%s': %s\n%s" % (binding_name, e, traceback.format_exc()))
 
     if not QT_BINDING:
-        raise ImportError("Could not find Qt binding (looked for: %s):\n%s" %
-                          (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
+        raise ImportError(
+            "Could not find Qt binding (looked for: %s):\n%s" %
+            (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
 def _register_binding_module(module_name, module):
