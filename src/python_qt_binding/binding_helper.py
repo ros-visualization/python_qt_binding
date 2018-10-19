@@ -92,7 +92,7 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtWebEngine',  # Qt 5.6 and higher
         'QtWebEngineCore',
         'QtWebEngineWidgets',
-        'QtWebKitWidgets', # Qt 5.0 - 5.5
+        'QtWebKitWidgets',  # Qt 5.0 - 5.5
         'QtWebSockets',
         'QtX11Extras',
         'QtXml',
@@ -111,10 +111,13 @@ def _select_qt_binding(binding_name=None, binding_order=None):
             else:
                 error_msgs.append("  Binding loader '_load_%s' not found." % binding_name)
         except ImportError as e:
-            error_msgs.append("  ImportError for '%s': %s\n%s" % (binding_name, e, traceback.format_exc()))
+            error_msgs.append("  ImportError for '%s': %s\n%s" %
+                              (binding_name, e, traceback.format_exc()))
 
     if not QT_BINDING:
-        raise ImportError("Could not find Qt binding (looked for: %s):\n%s" % (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
+        raise ImportError(
+            "Could not find Qt binding (looked for: %s):\n%s" %
+            (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
 def _register_binding_module(module_name, module):
@@ -222,7 +225,9 @@ def _load_pyside(required_modules, optional_modules):
                     widget = QUiLoader.createWidget(self, class_name, parent, name)
 
                 if str(type(widget)).find(self.class_aliases.get(class_name, class_name)) < 0:
-                    sys.modules['QtCore'].qDebug(str('PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' % (class_name, type(widget))))
+                    sys.modules['QtCore'].qDebug(
+                        'PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' %
+                        (class_name, type(widget)))
 
                 if self._base_instance:
                     setattr(self._base_instance, name, widget)
@@ -233,9 +238,9 @@ def _load_pyside(required_modules, optional_modules):
 
         # instead of passing the custom widgets, they should be registered using QUiLoader.registerCustomWidget(),
         # but this does not work in PySide 1.0.6: it simply segfaults...
-        #loader = CustomUiLoader(baseinstance)
-        #custom_widgets = custom_widgets or {}
-        #for custom_widget in custom_widgets.values():
+        # loader = CustomUiLoader(baseinstance)
+        # custom_widgets = custom_widgets or {}
+        # for custom_widget in custom_widgets.values():
         #    loader.registerCustomWidget(custom_widget)
 
         ui = loader.load(uifile)
