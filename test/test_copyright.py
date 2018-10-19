@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-@[if DEVELSPACE]@
-# location of cmake files in develspace
-set(python_qt_binding_EXTRAS_DIR "@(CMAKE_CURRENT_SOURCE_DIR)/cmake")
-@[else]@
-# location of cmake files in installspace
-set(python_qt_binding_EXTRAS_DIR "${python_qt_binding_DIR}")
-@[end if]@
+from ament_copyright.main import main
+import pytest
+
+
+@pytest.mark.copyright
+@pytest.mark.linter
+def test_copyright():
+    rc = main(argv=['.', 'test'])
+    assert rc == 0, 'Found errors'

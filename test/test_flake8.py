@@ -1,4 +1,4 @@
-# Copyright 2015 Open Source Robotics Foundation, Inc.
+# Copyright 2017 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-@[if DEVELSPACE]@
-# location of cmake files in develspace
-set(python_qt_binding_EXTRAS_DIR "@(CMAKE_CURRENT_SOURCE_DIR)/cmake")
-@[else]@
-# location of cmake files in installspace
-set(python_qt_binding_EXTRAS_DIR "${python_qt_binding_DIR}")
-@[end if]@
+from ament_flake8.main import main
+import pytest
+
+
+@pytest.mark.flake8
+@pytest.mark.linter
+def test_flake8():
+    rc = main(argv=[])
+    assert rc == 0, 'Found errors'

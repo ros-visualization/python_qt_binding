@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -30,7 +30,9 @@ except ImportError:
         d['long_description'] = description
 
 d.update({
-    'packages': [d['name']],
+    'tests_require': ['pytest'],
+    'install_requires': ['setuptools'],
+    'packages': find_packages(exclude=['test']),
     'package_dir': {'': 'python_qt_binding'},
     'classifiers': [
         'Development Status :: 5 - Production/Stable',
