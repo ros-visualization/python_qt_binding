@@ -225,7 +225,8 @@ def _load_pyside(required_modules, optional_modules):
 
                 if str(type(widget)).find(self.class_aliases.get(class_name, class_name)) < 0:
                     sys.modules['QtCore'].qDebug(
-                        str('PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' % (class_name, type(widget))))
+                        'PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' %
+                        (class_name, type(widget)))
 
                 if self._base_instance:
                     setattr(self._base_instance, name, widget)
@@ -236,8 +237,8 @@ def _load_pyside(required_modules, optional_modules):
 
         # instead of passing the custom widgets, they should be registered using QUiLoader.registerCustomWidget(),
         # but this does not work in PySide 1.0.6: it simply segfaults...
-        #loader = CustomUiLoader(baseinstance)
-        #custom_widgets = custom_widgets or {}
+        # loader = CustomUiLoader(baseinstance)
+        # custom_widgets = custom_widgets or {}
         # for custom_widget in custom_widgets.values():
         #    loader.registerCustomWidget(custom_widget)
 
