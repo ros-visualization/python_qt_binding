@@ -1,3 +1,17 @@
+# Copyright (c) 2018
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 if(__PYTHON_QT_BINDING_SIP_HELPER_INCLUDED)
   return()
 endif()
@@ -99,11 +113,11 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
     # first set all result variables to empty/FALSE
     foreach(arg_name ${_singleArgNames} ${_multiArgNames})
       set(${prefix}_${arg_name})
-    endforeach(arg_name)
+    endforeach()
 
     foreach(option ${_optionNames})
       set(${prefix}_${option} FALSE)
-    endforeach(option)
+    endforeach()
 
     set(${prefix}_UNPARSED_ARGUMENTS)
 
@@ -124,9 +138,9 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
           elseif("${insideValues}" STREQUAL "MULTI")
             list(APPEND ${prefix}_${currentArgName} ${currentArg})
           endif()
-        else(insideValues)
+        else()
           list(APPEND ${prefix}_UNPARSED_ARGUMENTS ${currentArg})
-        endif(insideValues)
+        endif()
       else()
         if(NOT ${optionIndex} EQUAL -1)
           set(${prefix}_${currentArg} TRUE)
@@ -142,15 +156,15 @@ if(${CMAKE_VERSION} VERSION_LESS 2.8.3)
         endif()
       endif()
 
-    endforeach(currentArg)
+    endforeach()
 
     # propagate the result variables to the caller:
     foreach(arg_name ${_singleArgNames} ${_multiArgNames} ${_optionNames})
       set(${prefix}_${arg_name}  ${${prefix}_${arg_name}} PARENT_SCOPE)
-    endforeach(arg_name)
+    endforeach()
     set(${prefix}_UNPARSED_ARGUMENTS ${${prefix}_UNPARSED_ARGUMENTS} PARENT_SCOPE)
 
-  endfunction(CMAKE_PARSE_ARGUMENTS _options _singleArgs _multiArgs)
+  endfunction()
 endif()
 
 #
