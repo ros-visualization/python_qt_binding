@@ -97,8 +97,9 @@ def _select_qt_binding(binding_name=None, binding_order=None):
                 binding_name, e, traceback.format_exc()))
 
     if not QT_BINDING:
-        raise ImportError('Could not find Qt binding (looked for: %s):\n%s' %
-                          (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
+        raise ImportError(
+            "Could not find Qt binding (looked for: %s):\n%s" %
+            (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
 def _register_binding_module(module_name, module):
@@ -207,8 +208,8 @@ def _load_pyside(required_modules, optional_modules):
 
                 if str(type(widget)).find(self.class_aliases.get(class_name, class_name)) < 0:
                     sys.modules['QtCore'].qDebug(
-                        'PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' % (
-                            class_name, type(widget)))
+                        'PySide.loadUi(): could not find widget class "%s", defaulting to "%s"' %
+                        (class_name, type(widget)))
 
                 if self._base_instance:
                     setattr(self._base_instance, name, widget)
