@@ -1,7 +1,4 @@
-
-<?xml version="1.0"?>
-<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<package format=2>
+<package format="2">
   <name>python_qt_binding</name>
   <version>0.3.4</version>
   <description>
