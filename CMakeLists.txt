@@ -22,7 +22,6 @@ install(FILES
     find_package(ament_lint_auto REQUIRED)
     ament_lint_auto_find_test_dependencies()
 
-    find_package(ament_cmake_pytest REQUIRED)
     ament_add_pytest_test(pqt_test test
       PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}"
       APPEND_ENV AMENT_PREFIX_PATH=${ament_index_build_path}
