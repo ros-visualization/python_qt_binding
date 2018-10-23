@@ -35,7 +35,7 @@
   <test_depend>ament_flake8</test_depend>
   <test_depend>ament_pep257</test_depend>
   <test_depend>python3-pytest</test_depend>
-  <test_depend>python-qt5-bindings</test_depend>
+  <test_depend>python3-qt5-bindings</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
