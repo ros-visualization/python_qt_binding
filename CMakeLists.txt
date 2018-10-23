@@ -10,13 +10,12 @@ install(TARGETS ${_library_name}
   DESTINATION "${PYTHON_INSTALL_DIR}/${PROJECT_NAME}"
 )
 
+set(python_qt_binding_CMAKE_DIRS cmake)
 install(FILES
   cmake/shiboken_helper.cmake
   cmake/sip_configure.py
   cmake/sip_helper.cmake
-  DESTINATION $SHARE_PYTHON_QT_BINDING)
-
-ament_export_dependencies(python3-qt5-bindings)
+  DESTINATION share/${PROJECT_NAME}/cmake/)
 
   if(BUILD_TESTING)
     find_package(ament_cmake_pytest REQUIRED)
