@@ -16,6 +16,7 @@ install(FILES
   cmake/sip_helper.cmake
   DESTINATION $SHARE_PYTHON_QT_BINDING)
 
+ament_export_dependencies(python3-qt5-bindings)
 
   if(BUILD_TESTING)
     find_package(ament_cmake_pytest REQUIRED)
