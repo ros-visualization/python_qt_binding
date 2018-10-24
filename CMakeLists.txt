@@ -19,8 +19,7 @@ install(FILES
     ament_lint_auto_find_test_dependencies()
 
     ament_add_pytest_test(pqt_test test
-      APPEND_ENV
-        PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
+      APPEND_ENV PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}
       TIMEOUT 90
   )
   endif()
