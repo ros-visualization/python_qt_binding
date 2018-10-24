@@ -53,7 +53,8 @@ A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
 
 import sys
 
-from python_qt_binding.binding_helper import QT_BINDING, QT_BINDING_MODULES, QT_BINDING_VERSION
+from python_qt_binding.binding_helper import \
+    loadUi, QT_BINDING, QT_BINDING_MODULES, QT_BINDING_VERSION
 
 # register binding modules as sub modules of this package (python_qt_binding) for easy importing
 for module_name, module in QT_BINDING_MODULES.items():
