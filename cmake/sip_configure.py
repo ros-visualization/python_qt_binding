@@ -72,6 +72,7 @@ except OSError:
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
+
 cmd = [
     config.sip_bin,
     '-c', build_dir,
