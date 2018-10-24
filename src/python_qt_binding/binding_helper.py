@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Copyright (c) 2011, Dirk Thomas, Dorian Scholz, TU Darmstadt
 # All rights reserved.
 #
@@ -252,7 +254,7 @@ def _load_pyside(required_modules, optional_modules):
 
 def loadUi(uifile, baseinstance=None, custom_widgets=None):
     """
-    Load a provided UI file using PySide2.
+    Load a provided UI file chosen Python QT5 Binding.
 
     @type uifile: str
     @param uifile: Absolute path of .ui file
