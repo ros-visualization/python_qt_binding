@@ -254,7 +254,7 @@ def _load_pyside(required_modules, optional_modules):
 
 def loadUi(uifile, baseinstance=None, custom_widgets=None):
     """
-    Load a provided UI file chosen Python QT5 Binding.
+    Load a provided UI file chosen Python Qt 5 binding.
 
     @type uifile: str
     @param uifile: Absolute path of .ui file
