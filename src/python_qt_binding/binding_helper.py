@@ -111,12 +111,12 @@ def _select_qt_binding(binding_name=None, binding_order=None):
             else:
                 error_msgs.append("  Binding loader '_load_%s' not found." % binding_name)
         except ImportError as e:
-            error_msgs.append("  ImportError for '%s': %s\n%s" % (
-                binding_name, e, traceback.format_exc()))
+            error_msgs.append("  ImportError for '%s': %s\n%s" %
+                              (binding_name, e, traceback.format_exc()))
 
     if not QT_BINDING:
         raise ImportError(
-            'Could not find Qt binding (looked for: %s):\n%s' %
+            "Could not find Qt binding (looked for: %s):\n%s" %
             (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
