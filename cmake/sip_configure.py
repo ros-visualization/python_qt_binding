@@ -5,8 +5,8 @@ import re
 import subprocess
 import sys
 
-import sipconfig
 from PyQt5 import QtCore
+import sipconfig
 
 
 class Configuration(sipconfig.Configuration):
@@ -73,6 +73,7 @@ except OSError:
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
+
 cmd = [
     config.sip_bin,
     '-c', build_dir,

@@ -236,7 +236,8 @@ def _load_pyside(required_modules, optional_modules):
 
         loader = CustomUiLoader(baseinstance, custom_widgets)
 
-        # instead of passing the custom widgets, they should be registered using QUiLoader.registerCustomWidget(),
+        # instead of passing the custom widgets, they should be registered using
+        # QUiLoader.registerCustomWidget(),
         # but this does not work in PySide 1.0.6: it simply segfaults...
         # loader = CustomUiLoader(baseinstance)
         # custom_widgets = custom_widgets or {}
@@ -253,6 +254,8 @@ def _load_pyside(required_modules, optional_modules):
 
 def loadUi(uifile, baseinstance=None, custom_widgets=None):
     """
+    Load a provided UI file chosen Python Qt 5 binding.
+
     @type uifile: str
     @param uifile: Absolute path of .ui file
     @type baseinstance: QWidget
