@@ -101,6 +101,8 @@ default_platform_lib_function = sipconfig.SIPModuleMakefile.platform_lib
 
 
 def custom_platform_lib_function(self, clib, framework=0):
+    if not clib or clib.isspace():
+        return None
     if os.path.isabs(clib):
         return clib
     return default_platform_lib_function(self, clib, framework)
