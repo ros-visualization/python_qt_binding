@@ -116,7 +116,7 @@ def _select_qt_binding(binding_name=None, binding_order=None):
 
     if not QT_BINDING:
         raise ImportError(
-            "Could not find Qt binding (looked for: %s):\n%s" %
+            'Could not find Qt binding (looked for: %s):\n%s' %
             (', '.join(["'%s'" % b for b in binding_order]), '\n'.join(error_msgs)))
 
 
