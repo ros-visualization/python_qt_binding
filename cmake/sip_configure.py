@@ -76,8 +76,8 @@ except OSError:
 
 sip_bin = config.sip_bin
 # Without the .exe, this might actually be a directory in Windows
-if sys.platform == "win32" and os.path.isdir(sip_bin):
-    sip_bin += ".exe"
+if sys.platform == 'win32' and os.path.isdir(sip_bin):
+    sip_bin += '.exe'
 
 cmd = [
     sip_bin,
