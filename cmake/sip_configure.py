@@ -137,15 +137,14 @@ for ldflag in ldflags.split('\\ '):
 # redirect location of generated library
 makefile._target = '"%s"' % os.path.join(output_dir, makefile._target)
 
+# Force c++14
 if sys.platform == "win32":
-    # Windows never really supported c++11, use c++14 instead
     makefile.extra_cxxflags.append('/std:c++14')
     # The __cplusplus flag is not properly set on Windows for backwards
     # compatibilty. This flag sets it correctly
     makefile.CXXFLAGS.append('/Zc:__cplusplus')
 else:
-    # Force c++11 for qt5
-    makefile.extra_cxxflags.append('-std=c++11')
+    makefile.extra_cxxflags.append('-std=c++14')
 
 # Generate the Makefile itself
 makefile.generate()
