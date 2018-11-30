@@ -215,9 +215,10 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
         file(MAKE_DIRECTORY ${sip_LIBRARY_DIR})
     endif()
 
-    set(MAKE_EXECUTABLE make)
     if (WIN32)
       set(MAKE_EXECUTABLE NMake.exe)
+    else()
+      set(MAKE_EXECUTABLE make)
     endif()
 
     add_custom_command(
