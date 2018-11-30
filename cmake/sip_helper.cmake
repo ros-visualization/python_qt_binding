@@ -215,7 +215,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
         file(MAKE_DIRECTORY ${sip_LIBRARY_DIR})
     endif()
 
-    if (WIN32)
+    if(WIN32)
       set(MAKE_EXECUTABLE NMake.exe)
     else()
       set(MAKE_EXECUTABLE make)
