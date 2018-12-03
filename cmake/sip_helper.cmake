@@ -215,9 +215,15 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
         file(MAKE_DIRECTORY ${sip_LIBRARY_DIR})
     endif()
 
+    if(WIN32)
+      set(MAKE_EXECUTABLE NMake.exe)
+    else()
+      set(MAKE_EXECUTABLE make)
+    endif()
+
     add_custom_command(
         OUTPUT ${sip_LIBRARY_DIR}/lib${PROJECT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}
-        COMMAND make
+        COMMAND ${MAKE_EXECUTABLE}
         DEPENDS ${SIP_BUILD_DIR}/Makefile
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
         COMMENT "Compiling generated code for ${PROJECT_NAME} Python bindings..."
