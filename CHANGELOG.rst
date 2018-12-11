@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2018-12-10)
+------------------
 * check for Homebrew's PyQt5 install path (`#57 <https://github.com/ros-visualization/python_qt_binding/issues/57>`_)
 * port to Windows (`#56 <https://github.com/ros-visualization/python_qt_binding/issues/56>`_)
 * fix lint tests (`#55 <https://github.com/ros-visualization/python_qt_binding/issues/55>`_)
