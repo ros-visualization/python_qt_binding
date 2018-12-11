@@ -2,6 +2,16 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* check for Homebrew's PyQt5 install path (`#57 <https://github.com/ros-visualization/python_qt_binding/issues/57>`_)
+* port to Windows (`#56 <https://github.com/ros-visualization/python_qt_binding/issues/56>`_)
+* fix lint tests (`#55 <https://github.com/ros-visualization/python_qt_binding/issues/55>`_)
+* update sip_configure to handle improper lib names (`#54 <https://github.com/ros-visualization/python_qt_binding/issues/54>`_)
+* port to ROS 2 (`#52 <https://github.com/ros-visualization/python_qt_binding/issues/52>`_)
+* autopep8 (`#51 <https://github.com/ros-visualization/python_qt_binding/issues/51>`_)
+* remove :: from shiboken include path (`#48 <https://github.com/ros-visualization/python_qt_binding/issues/48>`_)
+
 0.3.4 (2018-08-03)
 ------------------
 * add support for additional Qt5 modules (`#45 <https://github.com/ros-visualization/python_qt_binding/issues/45>`_)
