@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.1 (2018-12-11)
+------------------
 * no warnings for unavailable PySide/Shiboken (`#58 <https://github.com/ros-visualization/python_qt_binding/issues/58>`_)
 
 1.0.0 (2018-12-10)
