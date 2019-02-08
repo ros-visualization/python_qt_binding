@@ -200,9 +200,11 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     set(SIP_BUILD_DIR ${sip_BINARY_DIR}/sip/${PROJECT_NAME})
 
     set(INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
-    set(LIBRARIES ${${PROJECT_NAME}_LIBRARIES})
     set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
+
+    # SIP configure doesn't handle build configuration keywords
+    catkin_filter_libraries_for_build_configuration(LIBRARIES ${${PROJECT_NAME}_LIBRARIES})
 
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
