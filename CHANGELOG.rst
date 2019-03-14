@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.5 (2019-03-14)
+------------------
 * don't add -l prefix if it already exists (`#59 <https://github.com/ros-visualization/python_qt_binding/issues/59>`_)
 * autopep8 (`#51 <https://github.com/ros-visualization/python_qt_binding/issues/51>`_)
 * remove :: from shiboken include path (`#48 <https://github.com/ros-visualization/python_qt_binding/issues/48>`_)
