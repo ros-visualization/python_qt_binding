@@ -26,7 +26,7 @@ class Configuration(sipconfig.Configuration):
             'qt_lib_dir': qtconfig['QT_INSTALL_LIBS'],
             'qt_threaded': 1,
             'qt_version': QtCore.QT_VERSION,
-            'qt_winconfig': 'shared',
+            'qt_winconfig': 'shared exceptions',
         }
         if sys.platform == 'darwin':
             pyqtconfig['qt_framework'] = 1
@@ -63,7 +63,7 @@ try:
     sip_flags = config.pyqt_sip_flags
 except AttributeError:
     # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags attribute
-    sip_dir = sipconfig._pkg_config['default_sip_dir'] + '/PyQt5'
+    sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
     sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
 try:
@@ -73,8 +73,14 @@ except OSError:
 
 # Run SIP to generate the code.  Note that we tell SIP where to find the qt
 # module's specification files using the -I flag.
+
+sip_bin = config.sip_bin
+# Without the .exe, this might actually be a directory in Windows
+if sys.platform == 'win32' and os.path.isdir(sip_bin):
+    sip_bin += '.exe'
+
 cmd = [
-    config.sip_bin,
+    sip_bin,
     '-c', build_dir,
     '-b', os.path.join(build_dir, build_file),
     '-I', sip_dir,
@@ -130,8 +136,14 @@ for ldflag in ldflags.split('\\ '):
 # redirect location of generated library
 makefile._target = '"%s"' % os.path.join(output_dir, makefile._target)
 
-# Force c++11 for qt5
-makefile.extra_cxxflags.append('-std=c++11')
+# Force c++14
+if sys.platform == 'win32':
+    makefile.extra_cxxflags.append('/std:c++14')
+    # The __cplusplus flag is not properly set on Windows for backwards
+    # compatibilty. This flag sets it correctly
+    makefile.CXXFLAGS.append('/Zc:__cplusplus')
+else:
+    makefile.extra_cxxflags.append('-std=c++14')
 
 # Generate the Makefile itself
 makefile.generate()
