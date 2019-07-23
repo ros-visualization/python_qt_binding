@@ -82,7 +82,7 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtQuick',
         'QtQuickWidgets',
         'QtScript',
-        'QtScriptTools'
+        'QtScriptTools',
         'QtSensors',
         'QtSerialPort',
         'QtSql',
