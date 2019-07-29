@@ -145,5 +145,14 @@ if sys.platform == 'win32':
 else:
     makefile.extra_cxxflags.append('-std=c++14')
 
+# Finalise the Makefile, preparing it to be saved to disk
+makefile.finalise()
+
+# Replace Qt variables from libraries
+libs = makefile.LIBS.as_list()
+for i in range(len(libs)):
+    libs[i] = libs[i].replace('$$[QT_INSTALL_LIBS]', config.build_macros()['LIBDIR_QT'])
+makefile.LIBS.set(libs)
+
 # Generate the Makefile itself
 makefile.generate()
