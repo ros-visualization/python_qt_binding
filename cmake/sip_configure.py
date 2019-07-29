@@ -139,7 +139,7 @@ makefile.finalise()
 # Replace Qt variables from libraries
 libs = makefile.LIBS.as_list()
 for i in range(len(libs)):
-    libs[i] = libs[i].replace("$$[QT_INSTALL_LIBS]", config.build_macros()["LIBDIR_QT"])
+    libs[i] = libs[i].replace('$$[QT_INSTALL_LIBS]', config.build_macros()['LIBDIR_QT'])
 makefile.LIBS.set(libs)
 
 # Generate the Makefile itself
