@@ -10,9 +10,19 @@ find_package(PythonInterp "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQU
 assert(PYTHON_EXECUTABLE)
 find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQUIRED)
 
-find_program(SIP_EXECUTABLE sip)
+execute_process(
+  COMMAND ${PYTHON_EXECUTABLE} -c "import sipconfig; print(sipconfig.Configuration().sip_bin)"
+  OUTPUT_VARIABLE PYTHON_SIP_EXECUTABLE
+  ERROR_QUIET)
+
+if(PYTHON_SIP_EXECUTABLE)
+  string(STRIP ${PYTHON_SIP_EXECUTABLE} SIP_EXECUTABLE)
+else()
+  find_program(SIP_EXECUTABLE sip)
+endif()
+
 if(SIP_EXECUTABLE)
-  message(STATUS "SIP binding generator available.")
+  message(STATUS "SIP binding generator available at: ${SIP_EXECUTABLE}")
   set(sip_helper_FOUND TRUE)
 else()
   message(WARNING "SIP binding generator NOT available.")
