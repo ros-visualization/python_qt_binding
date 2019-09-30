@@ -2,6 +2,14 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* replace Qt variable in generated Makefile (`#64 <https://github.com/ros-visualization/python_qt_binding/issues/64>`_)
+* don't add -l prefix if it already exists (`#59 <https://github.com/ros-visualization/python_qt_binding/issues/59>`_)
+* if present, use the sipconfig suggested sip program (`#70 <https://github.com/ros-visualization/python_qt_binding/issues/70>`_)
+* replace Qt variable in generated Makefile (`#64 <https://github.com/ros-visualization/python_qt_binding/issues/64>`_) (`#67 <https://github.com/ros-visualization/python_qt_binding/issues/67>`_)
+* fixing trivial accidental string concatenation (`#66 <https://github.com/ros-visualization/python_qt_binding/issues/66>`_)
+
 1.0.1 (2018-12-11)
 ------------------
 * no warnings for unavailable PySide/Shiboken (`#58 <https://github.com/ros-visualization/python_qt_binding/issues/58>`_)
