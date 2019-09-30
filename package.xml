@@ -1,4 +1,4 @@
-<package format="2">
+<package format="3">
   <name>python_qt_binding</name>
   <version>0.3.5</version>
   <description>
@@ -28,7 +28,8 @@
   <build_depend>rosbuild</build_depend>
   <build_depend>qtbase5-dev</build_depend>
 
-  <depend>python-qt5-bindings</depend>
+  <depend condition="$ROS_PYTHON_VERSION == 2">python-qt5-bindings</depend>
+  <depend condition="$ROS_PYTHON_VERSION == 3">python3-qt5-bindings</depend>
 
   <export>
     <rosbuild cmake_directory="${prefix}/cmake"/>
