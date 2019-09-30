@@ -39,6 +39,33 @@ class Configuration(sipconfig.Configuration):
         self.set_build_macros(macros)
 
 
+def get_sip_dir_flags(config):
+    """
+    Get the extra SIP flags needed by the imported qt module, and locate PyQt5 sip install files.
+
+    Note that this normally only includes those flags (-x and -t) that relate to SIP's versioning
+    system.
+    """
+    try:
+        sip_dir = config.pyqt_sip_dir
+        sip_flags = config.pyqt_sip_flags
+        return sip_dir, sip_flags
+    except AttributeError:
+        # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
+        sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
+
+        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
+        if os.path.exists(default_sip_dir):
+            return default_sip_dir, sip_flags
+
+        # Homebrew installs sip files here by default
+        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5')
+        if os.path.exists(default_sip_dir):
+            return default_sip_dir, sip_flags
+        raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
+                                ' that PyQt5 is installed')
+
+
 if len(sys.argv) != 8:
     print('usage: %s build-dir sip-file output_dir include_dirs libs lib_dirs ldflags' %
           sys.argv[0])
@@ -55,16 +82,7 @@ build_file = 'pyqtscripting.sbf'
 # Get the PyQt configuration information.
 config = Configuration()
 
-# Get the extra SIP flags needed by the imported qt module.  Note that
-# this normally only includes those flags (-x and -t) that relate to SIP's
-# versioning system.
-try:
-    sip_dir = config.pyqt_sip_dir
-    sip_flags = config.pyqt_sip_flags
-except AttributeError:
-    # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags attribute
-    sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
-    sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
+sip_dir, sip_flags = get_sip_dir_flags(config)
 
 try:
     os.makedirs(build_dir)
@@ -106,6 +124,8 @@ default_platform_lib_function = sipconfig.SIPModuleMakefile.platform_lib
 
 
 def custom_platform_lib_function(self, clib, framework=0):
+    if not clib or clib.isspace():
+        return None
     # Only add '-l' if a library doesn't already start with '-l' and is not an absolute path
     if os.path.isabs(clib) or clib.startswith('-l'):
         return clib
