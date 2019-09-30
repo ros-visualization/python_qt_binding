@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.6 (2019-09-30)
+------------------
 * convert cmake targets to plain libraries (`#68 <https://github.com/ros-visualization/python_qt_binding/issues/68>`_)
 * add Python 3 dependency with condition (`#75 <https://github.com/ros-visualization/python_qt_binding/issues/75>`_)
 * if present, use the sipconfig suggested sip program (`#70 <https://github.com/ros-visualization/python_qt_binding/issues/70>`_)
