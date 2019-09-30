@@ -2,6 +2,18 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* convert cmake targets to plain libraries (`#68 <https://github.com/ros-visualization/python_qt_binding/issues/68>`_)
+* add Python 3 dependency with condition (`#75 <https://github.com/ros-visualization/python_qt_binding/issues/75>`_)
+* if present, use the sipconfig suggested sip program (`#70 <https://github.com/ros-visualization/python_qt_binding/issues/70>`_)
+* check for Homebrew's PyQt5 install path (`#57 <https://github.com/ros-visualization/python_qt_binding/issues/57>`_)
+* modifying sip_configure (`#54 <https://github.com/ros-visualization/python_qt_binding/issues/54>`_)
+* replace Qt variable in generated Makefile (`#64 <https://github.com/ros-visualization/python_qt_binding/issues/64>`_)
+* fixing trivial accidental string concatenation (`#66 <https://github.com/ros-visualization/python_qt_binding/issues/66>`_)
+* Windows: handling build configuration keywords before passed to SIP (`#60 <https://github.com/ros-visualization/python_qt_binding/issues/60>`_)
+* cherry-pick windows port from crystal-devel (`#61 <https://github.com/ros-visualization/python_qt_binding/issues/61>`_)
+
 0.3.5 (2019-03-14)
 ------------------
 * don't add -l prefix if it already exists (`#59 <https://github.com/ros-visualization/python_qt_binding/issues/59>`_)
