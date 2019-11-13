@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2019-11-12)
+------------------
 * check if Shiboken2Config.cmake defines a target instead of a variable (`#77 <https://github.com/ros-visualization/python_qt_binding/issues/77>`_)
 
 1.0.2 (2019-09-30)
