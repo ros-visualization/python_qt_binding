@@ -55,12 +55,19 @@ endif()
 
 
 macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
+    get_directory_property(shiboken_helper_include_dirs INCLUDE_DIRECTORIES)
+    list(APPEND shiboken_helper_include_dirs ${QT_INCLUDE_DIR} ${PYSIDE_INCLUDE_DIR})
     # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
     set(QT_INCLUDE_DIR_WITH_COLONS "")
-    foreach(dir ${QT_INCLUDE_DIR})
+    foreach(dir ${shiboken_helper_include_dirs})
         set(QT_INCLUDE_DIR_WITH_COLONS "${QT_INCLUDE_DIR_WITH_COLONS}:${dir}")
     endforeach()
-    set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --include-paths=${INCLUDE_PATH}${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
+    if(${Shiboken2_VERSION} VERSION_LESS "5.6")
+        set(SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH "")
+    else()
+        set(SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH "--enable-pyside-extensions")
+    endif()
+    set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken ${SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH} --include-paths=${INCLUDE_PATH}${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
 endmacro()
 
 
