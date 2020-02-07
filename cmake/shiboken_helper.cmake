@@ -55,19 +55,24 @@ endif()
 
 
 macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
-    get_directory_property(shiboken_helper_include_dirs INCLUDE_DIRECTORIES)
-    list(APPEND shiboken_helper_include_dirs ${QT_INCLUDE_DIR} ${PYSIDE_INCLUDE_DIR})
-    # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
-    set(QT_INCLUDE_DIR_WITH_COLONS "")
-    foreach(dir ${shiboken_helper_include_dirs})
-        set(QT_INCLUDE_DIR_WITH_COLONS "${QT_INCLUDE_DIR_WITH_COLONS}:${dir}")
-    endforeach()
-    if(${Shiboken2_VERSION} VERSION_LESS "5.6")
-        set(SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH "")
+    if(${Shiboken2_VERSION} VERSION_EQUAL "2.0.0")
+        # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
+        set(QT_INCLUDE_DIR_WITH_COLONS "")
+        foreach(dir ${QT_INCLUDE_DIR})
+            set(QT_INCLUDE_DIR_WITH_COLONS "${QT_INCLUDE_DIR_WITH_COLONS}:${dir}")
+        endforeach()
+        set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --include-paths=${INCLUDE_PATH}${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
     else()
-        set(SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH "--enable-pyside-extensions")
+        # Add includes from current directory, Qt and PySide
+        get_directory_property(SHIBOKEN_HELPER_INCLUDE_DIRS INCLUDE_DIRECTORIES)
+        list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS ${QT_INCLUDE_DIR} ${PYSIDE_INCLUDE_DIR})
+        # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
+        set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "")
+        foreach(dir ${SHIBOKEN_HELPER_INCLUDE_DIRS})
+            set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}:${dir}")
+        endforeach()
+        set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --enable-pyside-extensions --include-paths=${INCLUDE_PATH}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
     endif()
-    set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken ${SHIBOKEN_HELPER_PYSIDE_EXTENSION_SWITCH} --include-paths=${INCLUDE_PATH}${QT_INCLUDE_DIR_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
 endmacro()
 
 
