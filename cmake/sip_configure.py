@@ -10,6 +10,7 @@ import sipconfig
 
 libqt5_rename = False
 
+
 class Configuration(sipconfig.Configuration):
 
     def __init__(self):
