@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.0 (2020-02-28)
+------------------
 * use PySide2 and Shiboken2 targets for variables (`#79 <https://github.com/ros-visualization/python_qt_binding/issues/79>`_)
 * use QUIET and change warning into status msg to avoid stderr on Melodic (`#85 <https://github.com/ros-visualization/python_qt_binding/issues/85>`_)
 
