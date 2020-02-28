@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use PySide2 and Shiboken2 targets for variables (`#79 <https://github.com/ros-visualization/python_qt_binding/issues/79>`_)
+* use QUIET and change warning into status msg to avoid stderr on Melodic (`#85 <https://github.com/ros-visualization/python_qt_binding/issues/85>`_)
+
 0.3.7 (2020-02-28)
 ------------------
 * bump CMake minimum version to avoid CMP0048 warning (`#83 <https://github.com/ros-visualization/python_qt_binding/issues/83>`_)
