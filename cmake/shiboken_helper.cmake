@@ -45,7 +45,7 @@ if(Shiboken2_FOUND AND PySide2_FOUND AND PYTHONLIBS_FOUND)
   message(STATUS "Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
 else()
-  message(WARNING "Shiboken binding generator NOT available.")
+  message(STATUS "Shiboken binding generator NOT available.")
   set(shiboken_helper_NOTFOUND TRUE)
 endif()
 
