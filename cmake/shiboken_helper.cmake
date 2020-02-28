@@ -15,7 +15,6 @@ else()
   message(FATAL_ERROR "Unknown Python version: ${PYTHON_VERSION_STRING}")
 endif()
 set(PYTHON_EXTENSION_SUFFIX "${PYTHON_SUFFIX}-${CMAKE_CXX_LIBRARY_ARCHITECTURE}")
-
 find_package(Shiboken2)
 if(${Shiboken2_FOUND})
   if(NOT ${Shiboken2_VERSION} VERSION_LESS "5.13")
@@ -28,9 +27,7 @@ if(${Shiboken2_FOUND})
   message(STATUS "Using SHIBOKEN_INCLUDE_DIR: ${SHIBOKEN_INCLUDE_DIR}")
   message(STATUS "Using SHIBOKEN_BINARY: ${SHIBOKEN_BINARY}")
 endif()
-
 set(PYTHON_BASENAME "${PYTHON_SUFFIX}-${CMAKE_CXX_LIBRARY_ARCHITECTURE}")
-
 find_package(PySide2)
 if(${PySide2_FOUND})
   if(NOT ${PySide2_VERSION} VERSION_LESS "5.13")
@@ -41,7 +38,6 @@ if(${PySide2_FOUND})
   message(STATUS "Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
   message(STATUS "Using PYSIDE_INCLUDE_DIR: ${PYSIDE_INCLUDE_DIR}")
 endif()
-
 set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
