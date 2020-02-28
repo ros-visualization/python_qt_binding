@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.7 (2020-02-28)
+------------------
 * bump CMake minimum version to avoid CMP0048 warning (`#83 <https://github.com/ros-visualization/python_qt_binding/issues/83>`_)
 * check if Shiboken2Config.cmake defines a target instead of a variable, fixes `#69 <https://github.com/ros-visualization/python_qt_binding/issues/69>`_ (`#77 <https://github.com/ros-visualization/python_qt_binding/issues/77>`_)
 
