@@ -51,9 +51,9 @@ endif()
 
 
 macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
-  # Add includes from current directory, Qt and PySide
+  # Add includes from current directory, Qt, PySide and compiler specific dirs
   get_directory_property(SHIBOKEN_HELPER_INCLUDE_DIRS INCLUDE_DIRECTORIES)
-  list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS ${QT_INCLUDE_DIR} ${PYSIDE_INCLUDE_DIR})
+  list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS ${QT_INCLUDE_DIR} ${PYSIDE_INCLUDE_DIR} ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
   # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
   set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "")
   foreach(dir ${SHIBOKEN_HELPER_INCLUDE_DIRS})
