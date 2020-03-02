@@ -42,8 +42,16 @@ set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}"
 find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 if(Shiboken2_FOUND AND PySide2_FOUND AND PYTHONLIBS_FOUND)
-  message(STATUS "Shiboken binding generator available.")
-  set(shiboken_helper_FOUND TRUE)
+  if(${CMAKE_VERSION} VERSION_LESS "3.14")
+    # the shiboken invocation needs CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+    # which is broken before CMake 3.14
+    # see https://gitlab.kitware.com/cmake/cmake/issues/18394
+    message(STATUS "Shiboken binding generator available but CMake version is older than 3.14.")
+    set(shiboken_helper_NOTFOUND TRUE)
+  else()
+    message(STATUS "Shiboken binding generator available.")
+    set(shiboken_helper_FOUND TRUE)
+  endif()
 else()
   message(STATUS "Shiboken binding generator NOT available.")
   set(shiboken_helper_NOTFOUND TRUE)
