@@ -79,6 +79,11 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
 
+    set(EXTRA_DEFINES "")
+    if(DEFINED BUILD_SHARED_LIBS)
+      set(EXTRA_DEFINES "ROS_BUILD_SHARED_LIBS")
+    endif()
+
     # SIP configure doesn't handle build configuration keywords
     catkin_filter_libraries_for_build_configuration(LIBRARIES ${${PROJECT_NAME}_LIBRARIES})
     # SIP configure doesn't handle CMake targets
@@ -86,7 +91,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
-        COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR} \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
+        COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR} \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\" \"${EXTRA_DEFINES}\"
         DEPENDS ${sip_SIP_CONFIGURE} ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${sip_SOURCE_DIR}
         COMMENT "Running SIP generator for ${PROJECT_NAME} Python bindings..."
