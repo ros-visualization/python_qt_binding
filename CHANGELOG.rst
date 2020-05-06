@@ -2,6 +2,15 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.4 (2020-05-05)
+------------------
+* remove obsolete function used for backward compatibility (`#88 <https://github.com/ros-visualization/python_qt_binding/issues/88>`_)
+* disable Shiboken with CMake < 3.14 (`#87 <https://github.com/ros-visualization/python_qt_binding/issues/87>`_)
+* fix case of CMake function (`#86 <https://github.com/ros-visualization/python_qt_binding/issues/86>`_)
+* restore QUIET which was reverted in `#79 <https://github.com/ros-visualization/python_qt_binding/issues/79>`_
+* use PySide2 and Shiboken2 targets for variables (`#79 <https://github.com/ros-visualization/python_qt_binding/issues/79>`_)
+* Contributors: Dirk Thomas, Hermann von Kleist
+
 1.0.3 (2019-11-12)
 ------------------
 * check if Shiboken2Config.cmake defines a target instead of a variable (`#77 <https://github.com/ros-visualization/python_qt_binding/issues/77>`_)
