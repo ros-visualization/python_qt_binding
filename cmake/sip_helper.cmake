@@ -94,7 +94,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     if(WIN32)
       set(MAKE_EXECUTABLE NMake.exe)
     else()
-      set(MAKE_EXECUTABLE make)
+      set(MAKE_EXECUTABLE "\$(MAKE)")
     endif()
 
     add_custom_command(
