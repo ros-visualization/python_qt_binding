@@ -8,6 +8,8 @@ import sys
 import sipconfig
 from PyQt5 import QtCore
 
+libqt5_rename = False
+
 
 class Configuration(sipconfig.Configuration):
 
@@ -29,13 +31,18 @@ class Configuration(sipconfig.Configuration):
             'qt_winconfig': 'shared exceptions',
         }
         if sys.platform == 'darwin':
-            pyqtconfig['qt_framework'] = 1
+            if os.path.exists(os.path.join(qtconfig['QT_INSTALL_LIBS'], 'QtCore.framework')):
+                pyqtconfig['qt_framework'] = 1
+            else:
+                global libqt5_rename
+                libqt5_rename = True
+
         sipconfig.Configuration.__init__(self, [pyqtconfig])
 
         macros = sipconfig._default_macros.copy()
         macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
         macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
-        macros['MOC'] = 'moc-qt5'
+        macros['MOC'] = 'moc-qt5' if find_executable('moc-qt5') else 'moc'
         self.set_build_macros(macros)
 
 
@@ -129,6 +136,12 @@ def custom_platform_lib_function(self, clib, framework=0):
     # Only add '-l' if a library doesn't already start with '-l' and is not an absolute path
     if os.path.isabs(clib) or clib.startswith('-l'):
         return clib
+
+    global libqt5_rename
+    # sip renames libs to Qt5 automatically on Linux, but not on macOS
+    if libqt5_rename and not framework and clib.startswith('Qt') and not clib.startswith('Qt5'):
+        return '-lQt5' + clib[2:]
+
     return default_platform_lib_function(self, clib, framework)
 
 
