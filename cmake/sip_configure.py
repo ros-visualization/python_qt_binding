@@ -139,8 +139,8 @@ def custom_platform_lib_function(self, clib, framework=0):
 
     global libqt5_rename
     # sip renames libs to Qt5 automatically on Linux, but not on macOS
-    if libqt5_rename and not framework and clib.startswith("Qt") and not clib.startswith("Qt5"):
-        return "-lQt5" + clib[2:]
+    if libqt5_rename and not framework and clib.startswith('Qt') and not clib.startswith('Qt5'):
+        return '-lQt5' + clib[2:]
 
     return default_platform_lib_function(self, clib, framework)
 
