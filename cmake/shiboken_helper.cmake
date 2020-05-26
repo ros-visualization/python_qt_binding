@@ -67,7 +67,8 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   foreach(dir ${SHIBOKEN_HELPER_INCLUDE_DIRS})
     set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}:${dir}")
   endforeach()
-  set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --enable-pyside-extensions --include-paths=${INCLUDE_PATH}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
+  string(REPLACE ";" ":" INCLUDE_PATH_WITH_COLONS "${INCLUDE_PATH}")
+  set(${VAR} ${SHIBOKEN_BINARY} --generatorSet=shiboken --enable-pyside-extensions --include-paths=${INCLUDE_PATH_WITH_COLONS}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS} --typesystem-paths=${PYSIDE_TYPESYSTEMS} --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
 endmacro()
 
 
