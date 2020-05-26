@@ -80,7 +80,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
 
     set(EXTRA_DEFINES "")
-    if(DEFINED BUILD_SHARED_LIBS)
+    if(BUILD_SHARED_LIBS)
       set(EXTRA_DEFINES "ROS_BUILD_SHARED_LIBS")
     endif()
 
