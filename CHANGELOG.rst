@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* pass ROS_BUILD_SHARED_LIBS to use visibility control properly (`#89 <https://github.com/ros-visualization/python_qt_binding/issues/89>`_)
+* allow a list of INCLUDE_PATH (`#92 <https://github.com/ros-visualization/python_qt_binding/issues/92>`_)
+* use magic $(MAKE) variable to suppress build warning (`#91 <https://github.com/ros-visualization/python_qt_binding/issues/91>`_)
+
 0.4.1 (2020-03-02)
 ------------------
 * remove obsolete function used for backward compatibility (`#88 <https://github.com/ros-visualization/python_qt_binding/issues/88>`_)
