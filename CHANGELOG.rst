@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.3 (2020-06-11)
+------------------
 * fix linking with non framework builds of qt (e.g. from conda-forge) (`#84 <https://github.com/ros-visualization/python_qt_binding/issues/84>`_)
 
 0.4.2 (2020-05-28)
