@@ -2,6 +2,10 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix linking with non framework builds of qt (e.g. from conda-forge) (`#84 <https://github.com/ros-visualization/python_qt_binding/issues/84>`_)
+
 0.4.2 (2020-05-28)
 ------------------
 * pass ROS_BUILD_SHARED_LIBS to use visibility control properly (`#89 <https://github.com/ros-visualization/python_qt_binding/issues/89>`_)
