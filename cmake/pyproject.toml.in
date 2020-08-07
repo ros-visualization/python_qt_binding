@@ -1,0 +1,26 @@
+# Specify sip v5 as the build system for the package.
+[build-system]
+requires = ["PyQt-builder >=1, <2"]
+build-backend = "sipbuild.api"
+
+[tool.sip]
+project-factory = "pyqtbuild:PyQtProject"
+
+[tool.sip.builder]
+qmake = "@QMAKE_EXECUTABLE@"
+
+[tool.sip.project]
+sip-files-dir = "@SIP_FILES_DIR@"
+build-dir = "@SIP_BUILD_DIR@"
+
+# Specify the PEP 566 metadata for the project.
+[tool.sip.metadata]
+name = "lib@PROJECT_NAME@"
+
+[tool.sip.bindings.libqt_gui_cpp_sip]
+sip-file = "@SIP_FILE@"
+include-dirs = [@SIP_INCLUDE_DIRS@]
+libraries = [@SIP_LIBARIES@]
+library-dirs = [@SIP_LIBRARY_DIRS@]
+qmake-QT = ["widgets"]
+define-macros = [@SIP_EXTRA_DEFINES@]
