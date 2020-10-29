@@ -14,7 +14,8 @@
     independent of which binding provider was actually used which makes
     it very easy to switch between these.
   </description>
-  <maintainer email="dthomas@osrfoundation.org">Dirk Thomas</maintainer>
+  <maintainer email="clairewang@openrobotics.org">Claire Wang</maintainer>
+  <maintainer email="sloretz@openrobotics.org">Shane Loretz</maintainer>
   <license>BSD</license>
 
   <url>http://ros.org/wiki/python_qt_binding</url>
