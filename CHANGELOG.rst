@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update maintainers (`#96 <https://github.com/ros-visualization/python_qt_binding/issues/96>`_) (`#98 <https://github.com/ros-visualization/python_qt_binding/issues/98>`_)
+* Add pytest.ini so local tests don't display warning (`#93 <https://github.com/ros-visualization/python_qt_binding/issues/93>`_)
+* Contributors: Chris Lalancette, Shane Loretz
+
 1.0.5 (2020-05-26)
 ------------------
 * allow a list of INCLUDE_PATH (`#92 <https://github.com/ros-visualization/python_qt_binding/issues/92>`_)
