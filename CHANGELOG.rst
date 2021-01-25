@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.6 (2021-01-25)
+------------------
 * Update maintainers (`#96 <https://github.com/ros-visualization/python_qt_binding/issues/96>`_) (`#98 <https://github.com/ros-visualization/python_qt_binding/issues/98>`_)
 * Add pytest.ini so local tests don't display warning (`#93 <https://github.com/ros-visualization/python_qt_binding/issues/93>`_)
 * Contributors: Chris Lalancette, Shane Loretz
