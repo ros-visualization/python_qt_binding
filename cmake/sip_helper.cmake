@@ -81,7 +81,8 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
-        COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR} \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
+        COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR}
+          \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
         DEPENDS ${sip_SIP_CONFIGURE} ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${sip_SOURCE_DIR}
         COMMENT "Running SIP generator for ${PROJECT_NAME} Python bindings..."
