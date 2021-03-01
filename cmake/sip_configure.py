@@ -61,6 +61,12 @@ def get_sip_dir_flags(config):
         # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
         sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
+        # Archlinux installs sip files here by default
+        default_sip_dir = os.path.join(sipconfig._pkg_config['default_mod_dir'], 'PyQt5', 'bindings')
+        if os.path.exists(default_sip_dir):
+            return default_sip_dir, sip_flags
+
+        # sip4 installs here by default
         default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
         if os.path.exists(default_sip_dir):
             return default_sip_dir, sip_flags
