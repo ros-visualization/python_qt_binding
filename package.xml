@@ -1,6 +1,6 @@
 <package format="2">
   <name>python_qt_binding</name>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
   <description>
     This stack provides Python bindings for Qt.
     There are two providers: pyside and pyqt.  PySide2 is available under
@@ -14,7 +14,6 @@
     independent of which binding provider was actually used which makes
     it very easy to switch between these.
   </description>
-  <maintainer email="clairewang@openrobotics.org">Claire Wang</maintainer>
   <maintainer email="sloretz@openrobotics.org">Shane Loretz</maintainer>
   <license>BSD</license>
 
