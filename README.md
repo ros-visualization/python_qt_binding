@@ -27,4 +27,4 @@ The branches on this repo are for different ROS distros.
 * `melodic-devel` - ROS Noetic, ROS Melodic
 * `kinetic-devel` - ROS Lunar, ROS Kinetic
 * `groovy-devel` - ROS Jade, ROS Indigo, ROS Hydro, ROS Groovy
-* `fuerte-devel` - ROS Electric, ROS Fuerte
+* `fuerte-devel` - ROS Fuerte
