@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.3.8 (2021-04-12)
+------------------
+* Update maintainers (`#96 <https://github.com/ros-visualization/python_qt_binding/issues/96>`_) (`#97 <https://github.com/ros-visualization/python_qt_binding/issues/97>`_)
+* Contributors: Shane Loretz
+
 0.3.7 (2020-02-28)
 ------------------
 * bump CMake minimum version to avoid CMP0048 warning (`#83 <https://github.com/ros-visualization/python_qt_binding/issues/83>`_)
