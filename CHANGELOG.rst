@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.4.4 (2021-07-15)
+------------------
+* add check for sip binding install directory on archlinux (`#95 <https://github.com/ros-visualization/python_qt_binding/issues/95>`_)
+* Update maintainers (`#96 <https://github.com/ros-visualization/python_qt_binding/issues/96>`_)
+* Contributors: Akash Patel, Shane Loretz
+
 0.4.3 (2020-06-11)
 ------------------
 * fix linking with non framework builds of qt (e.g. from conda-forge) (`#84 <https://github.com/ros-visualization/python_qt_binding/issues/84>`_)
