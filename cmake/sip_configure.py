@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 import sipconfig
+import PyQt5
 from PyQt5 import QtCore
 
 libqt5_rename = False
@@ -62,7 +63,7 @@ def get_sip_dir_flags(config):
         sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
         # Archlinux installs sip files here by default
-        default_sip_dir = os.path.join(sipconfig._pkg_config['default_mod_dir'], 'PyQt5', 'bindings')
+        default_sip_dir = os.path.join(PyQt5.__path__[0], 'bindings')
         if os.path.exists(default_sip_dir):
             return default_sip_dir, sip_flags
 
