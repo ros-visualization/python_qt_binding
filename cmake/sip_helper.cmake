@@ -75,7 +75,14 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     set(SIP_BUILD_DIR ${sip_BINARY_DIR}/sip/${PROJECT_NAME})
 
-    set(INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+    set(INCLUDE_DIRS)
+    foreach(dir ${${PROJECT_NAME}_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+      get_filename_component(dir_real "${dir}" REALPATH BASE_DIR ${sip_SOURCE_DIR})
+      # filter out /usr/include, which must not be included via -isystem
+      if (NOT "${dir_real}" STREQUAL "/usr/include")
+        list(APPEND INCLUDE_DIRS ${dir_real})
+      endif()
+    endforeach()
     set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
 
@@ -92,6 +99,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
         COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR} \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\" \"${EXTRA_DEFINES}\"
+        COMMAND sed -i 's/ -I/ -isystem/g' ${SIP_BUILD_DIR}/Makefile
         DEPENDS ${sip_SIP_CONFIGURE} ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${sip_SOURCE_DIR}
         COMMENT "Running SIP generator for ${PROJECT_NAME} Python bindings..."
