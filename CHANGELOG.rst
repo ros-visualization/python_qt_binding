@@ -2,6 +2,13 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Make FindPythonInterp dependency explicit (`#107 <https://github.com/ros-visualization/python_qt_binding/issues/107>`_)
+* Add note about galactic branch (`#104 <https://github.com/ros-visualization/python_qt_binding/issues/104>`_)
+* fuerte-devel is too new for ROS Electric (`#101 <https://github.com/ros-visualization/python_qt_binding/issues/101>`_)
+* Contributors: Shane Loretz
+
 1.0.7 (2021-03-18)
 ------------------
 * Add repo README
