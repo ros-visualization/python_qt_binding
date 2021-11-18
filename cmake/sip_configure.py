@@ -65,6 +65,11 @@ def get_sip_dir_flags(config):
         if os.path.exists(default_sip_dir):
             return default_sip_dir, sip_flags
 
+        # Ubuntu 22.04 moves the sip directory to <sip_root_dir>/PyQt5/bindings
+        default_sip_dir = os.path.join(sipconfig._pkg_config['sip_root_dir'], 'PyQt5', 'bindings')
+        if os.path.exists(default_sip_dir):
+            return default_sip_dir, sip_flags
+
         # Homebrew installs sip files here by default
         default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5')
         if os.path.exists(default_sip_dir):
