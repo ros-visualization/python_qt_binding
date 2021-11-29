@@ -5,12 +5,10 @@ set(__PYTHON_QT_BINDING_SIP_HELPER_INCLUDED TRUE)
 
 set(__PYTHON_QT_BINDING_SIP_HELPER_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-set(Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-find_package(PythonInterp "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQUIRED)
-find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}" REQUIRED)
+find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
 
 execute_process(
-  COMMAND ${PYTHON_EXECUTABLE} -c "import sipconfig; print(sipconfig.Configuration().sip_bin)"
+  COMMAND ${Python3_EXECUTABLE} -c "import sipconfig; print(sipconfig.Configuration().sip_bin)"
   OUTPUT_VARIABLE PYTHON_SIP_EXECUTABLE
   ERROR_QUIET)
 
@@ -74,14 +72,14 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     set(SIP_BUILD_DIR ${sip_BINARY_DIR}/sip/${PROJECT_NAME})
 
-    set(INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${PYTHON_INCLUDE_DIRS})
+    set(INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${Python3_INCLUDE_DIRS})
     set(LIBRARIES ${${PROJECT_NAME}_LIBRARIES})
     set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
     set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
 
     add_custom_command(
         OUTPUT ${SIP_BUILD_DIR}/Makefile
-        COMMAND ${PYTHON_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR}
+        COMMAND ${Python3_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR}
           \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
         DEPENDS ${sip_SIP_CONFIGURE} ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${sip_SOURCE_DIR}
