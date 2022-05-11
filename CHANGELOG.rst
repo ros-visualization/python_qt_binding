@@ -2,6 +2,9 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.0 (2022-05-10)
+------------------
+
 1.1.1 (2021-12-06)
 ------------------
 * Replace PythonInterp to Python3 COMPONENTS (`#108 <https://github.com/ros-visualization/python_qt_binding/issues/108>`_)
