@@ -51,13 +51,13 @@ A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
   setattr(sys, 'SELECT_QT_BINDING', MY_BINDING_NAME)
 """
 
-import sys
-import warnings
-
 from python_qt_binding.binding_helper import loadUi  # noqa: F401
 from python_qt_binding.binding_helper import QT_BINDING  # noqa: F401
 from python_qt_binding.binding_helper import QT_BINDING_MODULES
 from python_qt_binding.binding_helper import QT_BINDING_VERSION  # noqa: F401
+
+import sys
+import warnings
 
 _DEPRECATION_MESSAGE = ("Using python_qt_bindings package in python is deprecated."
                         "The package should be replaced by python3-qtpy system dep."
