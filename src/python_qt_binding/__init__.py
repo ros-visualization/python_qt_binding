@@ -54,16 +54,16 @@ A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
 import sys
 import warnings
 
+from python_qt_binding.binding_helper import loadUi  # noqa: F401
+from python_qt_binding.binding_helper import QT_BINDING  # noqa: F401
+from python_qt_binding.binding_helper import QT_BINDING_MODULES
+from python_qt_binding.binding_helper import QT_BINDING_VERSION  # noqa: F401
+
 _DEPRECATION_MESSAGE = ("Using python_qt_bindings package in python is deprecated."
                         "The package should be replaced by python3-qtpy system dep."
                         "python_qt_bindings will only cater generation scrips in the future.")
 warnings.warn(_DEPRECATION_MESSAGE,
               DeprecationWarning, 2)
-
-from python_qt_binding.binding_helper import loadUi  # noqa: F401
-from python_qt_binding.binding_helper import QT_BINDING  # noqa: F401
-from python_qt_binding.binding_helper import QT_BINDING_MODULES
-from python_qt_binding.binding_helper import QT_BINDING_VERSION  # noqa: F401
 
 # register binding modules as sub modules of this package (python_qt_binding) for easy importing
 for module_name, module in QT_BINDING_MODULES.items():
