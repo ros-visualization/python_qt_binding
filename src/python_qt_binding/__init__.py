@@ -34,6 +34,20 @@
 
 import warnings
 from qtpy.uic import loadUi  # noqa: F401
+from qtpy import API_NAME, PYSIDE_VERSION, PYQT_VERSION
+
+from python_qt_binding.binding_helper import QT_BINDING_MODULES
+
+QT_BINDING = "pyside"
+QT_BINDING_VERSION = ""
+QT_BINDING_MODULES = []
+if(API_NAME == "PySide2"):
+    QT_BINDING = "pyside"
+    QT_BINDING_VERSION = PYSIDE_VERSION
+if(API_NAME == "PyQt5"):
+    QT_BINDING = "pyqt"
+    QT_BINDING_VERSION = PYQT_VERSION
+
 
 _DEPRECATION_MESSAGE = ("Using python_qt_bindings package in python is deprecated."
                         "The package should be replaced by python3-qtpy system dep."
