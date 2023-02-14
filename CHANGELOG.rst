@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.1 (2023-02-14)
+------------------
 * [rolling] Update maintainers - 2022-11-07 (`#120 <https://github.com/ros-visualization/python_qt_binding/issues/120>`_)
 * Contributors: Audrow Nash
 
