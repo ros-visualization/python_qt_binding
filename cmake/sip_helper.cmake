@@ -22,7 +22,7 @@ if(SIP_EXECUTABLE)
   message(STATUS "SIP binding generator available at: ${SIP_EXECUTABLE}")
   set(sip_helper_FOUND TRUE)
 else()
-  message(WARNING "SIP binding generator NOT available.")
+  message(STATUS "SIP binding generator NOT available.")
   set(sip_helper_NOTFOUND TRUE)
 endif()
 
