@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.2 (2023-02-24)
+------------------
 * Demote missing SIP message from WARNING to STATUS (`#122 <https://github.com/ros-visualization/python_qt_binding/issues/122>`_)
 * Contributors: Scott K Logan
 
