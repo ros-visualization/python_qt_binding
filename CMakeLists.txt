@@ -11,7 +11,6 @@ install(FILES
   cmake/shiboken_helper.cmake
   cmake/sip_configure.py
   cmake/sip_helper.cmake
-  cmake/pyside_config.py
   DESTINATION share/${PROJECT_NAME}/cmake)
 
 if(BUILD_TESTING)
