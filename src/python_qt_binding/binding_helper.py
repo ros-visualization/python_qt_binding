@@ -36,8 +36,8 @@ except ImportError:
     # since the 'future' package provides a 'builtins' module in Python 2
     # this must not be checked second
     import builtins
-import platform
 import os
+import platform
 import sys
 import traceback
 
