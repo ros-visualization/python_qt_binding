@@ -93,7 +93,9 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     if(WIN32)
       set(MAKE_EXECUTABLE NMake.exe)
     else()
-      set(MAKE_EXECUTABLE "\$(MAKE)")
+      find_program(MAKE_PROGRAM NAMES make)
+      message(STATUS "Found required make: ${MAKE_PROGRAM}")
+      set(MAKE_EXECUTABLE ${MAKE_PROGRAM})
     endif()
 
     add_custom_command(
