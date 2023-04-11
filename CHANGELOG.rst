@@ -2,6 +2,13 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_)
+* Fix flake8 linter regression (`#125 <https://github.com/ros-visualization/python_qt_binding/issues/125>`_)
+* Remove pyqt from default binding order for macOS (`#118 <https://github.com/ros-visualization/python_qt_binding/issues/118>`_)
+* Contributors: Christoph Hellmann Santos, Cristóbal Arroyo, Michael Carroll, Rhys Mainwaring
+
 1.2.2 (2023-02-24)
 ------------------
 * Demote missing SIP message from WARNING to STATUS (`#122 <https://github.com/ros-visualization/python_qt_binding/issues/122>`_)
