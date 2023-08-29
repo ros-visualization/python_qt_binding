@@ -98,6 +98,12 @@ else()
   set(shiboken_helper_NOTFOUND TRUE)
 endif()
 
+if(WIN32)
+  set(PATH_SPLITTER "\\\;")
+else()
+  set(PATH_SPLITTER ":")
+endif()
+
 
 macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   # Add includes from current directory, Qt, PySide and compiler specific dirs
@@ -109,9 +115,9 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
   set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "")
   foreach(dir ${SHIBOKEN_HELPER_INCLUDE_DIRS})
-    set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}:${dir}")
+    set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}${PATH_SPLITTER}${dir}")
   endforeach()
-  string(REPLACE ";" ":" INCLUDE_PATH_WITH_COLONS "${INCLUDE_PATH}")
+  string(REPLACE ";" "${PATH_SPLITTER}" INCLUDE_PATH_WITH_COLONS "${INCLUDE_PATH}")
   set(${VAR} ${SHIBOKEN_BINARY}
     --generatorSet=shiboken
     --enable-pyside-extensions
