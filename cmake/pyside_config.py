@@ -82,7 +82,7 @@ options.append(
         "--pyside-include-path",
         lambda: get_package_include_path(Package.PYSIDE_MODULE),
         pyside_error,
-        "Print PySide6 include paths",
+        "Print PySide include paths",
     )
 )
 
@@ -108,7 +108,7 @@ options.append(
         "--shiboken-module-qmake-lflags",
         lambda: get_package_qmake_lflags(Package.SHIBOKEN_MODULE),
         pyside_error,
-        "Print shiboken6 shared library link flags for qmake",
+        "Print shiboken shared library link flags for qmake",
     )
 )
 options.append(
@@ -116,7 +116,7 @@ options.append(
         "--pyside-qmake-lflags",
         lambda: get_package_qmake_lflags(Package.PYSIDE_MODULE),
         pyside_error,
-        "Print PySide6 shared library link flags for qmake",
+        "Print PySide shared library link flags for qmake",
     )
 )
 
@@ -210,7 +210,7 @@ def shared_library_glob_pattern():
 def filter_shared_libraries(libs_list):
     def predicate(lib_name):
         basename = os.path.basename(lib_name)
-        if "shiboken" in basename or "pyside6" in basename:
+        if "shiboken" in basename or "pyside" in basename:
             return True
         return False
 
@@ -238,7 +238,7 @@ def link_option(lib):
     return link
 
 
-# Locate PySide6 via sys.path package path.
+# Locate PySide via sys.path package path.
 def find_pyside():
     return find_package_path(PYSIDE_MODULE)
 
