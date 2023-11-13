@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.2 (2023-11-13)
+------------------
+* Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_) (`#128 <https://github.com/ros-visualization/python_qt_binding/issues/128>`_)
+* Contributors: Yasushi SHOJI
+
 1.1.1 (2021-12-06)
 ------------------
 * Replace PythonInterp to Python3 COMPONENTS (`#108 <https://github.com/ros-visualization/python_qt_binding/issues/108>`_)
