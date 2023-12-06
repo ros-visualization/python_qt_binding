@@ -1,5 +1,4 @@
-from copy import copy
-from distutils.spawn import find_executable
+import copy
 import os
 import re
 import shutil
@@ -17,9 +16,9 @@ libqt5_rename = False
 class Configuration(sipconfig.Configuration):
 
     def __init__(self):
-        env = copy(os.environ)
+        env = copy.copy(os.environ)
         env['QT_SELECT'] = '5'
-        qmake_exe = 'qmake-qt5' if find_executable('qmake-qt5') else 'qmake'
+        qmake_exe = 'qmake-qt5' if shutil.which('qmake-qt5') else 'qmake'
         qtconfig = subprocess.check_output(
             [qmake_exe, '-query'], env=env, universal_newlines=True)
         qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
@@ -45,7 +44,7 @@ class Configuration(sipconfig.Configuration):
         macros = sipconfig._default_macros.copy()
         macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
         macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
-        macros['MOC'] = 'moc-qt5' if find_executable('moc-qt5') else 'moc'
+        macros['MOC'] = 'moc-qt5' if shutil.which('moc-qt5') else 'moc'
         self.set_build_macros(macros)
 
 
@@ -61,25 +60,30 @@ def get_sip_dir_flags(config):
         sip_flags = config.pyqt_sip_flags
         return sip_dir, sip_flags
     except AttributeError:
-        # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
-        sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
+        pass
 
-        # Archlinux installs sip files here by default
-        default_sip_dir = os.path.join(PyQt5.__path__[0], 'bindings')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
+    # We didn't find the sip_dir and sip_flags from the config, continue looking
 
-        # sip4 installs here by default
-        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
+    # sipconfig.Configuration does not have a pyqt_sip_dir or pyqt_sip_flags AttributeError
+    sip_flags = QtCore.PYQT_CONFIGURATION['sip_flags']
 
-        # Homebrew installs sip files here by default
-        default_sip_dir = os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5')
-        if os.path.exists(default_sip_dir):
-            return default_sip_dir, sip_flags
-        raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
-                                ' that PyQt5 is installed')
+    candidate_sip_dirs = []
+
+    # Archlinux installs sip files here by default
+    candidate_sip_dirs.append(os.path.join(PyQt5.__path__[0], 'bindings'))
+
+    # sip4 installs here by default
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5'))
+
+    # Homebrew installs sip files here by default
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5'))
+
+    for sip_dir in candidate_sip_dirs:
+        if os.path.exists(sip_dir):
+            return sip_dir, sip_flags
+
+    raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
+                            ' that PyQt5 is installed')
 
 
 if len(sys.argv) != 8:
