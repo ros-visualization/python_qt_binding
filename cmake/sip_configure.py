@@ -2,8 +2,10 @@ from copy import copy
 from distutils.spawn import find_executable
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 import PyQt5
 from PyQt5 import QtCore
@@ -111,16 +113,43 @@ sip_bin = config.sip_bin
 if sys.platform == 'win32' and os.path.isdir(sip_bin):
     sip_bin += '.exe'
 
-cmd = [
-    sip_bin,
-    '-c', build_dir,
-    '-b', os.path.join(build_dir, build_file),
-    '-I', sip_dir,
-    '-w'
-]
-cmd += sip_flags.split(' ')
-cmd.append(sip_file)
-subprocess.check_call(cmd)
+# SIP4 has an incompatibility with Qt 5.15.6.  In particular, Qt 5.15.6 uses a new SIP directive
+# called py_ssize_t_clean in QtCoremod.sip that SIP4 does not understand.
+#
+# Unfortunately, the combination of SIP4 and Qt 5.15.6 is common.  Archlinux, Ubuntu 22.04
+# and RHEL-9 all have this combination.  On Ubuntu 22.04, there is a custom patch to SIP4
+# to make it understand the py_ssize_t_clean tag, so the combination works.  But on most
+# other platforms, it fails.
+#
+# To workaround this, copy all of the SIP files into a temporary directory, remove the offending
+# line, and then use that temporary directory as the include path.  This is unnecessary on
+# Ubuntu 22.04, but shouldn't hurt anything there.
+with tempfile.TemporaryDirectory() as tmpdirname:
+    shutil.copytree(sip_dir, tmpdirname, dirs_exist_ok=True)
+
+    output = ''
+    with open(os.path.join(tmpdirname, 'QtCore', 'QtCoremod.sip'), 'r') as infp:
+        for line in infp:
+            if line.startswith('%Module(name='):
+                result = re.sub(r', py_ssize_t_clean=True', '', line)
+                output += result
+            else:
+                output += line
+
+    with open(os.path.join(tmpdirname, 'QtCore', 'QtCoremod.sip'), 'w') as outfp:
+        outfp.write(output)
+
+    cmd = [
+        sip_bin,
+        '-c', build_dir,
+        '-b', os.path.join(build_dir, build_file),
+        '-I', tmpdirname,
+        '-w'
+    ]
+    cmd += sip_flags.split(' ')
+    cmd.append(sip_file)
+
+    subprocess.check_call(cmd)
 
 # Create the Makefile.  The QtModuleMakefile class provided by the
 # pyqtconfig module takes care of all the extra preprocessor, compiler and
