@@ -134,7 +134,7 @@ def _register_binding_module(module_name, module):
 
 def _named_import(name):
     parts = name.split('.')
-    assert(len(parts) >= 2)
+    assert len(parts) >= 2
     module = builtins.__import__(name)
     for m in parts[1:]:
         module = module.__dict__[m]
