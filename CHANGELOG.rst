@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.1.1 (2024-02-07)
+------------------
 * Remove unnecessary parentheses around assert. (`#133 <https://github.com/ros-visualization/python_qt_binding/issues/133>`_)
 * Contributors: Chris Lalancette
 
