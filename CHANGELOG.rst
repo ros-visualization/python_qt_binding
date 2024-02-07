@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update the SIP support so we can deal with a broken RHEL-9. (`#130 <https://github.com/ros-visualization/python_qt_binding/issues/130>`_)
+* Contributors: Chris Lalancette
+
 1.2.3 (2023-04-11)
 ------------------
 * Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_)
