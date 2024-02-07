@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.2.4 (2024-02-07)
+------------------
 * Update the SIP support so we can deal with a broken RHEL-9. (`#130 <https://github.com/ros-visualization/python_qt_binding/issues/130>`_)
 * Contributors: Chris Lalancette
 
