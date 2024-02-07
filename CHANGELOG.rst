@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove unnecessary parentheses around assert. (`#133 <https://github.com/ros-visualization/python_qt_binding/issues/133>`_)
+* Contributors: Chris Lalancette
+
 2.1.0 (2024-01-24)
 ------------------
 * Switch to FindPython3 in the shiboken_helper.cmake. (`#132 <https://github.com/ros-visualization/python_qt_binding/issues/132>`_)
