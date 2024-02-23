@@ -70,6 +70,7 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   set(${VAR} ${SHIBOKEN_BINARY}
     --generatorSet=shiboken
     --enable-pyside-extensions
+    -std=c++17
     --include-paths=${INCLUDE_PATH_WITH_COLONS}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}
     --typesystem-paths=${PYSIDE_TYPESYSTEMS}
     --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
