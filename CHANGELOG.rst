@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.2.0 (2024-03-28)
+------------------
 * Switch to C++17 for SIP and Shiboken (`#135 <https://github.com/ros-visualization/python_qt_binding/issues/135>`_)
 * Set hints to find the python version we actually want. (`#134 <https://github.com/ros-visualization/python_qt_binding/issues/134>`_)
 * Contributors: Chris Lalancette, Christophe Bedard
