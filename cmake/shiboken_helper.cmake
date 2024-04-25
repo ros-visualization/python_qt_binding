@@ -10,7 +10,7 @@
 # the search will prefer /usr/bin/python3 over /usr/bin/python3.11.  And that
 # latter functionality is only available in CMake 3.20 or later, so we need
 # at least that version.
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
@@ -24,7 +24,9 @@ set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 # In CMake 3.27 and later, FindPythonInterp and FindPythonLibs are deprecated.
 # However, Shiboken2 as packaged in Ubuntu 24.04 still use them, so set CMP0148 to
 # "OLD" to silence this warning.
-cmake_policy(SET CMP0148 OLD)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
+  cmake_policy(SET CMP0148 OLD)
+endif()
 find_package(Shiboken2 QUIET)
 if(Shiboken2_FOUND)
   message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
