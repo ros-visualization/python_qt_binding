@@ -21,6 +21,15 @@ if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
 endif()
 set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 
+<<<<<<< HEAD
+=======
+# In CMake 3.27 and later, FindPythonInterp and FindPythonLibs are deprecated.
+# However, Shiboken2 as packaged in Ubuntu 24.04 still use them, so set CMP0148 to
+# "OLD" to silence this warning.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
+  cmake_policy(SET CMP0148 OLD)
+endif()
+>>>>>>> 4fe5bce (Only suppress Python warnings on new enough CMake (#139))
 find_package(Shiboken2 QUIET)
 if(Shiboken2_FOUND)
   message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
