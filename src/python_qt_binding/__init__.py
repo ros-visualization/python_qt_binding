@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Copyright (c) 2011, Dirk Thomas, Dorian Scholz, TU Darmstadt
+#               2022, Christoph Hellmann Santos, Fraunhofer IPA
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -30,39 +31,26 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""
-Abstraction for different Python Qt bindings.
 
-Supported Python Qt 5 bindings are PyQt and PySide.
-The Qt modules can be imported like this:
+import warnings
+from qtpy.uic import loadUi  # noqa: F401
+from qtpy import API_NAME, PYSIDE_VERSION, PYQT_VERSION
 
-from python_qt_binding.QtCore import QObject
-from python_qt_binding import QtGui, loadUi
-
-The name of the selected binding is available in QT_BINDING.
-The version of the selected binding is available in QT_BINDING_VERSION.
-All available Qt modules are listed in QT_BINDING_MODULES.
-
-The default binding order ('pyqt', 'pyside') can be overridden with a
-SELECT_QT_BINDING_ORDER attribute on sys:
-  setattr(sys, 'SELECT_QT_BINDING_ORDER', [FIRST_NAME, NEXT_NAME, ..])
-
-A specific binding can be selected with a SELECT_QT_BINDING attribute on sys:
-  setattr(sys, 'SELECT_QT_BINDING', MY_BINDING_NAME)
-"""
-
-import sys
-
-from python_qt_binding.binding_helper import loadUi  # noqa: F401
-from python_qt_binding.binding_helper import QT_BINDING  # noqa: F401
 from python_qt_binding.binding_helper import QT_BINDING_MODULES
-from python_qt_binding.binding_helper import QT_BINDING_VERSION  # noqa: F401
 
-# register binding modules as sub modules of this package (python_qt_binding) for easy importing
-for module_name, module in QT_BINDING_MODULES.items():
-    sys.modules[__name__ + '.' + module_name] = module
-    setattr(sys.modules[__name__], module_name, module)
-    del module_name
-    del module
+QT_BINDING = "pyside"
+QT_BINDING_VERSION = ""
+QT_BINDING_MODULES = []
+if(API_NAME == "PySide2"):
+    QT_BINDING = "pyside"
+    QT_BINDING_VERSION = PYSIDE_VERSION
+if(API_NAME == "PyQt5"):
+    QT_BINDING = "pyqt"
+    QT_BINDING_VERSION = PYQT_VERSION
 
-del sys
+
+_DEPRECATION_MESSAGE = ("Using python_qt_bindings package in python is deprecated."
+                        "The package should be replaced by python3-qtpy system dep."
+                        "python_qt_bindings will only cater generation scrips in the future.")
+warnings.warn(_DEPRECATION_MESSAGE,
+              DeprecationWarning, 2)
