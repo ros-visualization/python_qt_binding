@@ -2,6 +2,14 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Only suppress Python warnings on new enough CMake (`#139 <https://github.com/ros-visualization/python_qt_binding/issues/139>`_)
+  * Older CMake doesn't have the policy, so skip it there.
+* Suppress warning from Shiboken2. (`#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_)
+  The comment has more information on why we are doing this.
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+
 2.2.0 (2024-03-28)
 ------------------
 * Switch to C++17 for SIP and Shiboken (`#135 <https://github.com/ros-visualization/python_qt_binding/issues/135>`_)
