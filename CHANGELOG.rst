@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.2.1 (2024-05-13)
+------------------
 * Suppress warning from Shiboken2. (backport `#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_) (`#138 <https://github.com/ros-visualization/python_qt_binding/issues/138>`_)
   Co-authored-by: Chris Lalancette <clalancette@gmail.com>
   Co-authored-by: Alejandro Hernández Cordero <ahcorde@gmail.com>
