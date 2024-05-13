@@ -2,6 +2,13 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Suppress warning from Shiboken2. (backport `#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_) (`#138 <https://github.com/ros-visualization/python_qt_binding/issues/138>`_)
+  Co-authored-by: Chris Lalancette <clalancette@gmail.com>
+  Co-authored-by: Alejandro Hernández Cordero <ahcorde@gmail.com>
+* Contributors: mergify[bot]
+
 2.2.0 (2024-03-28)
 ------------------
 * Switch to C++17 for SIP and Shiboken (`#135 <https://github.com/ros-visualization/python_qt_binding/issues/135>`_)
