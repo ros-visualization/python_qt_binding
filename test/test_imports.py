@@ -12,22 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
 
+import pytest
+
+
+@pytest.mark.skipif(sys.platform == 'win32' and sys.executable.endswith('python_d.exe'),
+                    reason='Skipping test on Windows Debug')
 def test_import_qtcore():
     from python_qt_binding import QtCore
     assert QtCore is not None
 
 
+@pytest.mark.skipif(sys.platform == 'win32' and sys.executable.endswith('python_d.exe'),
+                    reason='Skipping test on Windows Debug')
 def test_import_qtgui():
     from python_qt_binding import QtGui
     assert QtGui is not None
 
 
+@pytest.mark.skipif(sys.platform == 'win32' and sys.executable.endswith('python_d.exe'),
+                    reason='Skipping test on Windows Debug')
 def test_import_qtwidgets():
     from python_qt_binding import QtWidgets
     assert QtWidgets is not None
 
 
+@pytest.mark.skipif(sys.platform == 'win32' and sys.executable.endswith('python_d.exe'),
+                    reason='Skipping test on Windows Debug')
 def test_import_qtobject():
     from python_qt_binding.QtCore import QObject
     assert QObject is not None
