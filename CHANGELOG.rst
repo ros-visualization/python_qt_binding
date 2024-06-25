@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Skip running the tests on Windows Debug. (`#142 <https://github.com/ros-visualization/python_qt_binding/issues/142>`_)
+* Contributors: Chris Lalancette
+
 2.3.0 (2024-04-26)
 ------------------
 * Only suppress Python warnings on new enough CMake (`#139 <https://github.com/ros-visualization/python_qt_binding/issues/139>`_)
