@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.3.1 (2024-06-25)
+------------------
 * Skip running the tests on Windows Debug. (`#142 <https://github.com/ros-visualization/python_qt_binding/issues/142>`_)
 * Contributors: Chris Lalancette
 
