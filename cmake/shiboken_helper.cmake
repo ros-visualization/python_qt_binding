@@ -52,20 +52,17 @@ if(${QT_VERSION_MAJOR} GREATER "5")
       endif()
 
       find_package(python_qt_binding REQUIRED)
-      message("Alex " ${python_interpreter} ${python_qt_binding_DIR}/pyside_config.py
-      ${option} )
-
       execute_process(
         COMMAND ${python_interpreter} ${python_qt_binding_DIR}/pyside_config.py
                 ${option}
         OUTPUT_VARIABLE ${output_var}
         OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-      if ("${${output_var}}" STREQUAL "")
+      if("${${output_var}}" STREQUAL "")
           message(FATAL_ERROR "Error: Calling pyside_config.py ${option} returned no output.")
       endif()
       if(is_list)
-          string (REPLACE " " ";" ${output_var} "${${output_var}}")
+          string(REPLACE " " ";" ${output_var} "${${output_var}}")
       endif()
   endmacro()
 

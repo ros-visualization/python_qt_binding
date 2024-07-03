@@ -2,12 +2,12 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
-import sysconfig
 from enum import Enum
-import glob
+from glob import glob
 import os
 import re
 import sys
+import sysconfig
 
 
 PYSIDE = 'pyside6'
@@ -22,8 +22,8 @@ class Package(Enum):
 
 
 generic_error = ('Did you forget to activate your virtualenv? Or perhaps'
-                 f' you forgot to build / install {PYSIDE_MODULE} into your currently active Python'
-                 ' environment?')
+                 f' you forgot to build / install {PYSIDE_MODULE} into your currently'
+                 ' active Python environment?')
 pyside_error = f'Unable to locate {PYSIDE_MODULE}. {generic_error}'
 shiboken_module_error = f'Unable to locate {SHIBOKEN}-module. {generic_error}'
 shiboken_generator_error = f'Unable to locate shiboken-generator. {generic_error}'
@@ -34,57 +34,57 @@ python_include_error = 'Unable to locate the Python include headers directory.'
 options = []
 
 # option, function, error, description
-options.append(("--shiboken-module-path",
+options.append(('--shiboken-module-path',
                 lambda: find_shiboken_module(),
                 shiboken_module_error,
-                "Print shiboken module location"))
-options.append(("--shiboken-generator-path",
+                'Print shiboken module location'))
+options.append(('--shiboken-generator-path',
                 lambda: find_shiboken_generator(),
                 shiboken_generator_error,
-                "Print shiboken generator location"))
-options.append(("--pyside-path", lambda: find_pyside(), pyside_error,
-                f"Print {PYSIDE_MODULE} location"))
+                'Print shiboken generator location'))
+options.append(('--pyside-path', lambda: find_pyside(), pyside_error,
+                f'Print {PYSIDE_MODULE} location'))
 
-options.append(("--python-include-path",
+options.append(('--python-include-path',
                 lambda: get_python_include_path(),
                 python_include_error,
-                "Print Python include path"))
-options.append(("--shiboken-generator-include-path",
+                'Print Python include path'))
+options.append(('--shiboken-generator-include-path',
                 lambda: get_package_include_path(Package.SHIBOKEN_GENERATOR),
                 pyside_error,
-                "Print shiboken generator include paths"))
-options.append(("--pyside-include-path",
+                'Print shiboken generator include paths'))
+options.append(('--pyside-include-path',
                 lambda: get_package_include_path(Package.PYSIDE_MODULE),
                 pyside_error,
-                "Print PySide6 include paths"))
+                'Print PySide6 include paths'))
 
-options.append(("--python-link-flags-qmake", lambda: python_link_flags_qmake(), python_link_error,
-                "Print python link flags for qmake"))
-options.append(("--python-link-flags-cmake", lambda: python_link_flags_cmake(), python_link_error,
-                "Print python link flags for cmake"))
+options.append(('--python-link-flags-qmake', lambda: python_link_flags_qmake(), python_link_error,
+                'Print python link flags for qmake'))
+options.append(('--python-link-flags-cmake', lambda: python_link_flags_cmake(), python_link_error,
+                'Print python link flags for cmake'))
 
-options.append(("--shiboken-module-qmake-lflags",
+options.append(('--shiboken-module-qmake-lflags',
                 lambda: get_package_qmake_lflags(Package.SHIBOKEN_MODULE), pyside_error,
-                "Print shiboken6 shared library link flags for qmake"))
-options.append(("--pyside-qmake-lflags",
+                'Print shiboken6 shared library link flags for qmake'))
+options.append(('--pyside-qmake-lflags',
                 lambda: get_package_qmake_lflags(Package.PYSIDE_MODULE), pyside_error,
-                "Print PySide6 shared library link flags for qmake"))
+                'Print PySide6 shared library link flags for qmake'))
 
-options.append(("--shiboken-module-shared-libraries-qmake",
+options.append(('--shiboken-module-shared-libraries-qmake',
                 lambda: get_shared_libraries_qmake(Package.SHIBOKEN_MODULE), pyside_libs_error,
                 "Print paths of shiboken shared libraries (.so's, .dylib's, .dll's) for qmake"))
-options.append(("--shiboken-module-shared-libraries-cmake",
+options.append(('--shiboken-module-shared-libraries-cmake',
                 lambda: get_shared_libraries_cmake(Package.SHIBOKEN_MODULE), pyside_libs_error,
                 "Print paths of shiboken shared libraries (.so's, .dylib's, .dll's) for cmake"))
 
-options.append(("--pyside-shared-libraries-qmake",
+options.append(('--pyside-shared-libraries-qmake',
                 lambda: get_shared_libraries_qmake(Package.PYSIDE_MODULE), pyside_libs_error,
                 "Print paths of f{PYSIDE_MODULE} shared libraries (.so's, .dylib's, .dll's) "
-                "for qmake"))
-options.append(("--pyside-shared-libraries-cmake",
+                'for qmake'))
+options.append(('--pyside-shared-libraries-cmake',
                 lambda: get_shared_libraries_cmake(Package.PYSIDE_MODULE), pyside_libs_error,
                 f"Print paths of {PYSIDE_MODULE} shared libraries (.so's, .dylib's, .dll's) "
-                "for cmake"))
+                'for cmake'))
 
 options_usage = ''
 for i, (flag, _, _, description) in enumerate(options):
@@ -130,7 +130,7 @@ def import_suffixes():
 
 def is_debug():
     debug_suffix = '_d.pyd' if sys.platform == 'win32' else '_d.so'
-    return any([s.endswith(debug_suffix) for s in import_suffixes()])
+    return any(s.endswith(debug_suffix) for s in import_suffixes())
 
 
 def shared_library_glob_pattern():
@@ -175,7 +175,7 @@ def find_shiboken_module():
 
 
 def find_shiboken_generator():
-    return find_package_path(f"{SHIBOKEN}_generator")
+    return find_package_path(f'{SHIBOKEN}_generator')
 
 
 def find_package(which_package):
@@ -197,7 +197,7 @@ def find_package_path(dir_name):
     return None
 
 
-# Return version as "x.y" (e.g. 3.9, 3.12, etc)
+# Return version as 'x.y' (e.g. 3.9, 3.12, etc)
 def python_version():
     return str(sys.version_info[0]) + '.' + str(sys.version_info[1])
 
@@ -210,12 +210,12 @@ def python_link_flags_qmake():
     flags = python_link_data()
     if sys.platform == 'win32':
         libdir = flags['libdir']
-        # This will add the "~1" shortcut for directories that
+        # This will add the '~1' shortcut for directories that
         # contain white spaces
-        # e.g.: "Program Files" to "Progra~1"
-        for d in libdir.split("\\"):
-            if " " in d:
-                libdir = libdir.replace(d, d.split(" ")[0][:-1] + "~1")
+        # e.g.: 'Program Files' to 'Progra~1'
+        for d in libdir.split('\\'):
+            if ' ' in d:
+                libdir = libdir.replace(d, d.split(' ')[0][:-1] + '~1')
         lib_flags = flags['lib']
         return f'-L{libdir} -l{lib_flags}'
     elif sys.platform == 'darwin':
@@ -241,7 +241,7 @@ def python_link_data():
     libdir = sysconfig.get_config_var('LIBDIR')
     if libdir is None:
         libdir = os.path.abspath(os.path.join(
-            sysconfig.get_config_var('LIBDEST'), "..", "libs"))
+            sysconfig.get_config_var('LIBDEST'), '..', 'libs'))
     version = python_version()
     version_no_dots = version.replace('.', '')
 
@@ -267,7 +267,7 @@ def get_package_include_path(which_package):
     if package_path is None:
         return None
 
-    includes = f"{package_path}/include"
+    includes = f'{package_path}/include'
 
     return includes
 
@@ -277,8 +277,8 @@ def get_package_qmake_lflags(which_package):
     if package_path is None:
         return None
 
-    link = f"-L{package_path}"
-    glob_result = glob.glob(os.path.join(package_path, shared_library_glob_pattern()))
+    link = f'-L{package_path}'
+    glob_result = glob(os.path.join(package_path, shared_library_glob_pattern()))
     for lib in filter_shared_libraries(glob_result):
         link += ' '
         link += link_option(lib)
@@ -290,7 +290,7 @@ def get_shared_libraries_data(which_package):
     if package_path is None:
         return None
 
-    glob_result = glob.glob(os.path.join(package_path, shared_library_glob_pattern()))
+    glob_result = glob(os.path.join(package_path, shared_library_glob_pattern()))
     filtered_libs = filter_shared_libraries(glob_result)
     libs = []
     if sys.platform == 'win32':
@@ -329,7 +329,7 @@ def get_shared_libraries_cmake(which_package):
     return result
 
 
-print_all = option == "-a"
+print_all = option == '-a'
 for argument, handler, error, _ in options:
     if option == argument or print_all:
         handler_result = handler()
@@ -338,5 +338,5 @@ for argument, handler, error, _ in options:
 
         line = handler_result
         if print_all:
-            line = f"{argument:<40}: {line}"
+            line = f'{argument:<40}: {line}'
         print(line)
