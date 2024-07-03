@@ -262,7 +262,6 @@ def python_link_data():
 
 
 def get_package_include_path(which_package):
-    print('which_package ', which_package)
     package_path = find_package(which_package)
     if package_path is None:
         return None
