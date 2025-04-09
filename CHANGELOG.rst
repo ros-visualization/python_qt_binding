@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Use PyQt5 module path to find SIP bindings (`#105 <https://github.com/ros-visualization/python_qt_binding/issues/105>`_)
+* Contributors: Ben Wolsieffer
+
 0.4.4 (2021-07-15)
 ------------------
 * add check for sip binding install directory on archlinux (`#95 <https://github.com/ros-visualization/python_qt_binding/issues/95>`_)
