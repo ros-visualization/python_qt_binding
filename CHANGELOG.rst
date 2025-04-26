@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.4.6 (2025-04-26)
+------------------
 * Update CMakeLists.txt (`#148 <https://github.com/ros-visualization/python_qt_binding/issues/148>`_)
 * Contributors: Arne Hitzmann
 
