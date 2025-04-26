@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update CMakeLists.txt (`#148 <https://github.com/ros-visualization/python_qt_binding/issues/148>`_)
+* Contributors: Arne Hitzmann
+
 0.4.5 (2025-04-09)
 ------------------
 * Use PyQt5 module path to find SIP bindings (`#105 <https://github.com/ros-visualization/python_qt_binding/issues/105>`_)
