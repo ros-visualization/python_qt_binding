@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.0 (2025-04-28)
+------------------
+* Remove the mirror-rolling-to-main workflow (`#145 <https://github.com/ros-visualization/python_qt_binding/issues/145>`_)
+* Remove CODEOWNERS (`#144 <https://github.com/ros-visualization/python_qt_binding/issues/144>`_)
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette
+
 2.3.1 (2024-06-25)
 ------------------
 * Skip running the tests on Windows Debug. (`#142 <https://github.com/ros-visualization/python_qt_binding/issues/142>`_)
