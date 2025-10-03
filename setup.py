@@ -39,7 +39,7 @@ d.update({
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    license = 'BSD',
+    license='BSD',
 })
 
 setup(**d)
