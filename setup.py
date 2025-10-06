@@ -38,10 +38,8 @@ d.update({
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'License :: OSI Approved :: BSD License',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-        'License :: OSI Approved :: GNU General Public License (GPL)',
     ],
+    license: ['BSD'],
 })
 
 setup(**d)
