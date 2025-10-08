@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.2.2 (2025-10-08)
+------------------
+* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_) (`#154 <https://github.com/ros-visualization/python_qt_binding/issues/154>`_)
+* Remove CODEOWNERS (`#144 <https://github.com/ros-visualization/python_qt_binding/issues/144>`_) (`#146 <https://github.com/ros-visualization/python_qt_binding/issues/146>`_)
+* Contributors: mergify[bot]
+
 2.2.1 (2024-05-13)
 ------------------
 * Suppress warning from Shiboken2. (backport `#137 <https://github.com/ros-visualization/python_qt_binding/issues/137>`_) (`#138 <https://github.com/ros-visualization/python_qt_binding/issues/138>`_)
