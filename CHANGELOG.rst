@@ -2,6 +2,12 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.4.1 (2025-10-08)
+------------------
+* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_)
+* fix cmake deprecation (`#150 <https://github.com/ros-visualization/python_qt_binding/issues/150>`_)
+* Contributors: mosfet80
+
 2.4.0 (2025-04-28)
 ------------------
 * Remove the mirror-rolling-to-main workflow (`#145 <https://github.com/ros-visualization/python_qt_binding/issues/145>`_)
