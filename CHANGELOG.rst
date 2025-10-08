@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.3 (2025-10-08)
+------------------
+* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_) (`#155 <https://github.com/ros-visualization/python_qt_binding/issues/155>`_)
+* Contributors: mergify[bot]
+
 1.1.2 (2023-11-13)
 ------------------
 * Fix to allow ninja to use make for generators (`#123 <https://github.com/ros-visualization/python_qt_binding/issues/123>`_) (`#128 <https://github.com/ros-visualization/python_qt_binding/issues/128>`_)
