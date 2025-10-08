@@ -2,6 +2,14 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.2 (2025-10-08)
+------------------
+* fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_) (`#153 <https://github.com/ros-visualization/python_qt_binding/issues/153>`_)
+* fix cmake deprecation (`#150 <https://github.com/ros-visualization/python_qt_binding/issues/150>`_) (`#152 <https://github.com/ros-visualization/python_qt_binding/issues/152>`_)
+* Remove the mirror-rolling-to-main workflow. (`#145 <https://github.com/ros-visualization/python_qt_binding/issues/145>`_)
+* Remove CODEOWNERS (`#144 <https://github.com/ros-visualization/python_qt_binding/issues/144>`_)
+* Contributors: Alejandro Hernández Cordero, Chris Lalancette, mergify[bot]
+
 2.3.1 (2024-06-25)
 ------------------
 * Skip running the tests on Windows Debug. (`#142 <https://github.com/ros-visualization/python_qt_binding/issues/142>`_)
