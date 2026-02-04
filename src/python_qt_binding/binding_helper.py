@@ -51,10 +51,11 @@ def _select_qt_binding(binding_name=None, binding_order=None):
     global QT_BINDING, QT_BINDING_VERSION
 
     # order of default bindings can be changed here
-    if platform.system() == 'Darwin':
-        DEFAULT_BINDING_ORDER = ['pyside']
-    else:
-        DEFAULT_BINDING_ORDER = ['pyqt', 'pyside']
+    DEFAULT_BINDING_ORDER = ['pyside']
+    # if platform.system() == 'Darwin':
+    #     DEFAULT_BINDING_ORDER = ['pyside']
+    # else:
+    #     DEFAULT_BINDING_ORDER = ['pyside', 'pyqt']
 
     binding_order = binding_order or DEFAULT_BINDING_ORDER
 
@@ -155,9 +156,9 @@ def _load_pyqt(required_modules, optional_modules):
 
     # register required and optional PyQt modules
     for module_name in required_modules:
-        _named_import('PyQt5.%s' % module_name)
+        _named_import('PyQt6.%s' % module_name)
     for module_name in optional_modules:
-        _named_optional_import('PyQt5.%s' % module_name)
+        _named_optional_import('PyQt6.%s' % module_name)
 
     # set some names for compatibility with PySide
     sys.modules['QtCore'].Signal = sys.modules['QtCore'].pyqtSignal
@@ -166,19 +167,19 @@ def _load_pyqt(required_modules, optional_modules):
 
     # try to register Qwt module
     try:
-        import PyQt5.Qwt5
-        _register_binding_module('Qwt', PyQt5.Qwt5)
+        import PyQt6.Qwt6
+        _register_binding_module('Qwt', PyQt6.Qwt6)
     except ImportError:
         pass
 
     global _loadUi
 
     def _loadUi(uifile, baseinstance=None, custom_widgets_=None):
-        from PyQt5 import uic
+        from PyQt6 import uic
         return uic.loadUi(uifile, baseinstance=baseinstance)
 
-    import PyQt5.QtCore
-    return PyQt5.QtCore.PYQT_VERSION_STR
+    import PyQt6.QtCore
+    return PyQt6.QtCore.PYQT_VERSION_STR
 
 
 def _load_pyside(required_modules, optional_modules):
@@ -187,9 +188,9 @@ def _load_pyside(required_modules, optional_modules):
 
     # register required and optional PySide modules
     for module_name in required_modules:
-        _named_import('PySide2.%s' % module_name)
+        _named_import('PySide6.%s' % module_name)
     for module_name in optional_modules:
-        _named_optional_import('PySide2.%s' % module_name)
+        _named_optional_import('PySide6.%s' % module_name)
 
     # set some names for compatibility with PyQt
     sys.modules['QtCore'].pyqtSignal = sys.modules['QtCore'].Signal
@@ -206,8 +207,8 @@ def _load_pyside(required_modules, optional_modules):
     global _loadUi
 
     def _loadUi(uifile, baseinstance=None, custom_widgets=None):
-        from PySide2.QtUiTools import QUiLoader
-        from PySide2.QtCore import QMetaObject
+        from PySide6.QtUiTools import QUiLoader
+        from PySide6.QtCore import QMetaObject
 
         class CustomUiLoader(QUiLoader):
             class_aliases = {
@@ -253,8 +254,8 @@ def _load_pyside(required_modules, optional_modules):
         QMetaObject.connectSlotsByName(ui)
         return ui
 
-    import PySide2
-    return PySide2.__version__
+    import PySide6
+    return PySide6.__version__
 
 
 def loadUi(uifile, baseinstance=None, custom_widgets=None):

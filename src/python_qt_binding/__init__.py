@@ -58,6 +58,11 @@ from python_qt_binding.binding_helper import QT_BINDING  # noqa: F401
 from python_qt_binding.binding_helper import QT_BINDING_MODULES
 from python_qt_binding.binding_helper import QT_BINDING_VERSION  # noqa: F401
 
+print('QT_BINDING', QT_BINDING)
+for module, value in QT_BINDING_MODULES.items():
+  print('QT_BINDING_MODULES', module, value)
+print('QT_BINDING_VERSION', QT_BINDING_VERSION)
+
 # register binding modules as sub modules of this package (python_qt_binding) for easy importing
 for module_name, module in QT_BINDING_MODULES.items():
     sys.modules[__name__ + '.' + module_name] = module

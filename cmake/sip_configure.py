@@ -6,19 +6,19 @@ import subprocess
 import sys
 import tempfile
 
-import PyQt5
-from PyQt5 import QtCore
+import PyQt6
+from PyQt6 import QtCore
 import sipconfig
 
-libqt5_rename = False
+libqt6_rename = False
 
 
 class Configuration(sipconfig.Configuration):
 
     def __init__(self):
         env = copy.copy(os.environ)
-        env['QT_SELECT'] = '5'
-        qmake_exe = 'qmake-qt5' if shutil.which('qmake-qt5') else 'qmake'
+        env['QT_SELECT'] = '6'
+        qmake_exe = 'qmake-qt6' if shutil.which('qmake-qt6') else 'qmake'
         qtconfig = subprocess.check_output(
             [qmake_exe, '-query'], env=env, universal_newlines=True)
         qtconfig = dict(line.split(':', 1) for line in qtconfig.splitlines())
@@ -36,15 +36,15 @@ class Configuration(sipconfig.Configuration):
             if os.path.exists(os.path.join(qtconfig['QT_INSTALL_LIBS'], 'QtCore.framework')):
                 pyqtconfig['qt_framework'] = 1
             else:
-                global libqt5_rename
-                libqt5_rename = True
+                global libqt6_rename
+                libqt6_rename = True
 
         sipconfig.Configuration.__init__(self, [pyqtconfig])
 
         macros = sipconfig._default_macros.copy()
         macros['INCDIR_QT'] = qtconfig['QT_INSTALL_HEADERS']
         macros['LIBDIR_QT'] = qtconfig['QT_INSTALL_LIBS']
-        macros['MOC'] = 'moc-qt5' if shutil.which('moc-qt5') else 'moc'
+        macros['MOC'] = 'moc-qt6' if shutil.which('moc-qt6') else 'moc'
         self.set_build_macros(macros)
 
 
@@ -70,20 +70,20 @@ def get_sip_dir_flags(config):
     candidate_sip_dirs = []
 
     # Archlinux installs sip files here by default
-    candidate_sip_dirs.append(os.path.join(PyQt5.__path__[0], 'bindings'))
+    candidate_sip_dirs.append(os.path.join(PyQt6.__path__[0], 'bindings'))
 
     # sip4 installs here by default
-    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt5'))
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'PyQt6'))
 
     # Homebrew installs sip files here by default
-    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt5'))
+    candidate_sip_dirs.append(os.path.join(sipconfig._pkg_config['default_sip_dir'], 'Qt6'))
 
     for sip_dir in candidate_sip_dirs:
         if os.path.exists(sip_dir):
             return sip_dir, sip_flags
 
-    raise FileNotFoundError('The sip directory for PyQt5 could not be located. Please ensure' +
-                            ' that PyQt5 is installed')
+    raise FileNotFoundError('The sip directory for PyQt6 could not be located. Please ensure' +
+                            ' that PyQt6 is installed')
 
 
 if len(sys.argv) != 8:
@@ -177,10 +177,10 @@ def custom_platform_lib_function(self, clib, framework=0):
     if os.path.isabs(clib) or clib.startswith('-l'):
         return clib
 
-    global libqt5_rename
-    # sip renames libs to Qt5 automatically on Linux, but not on macOS
-    if libqt5_rename and not framework and clib.startswith('Qt') and not clib.startswith('Qt5'):
-        return '-lQt5' + clib[2:]
+    global libqt6_rename
+    # sip renames libs to Qt6 automatically on Linux, but not on macOS
+    if libqt6_rename and not framework and clib.startswith('Qt') and not clib.startswith('Qt6'):
+        return '-lQt6' + clib[2:]
 
     return default_platform_lib_function(self, clib, framework)
 
