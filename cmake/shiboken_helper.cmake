@@ -21,102 +21,48 @@ if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
 endif()
 set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 
-find_package(QT NAMES Qt5 Qt6 REQUIRED)
-
 # In CMake 3.27 and later, FindPythonInterp and FindPythonLibs are deprecated.
 # However, Shiboken2 as packaged in Ubuntu 24.04 still use them, so set CMP0148 to
 # "OLD" to silence this warning.
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
   cmake_policy(SET CMP0148 OLD)
 endif()
-# set(QT_VERSION_MAJOR 6)
-# if(${QT_VERSION_MAJOR} GREATER "5")
-  # Macro to get various pyside / python include / link flags and paths.
-  # Uses the not entirely supported utils/pyside_config.py file.
-
-    # Use provided python interpreter if given.
-  if(NOT python_interpreter)
-    find_program(python_interpreter "python3")
-    if(NOT python_interpreter)
-        message(FATAL_ERROR
-            "No Python interpreter could be found. Make sure python is in PATH.")
-    endif()
+find_package(Shiboken2 QUIET)
+if(Shiboken2_FOUND)
+  message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
+  if(NOT ${Shiboken2_VERSION} VERSION_LESS "5.13")
+    get_property(SHIBOKEN_INCLUDE_DIR TARGET Shiboken2::libshiboken PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    get_property(SHIBOKEN_LIBRARY TARGET Shiboken2::libshiboken PROPERTY LOCATION)
+    set(SHIBOKEN_BINARY Shiboken2::shiboken2)
   endif()
-  message(STATUS "Using python interpreter: ${python_interpreter}")
+  message(STATUS "Using SHIBOKEN_INCLUDE_DIR: ${SHIBOKEN_INCLUDE_DIR}")
+  message(STATUS "Using SHIBOKEN_LIBRARY: ${SHIBOKEN_LIBRARY}")
+  message(STATUS "Using SHIBOKEN_BINARY: ${SHIBOKEN_BINARY}")
+endif()
 
-  macro(pyside_config option output_var)
-      if(${ARGC} GREATER 2)
-          set(is_list ${ARGV2})
-      else()
-          set(is_list "")
-      endif()
+find_package(PySide2 QUIET)
+if(PySide2_FOUND)
+  message(STATUS "Found PySide2 version ${PySide2_VERSION}")
+  if(NOT ${PySide2_VERSION} VERSION_LESS "5.13")
+    get_property(PYSIDE_INCLUDE_DIR TARGET PySide2::pyside2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    get_property(PYSIDE_LIBRARY TARGET PySide2::pyside2 PROPERTY LOCATION)
+  endif()
+  message(STATUS "Using PYSIDE_INCLUDE_DIR: ${PYSIDE_INCLUDE_DIR}")
+  message(STATUS "Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
+endif()
 
-      find_package(python_qt_binding REQUIRED)
-      execute_process(
-        COMMAND ${python_interpreter} ${python_qt_binding_DIR}/pyside_config.py
-                ${option}
-        OUTPUT_VARIABLE ${output_var}
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-      if("${${output_var}}" STREQUAL "")
-          message(FATAL_ERROR "Error: Calling pyside_config.py ${option} returned no output.")
-      endif()
-      if(is_list)
-          string(REPLACE " " ";" ${output_var} "${${output_var}}")
-      endif()
-  endmacro()
-
-  pyside_config(--pyside-shared-libraries-cmake pyside6_lib)
-  pyside_config(--pyside-include-path pyside6_includes)
-  pyside_config(--shiboken-module-shared-libraries-cmake shiboken6_lib)
-  pyside_config(--shiboken-generator-include-path shiboken6_includes)
-  pyside_config(--shiboken-generator-path shiboken6_generator_path)
-
-  set(PYSIDE_LIBRARY ${pyside6_lib})
-  set(PYSIDE_INCLUDE_DIR ${pyside6_includes})
-  set(SHIBOKEN_LIBRARY ${shiboken6_lib})
-  set(SHIBOKEN_INCLUDE_DIR ${shiboken6_includes};${shiboken6_generator_path}/include)
-  set(SHIBOKEN_BINARY "${shiboken6_generator_path}/shiboken6")
+if(Shiboken2_FOUND AND PySide2_FOUND)
+  message(STATUS "Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
-# else()
-#   find_package(Shiboken2 QUIET)
-#   if(Shiboken2_FOUND)
-#     message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
-#     if(NOT ${Shiboken2_VERSION} VERSION_LESS "5.13")
-#       get_property(SHIBOKEN_INCLUDE_DIR TARGET Shiboken2::libshiboken PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-#       get_property(SHIBOKEN_LIBRARY TARGET Shiboken2::libshiboken PROPERTY LOCATION)
-#       set(SHIBOKEN_BINARY Shiboken2::shiboken2)
-#     endif()
-#   endif()
+else()
+  message(STATUS "Shiboken binding generator NOT available.")
+  set(shiboken_helper_NOTFOUND TRUE)
+endif()
 
-#   find_package(PySide2 QUIET)
-#   if(PySide2_FOUND)
-#     message(STATUS "Found PySide2 version ${PySide2_VERSION}")
-#     if(NOT ${PySide2_VERSION} VERSION_LESS "5.13")
-#       get_property(PYSIDE_INCLUDE_DIR TARGET PySide2::pyside2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-#       get_property(PYSIDE_LIBRARY TARGET PySide2::pyside2 PROPERTY LOCATION)
-#     endif()
-#   endif()
-
-#   if(Shiboken2_FOUND AND PySide2_FOUND)
-#     message(STATUS "Shiboken binding generator available.")
-#     set(shiboken_helper_FOUND TRUE)
-#   else()
-#     message(STATUS "Shiboken binding generator NOT available.")
-#     set(shiboken_helper_NOTFOUND TRUE)
-#   endif()
-# endif()
-
-message(STATUS "Using SHIBOKEN_INCLUDE_DIR: ${SHIBOKEN_INCLUDE_DIR}")
-message(STATUS "Using SHIBOKEN_LIBRARY: ${SHIBOKEN_LIBRARY}")
-message(STATUS "Using SHIBOKEN_BINARY: ${SHIBOKEN_BINARY}")
-message(STATUS "Using PYSIDE_INCLUDE_DIR: ${PYSIDE_INCLUDE_DIR}")
-message(STATUS "Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
 
 macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   # Add includes from current directory, Qt, PySide and compiler specific dirs
   get_directory_property(SHIBOKEN_HELPER_INCLUDE_DIRS INCLUDE_DIRECTORIES)
-  message("**** SHIBOKEN_HELPER_INCLUDE_DIRS " ${SHIBOKEN_HELPER_INCLUDE_DIRS})
   list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS
     ${QT_INCLUDE_DIR}
     ${PYSIDE_INCLUDE_DIR}
@@ -132,36 +78,10 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
     --enable-pyside-extensions
     -std=c++17
     --include-paths=${INCLUDE_PATH_WITH_COLONS}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}
-    --typesystem-paths="/usr/local/lib/python3.12/dist-packages/PySide6/typesystems/"
-    --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM}
-    --no-suppress-warnings)
+    --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+    --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM})
 endmacro()
 
-macro(_shiboken_generator_command6 VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
-  # Add includes from current directory, Qt, PySide and compiler specific dirs
-  get_directory_property(SHIBOKEN_HELPER_INCLUDE_DIRS INCLUDE_DIRECTORIES)
-  list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS
-    ${QT_INCLUDE_DIR}
-    ${PYSIDE_INCLUDE_DIR}
-    ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
-  # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
-  set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "")
-  foreach(dir ${SHIBOKEN_HELPER_INCLUDE_DIRS})
-    set(SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS "${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}:${dir}")
-  endforeach()
-  string(REPLACE ";" ":" INCLUDE_PATH_WITH_COLONS "${INCLUDE_PATH}")
-  message(SHIBOKEN_BINARY ${SHIBOKEN_BINARY})
-  set(${VAR} ${SHIBOKEN_BINARY}
-    --generator-set=shiboken
-    --enable-pyside-extensions
-    --language-level=c++17
-    --include-paths=${INCLUDE_PATH_WITH_COLONS}${SHIBOKEN_HELPER_INCLUDE_DIRS_WITH_COLONS}:/home/ahcorde/ros2_rolling/qt6-env/lib/python3.12/site-packages/shiboken6/include
-    --typesystem-paths="${PYSIDE_INCLUDE_DIR}/../typesystems/"
-    --output-directory=${BUILD_DIR} ${GLOBAL} ${TYPESYSTEM}
-    --enable-parent-ctor-heuristic
-    --enable-return-value-heuristic --use-isnull-as-nb-bool
-    --avoid-protected-hack)
-endmacro()
 
 #
 # Run the Shiboken generator.
@@ -195,17 +115,6 @@ function(shiboken_generator PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED
   )
 endfunction()
 
-function(shiboken_generator6 PROJECT_NAME GLOBAL TYPESYSTEM WORKING_DIR GENERATED_SRCS HDRS INCLUDE_PATH BUILD_DIR)
-  _shiboken_generator_command6(COMMAND "${GLOBAL}" "${TYPESYSTEM}" "${INCLUDE_PATH}" "${BUILD_DIR}")
-  message("comand ${COMMAND} ")
-  add_custom_command(
-    OUTPUT ${GENERATED_SRCS}
-    COMMAND ${COMMAND}
-    DEPENDS ${GLOBAL} ${TYPESYSTEM} ${HDRS}
-    WORKING_DIRECTORY ${WORKING_DIR}
-    COMMENT "Running Shiboken generator for ${PROJECT_NAME} Python bindings..."
-  )
-endfunction()
 
 #
 # Add the Shiboken/PySide specific include directories.
@@ -228,7 +137,7 @@ function(shiboken_include_directories PROJECT_NAME QT_COMPONENTS)
     set(shiboken_INCLUDE_DIRECTORIES ${shiboken_INCLUDE_DIRECTORIES} ${PYSIDE_INCLUDE_DIR}/${component})
   endforeach()
 
-  include_directories(${PROJECT_NAME} ${shiboken_INCLUDE_DIRECTORIES} /home/ahcorde/ros2_rolling/qt6-env/lib/python3.12/site-packages/shiboken6/include)
+  include_directories(${PROJECT_NAME} ${shiboken_INCLUDE_DIRECTORIES})
 endfunction()
 
 
