@@ -3,9 +3,18 @@ project(python_qt_binding)
 
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 
-ament_python_install_package(${PROJECT_NAME}
-  PACKAGE_DIR src/${PROJECT_NAME})
+if (${QT_VERSION_MAJOR} GREATER "5")
+message("lol" ${QT_VERSION_MAJOR})
+  ament_python_install_package(python_qt_binding
+    PACKAGE_DIR src/python_qt6_binding)
+else()
+message("no lol" ${QT_VERSION_MAJOR})
+  ament_python_install_package(python_qt_binding
+    PACKAGE_DIR src/python_qt_binding
+  )
+endif()
 
 install(FILES
   cmake/shiboken_helper.cmake
