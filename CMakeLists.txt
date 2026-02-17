@@ -6,17 +6,16 @@ find_package(ament_cmake_python REQUIRED)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 
 if (${QT_VERSION_MAJOR} GREATER "5")
-message("lol" ${QT_VERSION_MAJOR})
   ament_python_install_package(python_qt_binding
     PACKAGE_DIR src/python_qt6_binding)
 else()
-message("no lol" ${QT_VERSION_MAJOR})
   ament_python_install_package(python_qt_binding
     PACKAGE_DIR src/python_qt_binding
   )
 endif()
 
 install(FILES
+  cmake/pyproject.toml.in
   cmake/shiboken_helper.cmake
   cmake/sip_configure.py
   cmake/sip_helper.cmake
