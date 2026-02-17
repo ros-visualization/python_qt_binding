@@ -15,7 +15,6 @@ else()
 endif()
 
 install(FILES
-  cmake/pyproject.toml.in
   cmake/shiboken_helper.cmake
   cmake/sip_configure.py
   cmake/sip_helper.cmake
