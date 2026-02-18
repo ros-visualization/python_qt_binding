@@ -155,6 +155,15 @@ function(build_sip_6_binding PROJECT_NAME SIP_FILE)
   endforeach()
   string(REGEX REPLACE "^," "" SIP_EXTRA_DEFINES "${SIP_EXTRA_DEFINES}")
 
+  execute_process(
+      COMMAND ${Python_EXECUTABLE} -c
+      "import site; print(next(p for p in site.getsitepackages() if 'site-packages' in p))"
+      OUTPUT_VARIABLE Python_SITELIB
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+  set(SIP_PROJECT_INCLUDE_DIRS ${Python_SITELIB}/PyQt6/bindings)
+
   configure_file(
       ${sip_SOURCE_DIR}/pyproject.toml.in
       ${sip_BINARY_DIR}/sip/pyproject.toml
