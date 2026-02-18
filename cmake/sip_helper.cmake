@@ -31,7 +31,7 @@ execute_process(
 if(PYTHON_SIP_EXECUTABLE)
   string(STRIP ${PYTHON_SIP_EXECUTABLE} SIP_EXECUTABLE)
 else()
-  find_program(SIP_EXECUTABLE NAMES sip-build)
+  find_program(SIP_EXECUTABLE NAMES sip sip-build)
 endif()
 
 set(SIP_PROJECT_INCLUDE_DIRS "$ENV{SIP_PROJECT_INCLUDE_DIRS}")
@@ -155,6 +155,7 @@ function(build_sip_6_binding PROJECT_NAME SIP_FILE)
   endforeach()
   string(REGEX REPLACE "^," "" SIP_EXTRA_DEFINES "${SIP_EXTRA_DEFINES}")
 
+  find_package(Python COMPONENTS Interpreter Development REQUIRED)
   execute_process(
       COMMAND ${Python_EXECUTABLE} -c
       "import site; print(next(p for p in site.getsitepackages() if 'site-packages' in p))"
