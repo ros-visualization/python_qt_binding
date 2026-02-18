@@ -155,8 +155,6 @@ function(build_sip_6_binding PROJECT_NAME SIP_FILE)
   endforeach()
   string(REGEX REPLACE "^," "" SIP_EXTRA_DEFINES "${SIP_EXTRA_DEFINES}")
 
-  set(SIP_PROJECT_INCLUDE_DIRS /home/ahcorde/ros2_rolling/qt6-env/lib/python3.12/site-packages/PyQt6/bindings)
-
   configure_file(
       ${sip_SOURCE_DIR}/pyproject.toml.in
       ${sip_BINARY_DIR}/sip/pyproject.toml
