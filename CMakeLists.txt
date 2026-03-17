@@ -9,7 +9,6 @@ ament_python_install_package(${PROJECT_NAME}
 
 install(FILES
   cmake/shiboken_helper.cmake
-  cmake/sip_configure.py
   cmake/sip_helper.cmake
   DESTINATION share/${PROJECT_NAME}/cmake)
 

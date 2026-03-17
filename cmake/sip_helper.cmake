@@ -5,47 +5,30 @@ set(__PYTHON_QT_BINDING_SIP_HELPER_INCLUDED TRUE)
 
 set(__PYTHON_QT_BINDING_SIP_HELPER_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-# By default, without the settings below, find_package(Python3) will attempt
-# to find the newest python version it can, and additionally will find the
-# most specific version.  For instance, on a system that has
-# /usr/bin/python3.10, /usr/bin/python3.11, and /usr/bin/python3, it will find
-# /usr/bin/python3.11, even if /usr/bin/python3 points to /usr/bin/python3.10.
-# The behavior we want is to prefer the "system" installed version unless the
-# user specifically tells us othewise through the Python3_EXECUTABLE hint.
-# Setting CMP0094 to NEW means that the search will stop after the first
-# python version is found.  Setting Python3_FIND_UNVERSIONED_NAMES means that
-# the search will prefer /usr/bin/python3 over /usr/bin/python3.11.  And that
-# latter functionality is only available in CMake 3.20 or later, so we need
-# at least that version.
 cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
 
+# Check if modern sipbuild is available via python module
 execute_process(
-  COMMAND ${Python3_EXECUTABLE} -c "import sipconfig; print(sipconfig.Configuration().sip_bin)"
-  OUTPUT_VARIABLE PYTHON_SIP_EXECUTABLE
+  COMMAND ${Python3_EXECUTABLE} -c "import sipbuild"
+  RESULT_VARIABLE _sipbuild_res
   ERROR_QUIET)
 
-if(PYTHON_SIP_EXECUTABLE)
-  string(STRIP ${PYTHON_SIP_EXECUTABLE} SIP_EXECUTABLE)
-else()
-  find_program(SIP_EXECUTABLE sip)
-endif()
-
-if(SIP_EXECUTABLE)
-  message(STATUS "SIP binding generator available at: ${SIP_EXECUTABLE}")
+if(_sipbuild_res EQUAL 0)
+  message(STATUS "Modern SIP binding generator (sip-build) is available.")
   set(sip_helper_FOUND TRUE)
 else()
-  message(STATUS "SIP binding generator NOT available.")
+  message(STATUS "Modern SIP binding generator NOT available.")
   set(sip_helper_NOTFOUND TRUE)
 endif()
 
 #
 # Run the SIP generator and compile the generated code into a library.
 #
-# .. note:: The target lib${PROJECT_NAME} is created.
+# .. note:: Creates a target named lib${PROJECT_NAME}
 #
 # :param PROJECT_NAME: The name of the sip project
 # :type PROJECT_NAME: string
@@ -53,17 +36,14 @@ endif()
 # :type SIP_FILE: string
 #
 # The following options can be used to override the default behavior:
-#   SIP_CONFIGURE: the used configure script for SIP
-#     (default: sip_configure.py in the same folder as this file)
+#   SIP_CONFIGURE: (IGNORED) Retained for CMake API compatibility only.
 #   SOURCE_DIR: the source dir (default: ${PROJECT_SOURCE_DIR}/src)
 #   LIBRARY_DIR: the library dir (default: ${PROJECT_SOURCE_DIR}/src)
 #   BINARY_DIR: the binary dir (default: ${PROJECT_BINARY_DIR})
 #
 # The following keywords arguments can be used to specify:
-#   DEPENDS: depends for the custom command
-#     (should list all sip and header files)
+#   DEPENDS: depends for the custom command (should list all sip and header files)
 #   DEPENDENCIES: target dependencies
-#     (should list the library for which SIP generates the bindings)
 #
 function(build_sip_binding PROJECT_NAME SIP_FILE)
     cmake_parse_arguments(sip "" "SIP_CONFIGURE;SOURCE_DIR;LIBRARY_DIR;BINARY_DIR" "DEPENDS;DEPENDENCIES" ${ARGN})
@@ -71,11 +51,11 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
         message(WARNING "build_sip_binding(${PROJECT_NAME}) called with unused arguments: ${sip_UNPARSED_ARGUMENTS}")
     endif()
 
-    # set default values for optional arguments
-    if(NOT sip_SIP_CONFIGURE)
-        # default to sip_configure.py in this directory
-        set(sip_SIP_CONFIGURE ${__PYTHON_QT_BINDING_SIP_HELPER_DIR}/sip_configure.py)
+    if(sip_SIP_CONFIGURE)
+        message(WARNING "SIP_CONFIGURE argument is deprecated and ignored. CMake now handles configuration natively.")
     endif()
+
+    # set default values for optional arguments
     if(NOT sip_SOURCE_DIR)
         set(sip_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
     endif()
@@ -88,43 +68,52 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     set(SIP_BUILD_DIR ${sip_BINARY_DIR}/sip/${PROJECT_NAME})
 
-    set(INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} ${Python3_INCLUDE_DIRS})
-    set(LIBRARIES ${${PROJECT_NAME}_LIBRARIES})
-    set(LIBRARY_DIRS ${${PROJECT_NAME}_LIBRARY_DIRS})
-    set(LDFLAGS_OTHER ${${PROJECT_NAME}_LDFLAGS_OTHER})
+    # Extract the filename from the SIP_FILE path
+    get_filename_component(SIP_FILE_NAME ${SIP_FILE} NAME)
 
+    # Generate a pyproject.toml to be given to sip-build
+    file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
+    set(TOML_CONTENT 
+"[build-system]
+requires = [\"sip >= 5.3\"]
+build-backend = \"sipbuild.api\"
+
+[project]
+name = \"${PROJECT_NAME}\"
+version = \"1.0.0\"
+
+[tool.sip.metadata]
+name = \"${PROJECT_NAME}\"
+
+[tool.sip.project]
+sip-files-dir = \"${sip_SOURCE_DIR}\"
+
+[tool.sip.bindings.${PROJECT_NAME}]
+sip-file = \"${SIP_FILE_NAME}\"
+")
+    file(WRITE ${SIP_BUILD_DIR}/pyproject.toml "${TOML_CONTENT}")
+
+    # Expect sip-build to produce a single output file because of the --concatenate 1 agrument below
+    set(GENERATED_CPP ${SIP_BUILD_DIR}/build/${PROJECT_NAME}/sip${PROJECT_NAME}part0.cpp)
+
+    # Generate code for a cPython extension using sip-build
     add_custom_command(
-        OUTPUT ${SIP_BUILD_DIR}/Makefile
-        COMMAND ${Python3_EXECUTABLE} ${sip_SIP_CONFIGURE} ${SIP_BUILD_DIR} ${SIP_FILE} ${sip_LIBRARY_DIR}
-          \"${INCLUDE_DIRS}\" \"${LIBRARIES}\" \"${LIBRARY_DIRS}\" \"${LDFLAGS_OTHER}\"
-        DEPENDS ${sip_SIP_CONFIGURE} ${SIP_FILE} ${sip_DEPENDS}
-        WORKING_DIRECTORY ${sip_SOURCE_DIR}
-        COMMENT "Running SIP generator for ${PROJECT_NAME} Python bindings..."
-    )
-
-    if(NOT EXISTS "${sip_LIBRARY_DIR}")
-        file(MAKE_DIRECTORY ${sip_LIBRARY_DIR})
-    endif()
-
-    if(WIN32)
-      set(MAKE_EXECUTABLE NMake.exe)
-    else()
-      find_program(MAKE_PROGRAM NAMES make)
-      message(STATUS "Found required make: ${MAKE_PROGRAM}")
-      set(MAKE_EXECUTABLE ${MAKE_PROGRAM})
-    endif()
-
-    add_custom_command(
-        OUTPUT ${sip_LIBRARY_DIR}/lib${PROJECT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}
-        COMMAND ${MAKE_EXECUTABLE}
-        DEPENDS ${SIP_BUILD_DIR}/Makefile
+        OUTPUT ${GENERATED_CPP}
+        COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1 --build-dir build
+        DEPENDS ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
-        COMMENT "Compiling generated code for ${PROJECT_NAME} Python bindings..."
+        COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
     )
 
-    add_custom_target(lib${PROJECT_NAME} ALL
-        DEPENDS ${sip_LIBRARY_DIR}/lib${PROJECT_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}
-        COMMENT "Meta target for ${PROJECT_NAME} Python bindings..."
-    )
-    add_dependencies(lib${PROJECT_NAME} ${sip_DEPENDENCIES})
+    # Build the cPython extension natively using CMake
+    Python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
+
+    # Link project dependencies against this target
+    target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
+    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES})
+    target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
+
+    if(${PROJECT_NAME}_LDFLAGS_OTHER)
+        target_link_options(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LDFLAGS_OTHER})
+    endif()
 endfunction()
