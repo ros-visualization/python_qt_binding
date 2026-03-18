@@ -10,6 +10,7 @@ cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
+find_package(Qt5 REQUIRED COMPONENTS Core)
 
 # Check if modern sipbuild is available via python module
 execute_process(
@@ -75,18 +76,17 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
     set(TOML_CONTENT 
 "[build-system]
-requires = [\"sip >= 5.3\"]
+requires = [\"sip >=6, <7\"]
 build-backend = \"sipbuild.api\"
 
 [project]
 name = \"${PROJECT_NAME}\"
 version = \"1.0.0\"
 
-[tool.sip.metadata]
-name = \"${PROJECT_NAME}\"
-
 [tool.sip.project]
 sip-files-dir = \"${sip_SOURCE_DIR}\"
+sip-include-dirs = [\"/usr/lib/python3/dist-packages/PyQt5/bindings\"]
+abi-version = \"12\"
 
 [tool.sip.bindings.${PROJECT_NAME}]
 sip-file = \"${SIP_FILE_NAME}\"
@@ -94,7 +94,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     file(WRITE ${SIP_BUILD_DIR}/pyproject.toml "${TOML_CONTENT}")
 
     # Expect sip-build to produce a single output file because of the --concatenate 1 agrument below
-    set(GENERATED_CPP ${SIP_BUILD_DIR}/build/${PROJECT_NAME}/sip${PROJECT_NAME}part0.cpp)
+    set(GENERATED_CPP ${SIP_BUILD_DIR}/build/lib${PROJECT_NAME}/siplib${PROJECT_NAME}part0.cpp)
 
     # Generate code for a cPython extension using sip-build
     add_custom_command(
@@ -109,8 +109,9 @@ sip-file = \"${SIP_FILE_NAME}\"
     Python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
 
     # Link project dependencies against this target
+    message(WARNING "Include dirs: ${${PROJECT_NAME}_INCLUDE_DIRS}" )
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
-    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES})
+    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} Qt5::Core)
     target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
 
     if(${PROJECT_NAME}_LDFLAGS_OTHER)
