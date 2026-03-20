@@ -10,9 +10,41 @@ cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
+
+# Find the directory containing the SIP bindings shipped by PyQt.
+#
+# :param QT_MAJOR_VERSION: The major version of Qt (e.g., 5 or 6).
+# :type QT_MAJOR_VERSION: string/int
+#
+# :out __PYQT_BINDINGS_DIR: Path to the directory containing QT*.sip files.
+# :out __PYQT_BINDINGS_FOUND: Boolean indicating if the bindings were located.
+#
+function(__find_qt_sip_files QT_MAJOR_VERSION)
+    set(MODULE_NAME "PyQt${QT_MAJOR_VERSION}")
+
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}.bindings as pb; print(pb.__path__[0])"
+        OUTPUT_VARIABLE BINDINGS_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+        RESULT_VARIABLE _res
+    )
+
+    if(_res EQUAL 0 AND IS_DIRECTORY "${BINDINGS_DIR}")
+        set(__PYQT_BINDINGS_DIR "${BINDINGS_DIR}" PARENT_SCOPE)
+        set(__PYQT_BINDINGS_FOUND TRUE PARENT_SCOPE)
+        message(STATUS "Found ${MODULE_NAME} SIP bindings at: ${BINDINGS_DIR}")
+    else()
+        set(PYQT_BINDINGS_FOUND FALSE PARENT_SCOPE)
+        message(WARNING "Could not determine ${MODULE_NAME} bindings directory.")
+    endif()
+endfunction()
+
 find_package(Qt5 QUIET COMPONENTS Core)
 
+# TODO make decision on Qt5 vs Qt6 before this blcok
 if(Qt5_FOUND)
+  set(QT_MAJOR_VERSION "5")
   # Look for all Qt5 components
   file(GLOB CONFIG_FILES "${Qt5_DIR}/../Qt5*/Qt5*Config.cmake")
 
@@ -42,6 +74,7 @@ else()
     message(FATAL_ERROR "Unable to find Qt5")
 endif()
 
+
 # Check if modern sipbuild is available via python module
 execute_process(
   COMMAND ${Python3_EXECUTABLE} -c "import sipbuild"
@@ -54,6 +87,11 @@ if(_sipbuild_res EQUAL 0)
 else()
   message(STATUS "Modern SIP binding generator NOT available.")
   set(sip_helper_NOTFOUND TRUE)
+endif()
+
+__find_qt_sip_files(${QT_MAJOR_VERSION})
+if(NOT __PYQT_BINDINGS_FOUND)
+    message(FATAL_ERROR "PyQt${QT_MAJOR_VERSION} SIP bindings are required but were not found.")
 endif()
 
 #
@@ -102,26 +140,14 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     # Extract the filename from the SIP_FILE path
     get_filename_component(SIP_FILE_NAME ${SIP_FILE} NAME)
 
-    # Get path to directory with QT*.sip files shipped by PyQt5
-    execute_process(
-        COMMAND ${Python3_EXECUTABLE} -c "import PyQt5.bindings as pb; print(pb.__path__[0])"
-        OUTPUT_VARIABLE PYQT_BINDINGS_DIR
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_QUIET
-    )
-
     # Extract the sip-abi-version from PyQt5's QtCore.toml
     set(QT_SIP_ABI_VERSION "12")
-    set(TOML_FILE "${PYQT_BINDINGS_DIR}/QtCore/QtCore.toml")
+    set(TOML_FILE "${__PYQT_BINDINGS_DIR}/QtCore/QtCore.toml")
     if(EXISTS "${TOML_FILE}")
         file(READ "${TOML_FILE}" TOML_CONTENT_STR)
         if(TOML_CONTENT_STR MATCHES "sip-abi-version[ \t]*=[ \t]*\"([^\"]+)\"")
             set(QT_SIP_ABI_VERSION ${CMAKE_MATCH_1})
         endif()
-    endif()
-
-    if(NOT PYQT_BINDINGS_DIR)
-        message(FATAL_ERROR "Could not determine PyQt.bindings directory.")
     endif()
 
     # Generate a pyproject.toml to be given to sip-build
@@ -137,7 +163,7 @@ version = \"1.0.0\"
 
 [tool.sip.project]
 sip-files-dir = \"${sip_SOURCE_DIR}\"
-sip-include-dirs = [\"${PYQT_BINDINGS_DIR}\"]
+sip-include-dirs = [\"${__PYQT_BINDINGS_DIR}\"]
 abi-version = \"${QT_SIP_ABI_VERSION}\"
 
 [tool.sip.bindings.${PROJECT_NAME}]
