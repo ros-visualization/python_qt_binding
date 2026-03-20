@@ -10,7 +10,37 @@ cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
-find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt5 QUIET COMPONENTS Core)
+
+if(Qt5_FOUND)
+  # Look for all Qt5 components
+  file(GLOB CONFIG_FILES "${Qt5_DIR}/../Qt5*/Qt5*Config.cmake")
+
+  set(qt5_components "")
+  set(qt_targets "")
+
+  foreach(FILE_PATH ${CONFIG_FILES})
+    # Get just the filename (Qt5WidgetsConfig.cmake")
+    get_filename_component(FILENAME "${FILE_PATH}" NAME)
+
+    # Extract the component name from the filename only ("Widgets")
+    if("${FILENAME}" MATCHES "Qt5(.+)Config\\.cmake")
+      set(COMPONENT_NAME ${CMAKE_MATCH_1})
+
+      # Avoid adding the base "Qt5Config.cmake" which results in an empty component name
+      if(NOT COMPONENT_NAME STREQUAL "")
+        list(APPEND qt5_components ${COMPONENT_NAME})
+        list(APPEND qt_targets "Qt5::${COMPONENT_NAME}")
+      endif()
+    endif()
+  endforeach()
+
+  find_package(Qt5 REQUIRED COMPONENTS ${qt5_components})
+
+  message(STATUS "Discovered Qt5 Components: ${qt5_components}")
+else()
+    message(FATAL_ERROR "Unable to find Qt5")
+endif()
 
 # Check if modern sipbuild is available via python module
 execute_process(
@@ -111,7 +141,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     # Link project dependencies against this target
     message(WARNING "Include dirs: ${${PROJECT_NAME}_INCLUDE_DIRS}" )
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
-    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} Qt5::Core)
+    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} ${qt_targets})
     target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
 
     if(${PROJECT_NAME}_LDFLAGS_OTHER)
