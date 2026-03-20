@@ -102,6 +102,28 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     # Extract the filename from the SIP_FILE path
     get_filename_component(SIP_FILE_NAME ${SIP_FILE} NAME)
 
+    # Get path to directory with QT*.sip files shipped by PyQt5
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c "import PyQt5.bindings as pb; print(pb.__path__[0])"
+        OUTPUT_VARIABLE PYQT_BINDINGS_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+
+    # Extract the sip-abi-version from PyQt5's QtCore.toml
+    set(QT_SIP_ABI_VERSION "12")
+    set(TOML_FILE "${PYQT_BINDINGS_DIR}/QtCore/QtCore.toml")
+    if(EXISTS "${TOML_FILE}")
+        file(READ "${TOML_FILE}" TOML_CONTENT_STR)
+        if(TOML_CONTENT_STR MATCHES "sip-abi-version[ \t]*=[ \t]*\"([^\"]+)\"")
+            set(QT_SIP_ABI_VERSION ${CMAKE_MATCH_1})
+        endif()
+    endif()
+
+    if(NOT PYQT_BINDINGS_DIR)
+        message(FATAL_ERROR "Could not determine PyQt.bindings directory.")
+    endif()
+
     # Generate a pyproject.toml to be given to sip-build
     file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
     set(TOML_CONTENT 
@@ -115,8 +137,8 @@ version = \"1.0.0\"
 
 [tool.sip.project]
 sip-files-dir = \"${sip_SOURCE_DIR}\"
-sip-include-dirs = [\"/usr/lib/python3/dist-packages/PyQt5/bindings\"]
-abi-version = \"12\"
+sip-include-dirs = [\"${PYQT_BINDINGS_DIR}\"]
+abi-version = \"${QT_SIP_ABI_VERSION}\"
 
 [tool.sip.bindings.${PROJECT_NAME}]
 sip-file = \"${SIP_FILE_NAME}\"
@@ -139,7 +161,6 @@ sip-file = \"${SIP_FILE_NAME}\"
     Python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
 
     # Link project dependencies against this target
-    message(WARNING "Include dirs: ${${PROJECT_NAME}_INCLUDE_DIRS}" )
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
     target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} ${qt_targets})
     target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
