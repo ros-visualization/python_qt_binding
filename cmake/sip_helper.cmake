@@ -9,18 +9,21 @@ cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
+# Allow users to pick which QT version to use
+# TODO(sloretz) Bump to 6 as the preferred version when Rolling rolls to Lyrical's target platforms
+set(python_qt_binding_QT_MAJOR_VERSION "5" CACHE STRING "The major version of Qt to use (5 or 6)")
+
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
 
 # Find the directory containing the SIP bindings shipped by PyQt.
 #
-# :param QT_MAJOR_VERSION: The major version of Qt (e.g., 5 or 6).
-# :type QT_MAJOR_VERSION: string/int
+# :param python_qt_binding_QT_MAJOR_VERSION: The major version of Qt (e.g., 5 or 6).
 #
 # :out __PYQT_BINDINGS_DIR: Path to the directory containing QT*.sip files.
 # :out __PYQT_BINDINGS_FOUND: Boolean indicating if the bindings were located.
 #
-function(__find_qt_sip_files QT_MAJOR_VERSION)
-    set(MODULE_NAME "PyQt${QT_MAJOR_VERSION}")
+function(__find_qt_sip_files python_qt_binding_QT_MAJOR_VERSION)
+    set(MODULE_NAME "PyQt${python_qt_binding_QT_MAJOR_VERSION}")
 
     execute_process(
         COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}.bindings as pb; print(pb.__path__[0])"
@@ -35,45 +38,32 @@ function(__find_qt_sip_files QT_MAJOR_VERSION)
         set(__PYQT_BINDINGS_FOUND TRUE PARENT_SCOPE)
         message(STATUS "Found ${MODULE_NAME} SIP bindings at: ${BINDINGS_DIR}")
     else()
-        set(PYQT_BINDINGS_FOUND FALSE PARENT_SCOPE)
+        set(__PYQT_BINDINGS_FOUND FALSE PARENT_SCOPE)
         message(WARNING "Could not determine ${MODULE_NAME} bindings directory.")
     endif()
 endfunction()
 
-find_package(Qt5 QUIET COMPONENTS Core)
+# Extract the sip-abi-version from PyQt's configuration
+#
+# :param BINDINGS_DIR: Path to the directory containing QT*.sip files.
+# :out __QT_SIP_ABI_VERSION: The detected ABI version (defaults to 12).
+function(__find_qt_sip_abi BINDINGS_DIR)
+    # Default to 12 if detection fails
+    set(DETECTED_ABI "12")
+    set(TOML_FILE "${BINDINGS_DIR}/QtCore/QtCore.toml")
 
-# TODO make decision on Qt5 vs Qt6 before this blcok
-if(Qt5_FOUND)
-  set(QT_MAJOR_VERSION "5")
-  # Look for all Qt5 components
-  file(GLOB CONFIG_FILES "${Qt5_DIR}/../Qt5*/Qt5*Config.cmake")
-
-  set(qt5_components "")
-  set(qt_targets "")
-
-  foreach(FILE_PATH ${CONFIG_FILES})
-    # Get just the filename (Qt5WidgetsConfig.cmake")
-    get_filename_component(FILENAME "${FILE_PATH}" NAME)
-
-    # Extract the component name from the filename only ("Widgets")
-    if("${FILENAME}" MATCHES "Qt5(.+)Config\\.cmake")
-      set(COMPONENT_NAME ${CMAKE_MATCH_1})
-
-      # Avoid adding the base "Qt5Config.cmake" which results in an empty component name
-      if(NOT COMPONENT_NAME STREQUAL "")
-        list(APPEND qt5_components ${COMPONENT_NAME})
-        list(APPEND qt_targets "Qt5::${COMPONENT_NAME}")
-      endif()
+    if(EXISTS "${TOML_FILE}")
+        file(READ "${TOML_FILE}" TOML_CONTENT_STR)
+        if(TOML_CONTENT_STR MATCHES "sip-abi-version[ \t]*=[ \t]*\"([^\"]+)\"")
+            set(DETECTED_ABI ${CMAKE_MATCH_1})
+            message(STATUS "Detected SIP ABI version: ${DETECTED_ABI}")
+        endif()
+    else()
+        message(STATUS "QtCore.toml not found at ${TOML_FILE}, defaulting SIP ABI to 12")
     endif()
-  endforeach()
 
-  find_package(Qt5 REQUIRED COMPONENTS ${qt5_components})
-
-  message(STATUS "Discovered Qt5 Components: ${qt5_components}")
-else()
-    message(FATAL_ERROR "Unable to find Qt5")
-endif()
-
+    set(__QT_SIP_ABI_VERSION "${DETECTED_ABI}" PARENT_SCOPE)
+endfunction()
 
 # Check if modern sipbuild is available via python module
 execute_process(
@@ -89,10 +79,14 @@ else()
   set(sip_helper_NOTFOUND TRUE)
 endif()
 
-__find_qt_sip_files(${QT_MAJOR_VERSION})
+# Find Qt's installed SIP files
+__find_qt_sip_files(${python_qt_binding_QT_MAJOR_VERSION})
 if(NOT __PYQT_BINDINGS_FOUND)
-    message(FATAL_ERROR "PyQt${QT_MAJOR_VERSION} SIP bindings are required but were not found.")
+    message(FATAL_ERROR "PyQt${python_qt_binding_QT_MAJOR_VERSION} SIP bindings are required but were not found.")
 endif()
+
+# Extract the sip-abi-version from PyQt
+__find_qt_sip_abi("${__PYQT_BINDINGS_DIR}")
 
 #
 # Run the SIP generator and compile the generated code into a library.
@@ -140,16 +134,6 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     # Extract the filename from the SIP_FILE path
     get_filename_component(SIP_FILE_NAME ${SIP_FILE} NAME)
 
-    # Extract the sip-abi-version from PyQt5's QtCore.toml
-    set(QT_SIP_ABI_VERSION "12")
-    set(TOML_FILE "${__PYQT_BINDINGS_DIR}/QtCore/QtCore.toml")
-    if(EXISTS "${TOML_FILE}")
-        file(READ "${TOML_FILE}" TOML_CONTENT_STR)
-        if(TOML_CONTENT_STR MATCHES "sip-abi-version[ \t]*=[ \t]*\"([^\"]+)\"")
-            set(QT_SIP_ABI_VERSION ${CMAKE_MATCH_1})
-        endif()
-    endif()
-
     # Generate a pyproject.toml to be given to sip-build
     file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
     set(TOML_CONTENT 
@@ -164,7 +148,7 @@ version = \"1.0.0\"
 [tool.sip.project]
 sip-files-dir = \"${sip_SOURCE_DIR}\"
 sip-include-dirs = [\"${__PYQT_BINDINGS_DIR}\"]
-abi-version = \"${QT_SIP_ABI_VERSION}\"
+abi-version = \"${__QT_SIP_ABI_VERSION}\"
 
 [tool.sip.bindings.${PROJECT_NAME}]
 sip-file = \"${SIP_FILE_NAME}\"
@@ -178,7 +162,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     add_custom_command(
         OUTPUT ${GENERATED_CPP}
         COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1 --build-dir build
-        DEPENDS ${SIP_FILE} ${sip_DEPENDS}
+        DEPENDS ${SIP_FILE} ${sip_DEPENDS} ${SIP_BUILD_DIR}/pyproject.toml
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
         COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
     )
@@ -188,7 +172,7 @@ sip-file = \"${SIP_FILE_NAME}\"
 
     # Link project dependencies against this target
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
-    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} ${qt_targets})
+    target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} ${sip_DEPENDENCIES})
     target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
 
     if(${PROJECT_NAME}_LDFLAGS_OTHER)
