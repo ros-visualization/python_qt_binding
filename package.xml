@@ -32,7 +32,6 @@
   <build_depend>python3-qt5-bindings</build_depend>
 
   <exec_depend>python3-qt5-bindings</exec_depend>
-  <!-- TODO build/exec depend on python3-sipbuild; needs new rosdep key -->
 
   <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
