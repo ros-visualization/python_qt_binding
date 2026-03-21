@@ -136,7 +136,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     # Generate a pyproject.toml to be given to sip-build
     file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
-    set(TOML_CONTENT 
+    set(TOML_CONTENT
 "[build-system]
 requires = [\"sip >=6, <7\"]
 build-backend = \"sipbuild.api\"
@@ -168,7 +168,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     )
 
     # Build the cPython extension natively using CMake
-    Python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
+    python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
 
     # Link project dependencies against this target
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
