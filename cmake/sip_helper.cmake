@@ -151,8 +151,11 @@ sip-file = \"${SIP_FILE_NAME}\"
 ")
     file(WRITE ${SIP_BUILD_DIR}/pyproject.toml "${TOML_CONTENT}")
 
-    # Expect sip-build to produce a single output file because of the --concatenate 1 agrument below
-    set(GENERATED_CPP ${SIP_BUILD_DIR}/build/lib${PROJECT_NAME}/siplib${PROJECT_NAME}part0.cpp)
+    # Find all generated C/C++ files
+    file(GLOB_RECURSE GENERATED_CPP
+        "${SIP_BUILD_DIR}/build/*.cpp"
+        "${SIP_BUILD_DIR}/build/*.c"
+    )
 
     # Generate code for a cPython extension using sip-build
     add_custom_command(
