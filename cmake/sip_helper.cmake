@@ -141,7 +141,11 @@ build-backend = \"sipbuild.api\"
 name = \"${PROJECT_NAME}\"
 version = \"1.0.0\"
 
+[tool.sip]
+project-factory = \"pyqtbuild:PyQtProject\"
+
 [tool.sip.project]
+build-dir = \"${SIP_BUILD_DIR}\"
 sip-files-dir = \"${sip_SOURCE_DIR}\"
 sip-include-dirs = [\"${__PYQT_BINDINGS_DIR}\"]
 abi-version = \"${__QT_SIP_ABI_VERSION}\"
@@ -152,15 +156,14 @@ sip-file = \"${SIP_FILE_NAME}\"
     file(WRITE ${SIP_BUILD_DIR}/pyproject.toml "${TOML_CONTENT}")
 
     # Find all generated C/C++ files
-    file(GLOB_RECURSE GENERATED_CPP
-        "${SIP_BUILD_DIR}/build/*.cpp"
-        "${SIP_BUILD_DIR}/build/*.c"
+    set(GENERATED_CPP
+        "${SIP_BUILD_DIR}/lib${PROJECT_NAME}/siplib${PROJECT_NAME}part0.cpp"
     )
 
     # Generate code for a cPython extension using sip-build
     add_custom_command(
         OUTPUT ${GENERATED_CPP}
-        COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1 --build-dir build
+        COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1
         DEPENDS ${SIP_FILE} ${sip_DEPENDS} ${SIP_BUILD_DIR}/pyproject.toml
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
         COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
@@ -170,7 +173,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
 
     # Link project dependencies against this target
-    target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS})
+    target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${SIP_BUILD_DIR})
     target_link_libraries(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES} ${sip_DEPENDENCIES})
     target_link_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARY_DIRS})
 
