@@ -9,10 +9,6 @@ cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0094 NEW)
 set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
-# Allow users to pick which QT version to use
-# TODO(sloretz) Bump to 6 as the preferred version when Rolling rolls to Lyrical's target platforms
-set(python_qt_binding_QT_MAJOR_VERSION "5" CACHE STRING "The major version of Qt to use (5 or 6)")
-
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
 
 # Find the directory containing the SIP bindings shipped by PyQt.
