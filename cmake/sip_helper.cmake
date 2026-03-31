@@ -84,6 +84,9 @@ endif()
 # Extract the sip-abi-version from PyQt
 __find_qt_sip_abi("${__PYQT_BINDINGS_DIR}")
 
+# Find qmake
+find_program(python_qt_binding_QMAKE_EXECUTABLE NAMES qmake${python_qt_binding_QT_MAJOR_VERSION} qmake REQUIRED)
+
 #
 # Run the SIP generator and compile the generated code into a library.
 #
@@ -132,28 +135,13 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
 
     # Generate a pyproject.toml to be given to sip-build
     file(MAKE_DIRECTORY ${SIP_BUILD_DIR})
-    set(TOML_CONTENT
-"[build-system]
-requires = [\"sip >=6, <7\"]
-build-backend = \"sipbuild.api\"
 
-[project]
-name = \"${PROJECT_NAME}\"
-version = \"1.0.0\"
-
-[tool.sip]
-project-factory = \"pyqtbuild:PyQtProject\"
-
-[tool.sip.project]
-build-dir = \"${SIP_BUILD_DIR}\"
-sip-files-dir = \"${sip_SOURCE_DIR}\"
-sip-include-dirs = [\"${__PYQT_BINDINGS_DIR}\"]
-abi-version = \"${__QT_SIP_ABI_VERSION}\"
-
-[tool.sip.bindings.${PROJECT_NAME}]
-sip-file = \"${SIP_FILE_NAME}\"
-")
-    file(WRITE ${SIP_BUILD_DIR}/pyproject.toml "${TOML_CONTENT}")
+    set(PYPROJECT_TOML "${SIP_BUILD_DIR}/pyproject.toml")
+    configure_file(
+        "${__PYTHON_QT_BINDING_SIP_HELPER_DIR}/pyproject.toml.in"
+        "${PYPROJECT_TOML}"
+        @ONLY
+    )
 
     # Find all generated C/C++ files
     set(GENERATED_CPP
@@ -164,7 +152,7 @@ sip-file = \"${SIP_FILE_NAME}\"
     add_custom_command(
         OUTPUT ${GENERATED_CPP}
         COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1
-        DEPENDS ${SIP_FILE} ${sip_DEPENDS} ${SIP_BUILD_DIR}/pyproject.toml
+        DEPENDS ${SIP_FILE} ${sip_DEPENDS} ${PYPROJECT_TOML}
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
         COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
     )

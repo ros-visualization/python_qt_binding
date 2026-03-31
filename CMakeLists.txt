@@ -19,6 +19,7 @@ ament_python_install_package(${PROJECT_NAME}
   PACKAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
 
 install(FILES
+  cmake/pyproject.toml.in
   cmake/shiboken_helper.cmake
   cmake/sip_helper.cmake
   DESTINATION share/${PROJECT_NAME}/cmake)
