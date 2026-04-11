@@ -85,7 +85,12 @@ endif()
 __find_qt_sip_abi("${__PYQT_BINDINGS_DIR}")
 
 # Find qmake
-find_program(python_qt_binding_QMAKE_EXECUTABLE NAMES qmake${python_qt_binding_QT_MAJOR_VERSION} qmake-qt${python_qt_binding_QT_MAJOR_VERSION} qmake REQUIRED)
+find_program(python_qt_binding_QMAKE_EXECUTABLE
+    NAMES
+        qmake${python_qt_binding_QT_MAJOR_VERSION}
+        qmake-qt${python_qt_binding_QT_MAJOR_VERSION}
+        qmake
+    REQUIRED)
 
 #
 # Run the SIP generator and compile the generated code into a library.
