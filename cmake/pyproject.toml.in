@@ -20,3 +20,9 @@ abi-version = "@__QT_SIP_ABI_VERSION@"
 
 [tool.sip.bindings.@PROJECT_NAME@]
 sip-file = "@SIP_FILE_NAME@"
+
+[tool.sip.metadata]
+name = "@PROJECT_NAME@"
+version = "1.0.0"
+summary = "This stack provides Python bindings for Qt"
+home-page = "https://github.com/ros-visualization/python_qt_binding"

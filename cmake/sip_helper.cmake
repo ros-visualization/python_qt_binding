@@ -85,7 +85,7 @@ endif()
 __find_qt_sip_abi("${__PYQT_BINDINGS_DIR}")
 
 # Find qmake
-find_program(python_qt_binding_QMAKE_EXECUTABLE NAMES qmake${python_qt_binding_QT_MAJOR_VERSION} qmake REQUIRED)
+find_program(python_qt_binding_QMAKE_EXECUTABLE NAMES qmake${python_qt_binding_QT_MAJOR_VERSION} qmake-qt${python_qt_binding_QT_MAJOR_VERSION} qmake REQUIRED)
 
 #
 # Run the SIP generator and compile the generated code into a library.
@@ -152,7 +152,7 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
     add_custom_command(
         OUTPUT ${GENERATED_CPP}
         COMMAND ${Python3_EXECUTABLE} -m sipbuild.tools.build --no-compile --concatenate 1
-        DEPENDS ${SIP_FILE} ${sip_DEPENDS} ${PYPROJECT_TOML}
+        DEPENDS ${SIP_FILE} ${sip_DEPENDS}
         WORKING_DIRECTORY ${SIP_BUILD_DIR}
         COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
     )
