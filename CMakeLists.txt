@@ -4,12 +4,23 @@ project(python_qt_binding)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
+# Copy python package into binary directory
+file(COPY src/${PROJECT_NAME} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+include(python_qt_binding-extras.cmake)
+
+# Generate a version.py file inside the copied package directory
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/version.py
+  "QT_MAJOR_VERSION = ${python_qt_binding_QT_MAJOR_VERSION}\n"
+)
+
+# Install the package from the binary directory
 ament_python_install_package(${PROJECT_NAME}
-  PACKAGE_DIR src/${PROJECT_NAME})
+  PACKAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME})
 
 install(FILES
+  cmake/pyproject.toml.in
   cmake/shiboken_helper.cmake
-  cmake/sip_configure.py
   cmake/sip_helper.cmake
   DESTINATION share/${PROJECT_NAME}/cmake)
 
@@ -27,4 +38,6 @@ if(BUILD_TESTING)
     TIMEOUT 90)
 endif()
 
-ament_package()
+ament_package(
+  CONFIG_EXTRAS "python_qt_binding-extras.cmake"
+)

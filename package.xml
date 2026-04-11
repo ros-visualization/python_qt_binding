@@ -28,10 +28,8 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <build_depend>qtbase5-dev</build_depend>
-  <build_depend>python3-qt5-bindings</build_depend>
-
-  <exec_depend>python3-qt5-bindings</exec_depend>
+  <build_depend>qt6-base-dev</build_depend>
+  <build_depend>python3-qt-bindings</build_depend>
 
   <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
