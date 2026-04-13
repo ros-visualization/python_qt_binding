@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.5.0 (2026-04-13)
+------------------
+* Use sip-build and python3_add_library for Qt5/Qt6 (`#157 <https://github.com/ros-visualization/python_qt_binding/issues/157>`_)
+* Contributors: Shane Loretz, Alejandro Hernández Cordero
+
 2.4.1 (2025-10-08)
 ------------------
 * fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_)
