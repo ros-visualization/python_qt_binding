@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.5.2 (2026-04-21)
+------------------
 * Remove qt6-base-dev from package.xml (`#159 <https://github.com/ros-visualization/python_qt_binding/issues/159>`_)
 * Contributors: Shane Loretz
 
