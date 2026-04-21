@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.5.1 (2026-04-21)
+------------------
 * Depend on python3-dev (`#158 <https://github.com/ros-visualization/python_qt_binding/issues/158>`_)
 * Contributors: Shane Loretz
 
