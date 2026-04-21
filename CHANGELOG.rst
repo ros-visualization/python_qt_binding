@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Depend on python3-dev (`#158 <https://github.com/ros-visualization/python_qt_binding/issues/158>`_)
+* Contributors: Shane Loretz
+
 2.5.0 (2026-04-13)
 ------------------
 * Use sip-build and python3_add_library for Qt5/Qt6 (`#157 <https://github.com/ros-visualization/python_qt_binding/issues/157>`_)
