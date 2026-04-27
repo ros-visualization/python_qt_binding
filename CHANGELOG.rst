@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Re-add exec depend on python3 qt bindings rosdep key (`#160 <https://github.com/ros-visualization/python_qt_binding/issues/160>`_)
+* Contributors: Shane Loretz
+
 2.5.2 (2026-04-21)
 ------------------
 * Remove qt6-base-dev from package.xml (`#159 <https://github.com/ros-visualization/python_qt_binding/issues/159>`_)
