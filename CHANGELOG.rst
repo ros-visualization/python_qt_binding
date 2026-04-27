@@ -2,8 +2,8 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+2.5.3 (2026-04-27)
+------------------
 * Re-add exec depend on python3 qt bindings rosdep key (`#160 <https://github.com/ros-visualization/python_qt_binding/issues/160>`_)
 * Contributors: Shane Loretz
 
