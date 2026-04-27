@@ -31,6 +31,8 @@
   <build_depend>python3-qt-bindings</build_depend>
   <build_export_depend>python3-dev</build_export_depend>
 
+  <exec_depend>python3-qt-bindings</exec_depend>
+
   <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
