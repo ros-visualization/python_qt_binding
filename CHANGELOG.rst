@@ -2,6 +2,9 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 2.5.4 (2026-04-28)
 ------------------
 * Pick Qt version at build time, not install time (`#161 <https://github.com/ros-visualization/python_qt_binding/issues/161>`_)
