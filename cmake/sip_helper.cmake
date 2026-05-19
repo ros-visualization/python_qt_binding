@@ -21,13 +21,24 @@ find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Developm
 function(__find_qt_sip_files python_qt_binding_QT_MAJOR_VERSION)
     set(MODULE_NAME "PyQt${python_qt_binding_QT_MAJOR_VERSION}")
 
-    execute_process(
+    if (python_qt_binding_QT_MAJOR_VERSION EQUAL 5)
+      execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}.bindings as pb; print(pb.__path__[0])"
+        OUTPUT_VARIABLE BINDINGS_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+        RESULT_VARIABLE _res
+      )
+    else()
+      execute_process(
         COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME} as pb; print(pb.__path__[0] + \"/bindings\")"
         OUTPUT_VARIABLE BINDINGS_DIR
         OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET
         RESULT_VARIABLE _res
-    )
+      )
+    endif()
+
 
     if(_res EQUAL 0 AND IS_DIRECTORY "${BINDINGS_DIR}")
         set(__PYQT_BINDINGS_DIR "${BINDINGS_DIR}" PARENT_SCOPE)
