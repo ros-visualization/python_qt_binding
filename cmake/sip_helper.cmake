@@ -29,7 +29,7 @@ function(__find_qt_sip_files python_qt_binding_QT_MAJOR_VERSION)
         ERROR_QUIET
         RESULT_VARIABLE _res
       )
-    else()
+    elseif (python_qt_binding_QT_MAJOR_VERSION EQUAL 6)
       execute_process(
         COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME} as pb; print(pb.__path__[0] + \"/bindings\")"
         OUTPUT_VARIABLE BINDINGS_DIR
