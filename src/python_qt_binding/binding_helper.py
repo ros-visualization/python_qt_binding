@@ -30,12 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-try:
-    import __builtin__ as builtins
-except ImportError:
-    # since the 'future' package provides a 'builtins' module in Python 2
-    # this must not be checked second
-    import builtins
+import builtins
 import os
 import platform
 import sys
