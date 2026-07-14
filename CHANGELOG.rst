@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.5.5 (2026-07-14)
+------------------
+* Removed Python2 references (`#163 <https://github.com/ros-visualization/python_qt_binding/issues/163>`_) (`#164 <https://github.com/ros-visualization/python_qt_binding/issues/164>`_)
+* Contributors: mergify[bot]
+
 2.5.4 (2026-04-28)
 ------------------
 * Pick Qt version at build time, not install time (`#161 <https://github.com/ros-visualization/python_qt_binding/issues/161>`_)
