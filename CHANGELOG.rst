@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.6.1 (2026-07-14)
+------------------
+* Removed Python2 references (`#163 <https://github.com/ros-visualization/python_qt_binding/issues/163>`_)
+* Contributors: Alejandro Hernández Cordero
+
 2.6.0 (2026-05-06)
 ------------------
 
