@@ -36,8 +36,6 @@ import platform
 import sys
 import traceback
 
-from .version import QT_MAJOR_VERSION
-
 
 QT_BINDING = None
 QT_BINDING_MODULES = {}
@@ -75,7 +73,7 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtMultimedia',
         'QtMultimediaWidgets',
         'QtNetwork',
-        'QNetworkAuth',
+        'QtNetworkAuth',
         'QtNfc',
         'QtOpenGL',
         'QtPositioning',
@@ -83,22 +81,17 @@ def _select_qt_binding(binding_name=None, binding_order=None):
         'QtQml',
         'QtQuick',
         'QtQuickWidgets',
-        'QtScript',
-        'QtScriptTools',
         'QtSensors',
         'QtSerialPort',
         'QtSql',
         'QtSvg',
         'QtTest',
         'QtWebChannel',
-        'QtWebEngine',  # Qt 5.6 and higher
+        'QtWebEngine',
         'QtWebEngineCore',
         'QtWebEngineWidgets',
-        'QtWebKitWidgets',  # Qt 5.0 - 5.5
         'QtWebSockets',
-        'QtX11Extras',
         'QtXml',
-        'QtXmlPatterns',
     ]
 
     # try to load preferred bindings
@@ -152,29 +145,22 @@ def _load_pyqt(required_modules, optional_modules):
 
     # register required and optional PyQt modules
     for module_name in required_modules:
-        _named_import(f'PyQt{QT_MAJOR_VERSION}.{module_name}')
+        _named_import(f'PyQt6.{module_name}')
     for module_name in optional_modules:
-        _named_optional_import(f'PyQt{QT_MAJOR_VERSION}.{module_name}')
+        _named_optional_import(f'PyQt6.{module_name}')
 
     # set some names for compatibility with PySide
     sys.modules['QtCore'].Signal = sys.modules['QtCore'].pyqtSignal
     sys.modules['QtCore'].Slot = sys.modules['QtCore'].pyqtSlot
     sys.modules['QtCore'].Property = sys.modules['QtCore'].pyqtProperty
 
-    # try to register Qwt module
-    try:
-        Qwt = builtins.__import__(f'PyQt{QT_MAJOR_VERSION}.Qwt{QT_MAJOR_VERSION}', fromlist=['*'])
-        _register_binding_module('Qwt', Qwt)
-    except ImportError:
-        pass
-
     global _loadUi
 
     def _loadUi(uifile, baseinstance=None, custom_widgets_=None):
-        uic = builtins.__import__(f'PyQt{QT_MAJOR_VERSION}.uic', fromlist=['*'])
+        uic = builtins.__import__('PyQt6.uic', fromlist=['*'])
         return uic.loadUi(uifile, baseinstance=baseinstance)
 
-    QtCore = builtins.__import__(f'PyQt{QT_MAJOR_VERSION}.QtCore', fromlist=['*'])
+    QtCore = builtins.__import__('PyQt6.QtCore', fromlist=['*'])
     return QtCore.PYQT_VERSION_STR
 
 
@@ -182,13 +168,7 @@ def _load_pyside(required_modules, optional_modules):
     # set environment variable QT_API for matplotlib
     os.environ['QT_API'] = 'pyside'
 
-    # Determine the PySide module based on the Qt version
-    if str(QT_MAJOR_VERSION) == '6':
-        pyside_module = 'PySide6'
-    elif str(QT_MAJOR_VERSION) == '5':
-        pyside_module = 'PySide2'
-    else:
-        raise RuntimeError('Only Qt5 and Qt6 are supported')
+    pyside_module = 'PySide6'
 
     # register required and optional PySide modules
     for module_name in required_modules:
@@ -200,13 +180,6 @@ def _load_pyside(required_modules, optional_modules):
     sys.modules['QtCore'].pyqtSignal = sys.modules['QtCore'].Signal
     sys.modules['QtCore'].pyqtSlot = sys.modules['QtCore'].Slot
     sys.modules['QtCore'].pyqtProperty = sys.modules['QtCore'].Property
-
-    # try to register PySideQwt module
-    try:
-        PySideQwt = builtins.__import__(f'{pyside_module}Qwt', fromlist=['*'])
-        _register_binding_module('Qwt', PySideQwt)
-    except ImportError:
-        pass
 
     global _loadUi
 

@@ -33,7 +33,7 @@
 """
 Abstraction for different Python Qt bindings.
 
-Supported Python Qt 5 bindings are PyQt and PySide.
+Supported Python Qt 6 bindings are PyQt6 and PySide6.
 The Qt modules can be imported like this:
 
 from python_qt_binding.QtCore import QObject

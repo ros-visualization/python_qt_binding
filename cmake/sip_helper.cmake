@@ -11,15 +11,13 @@ set(Python3_FIND_UNVERSIONED_NAMES FIRST)
 
 find_package(Python3 ${Python3_VERSION} REQUIRED COMPONENTS Interpreter Development)
 
-# Find the directory containing the SIP bindings shipped by PyQt.
-#
-# :param python_qt_binding_QT_MAJOR_VERSION: The major version of Qt (e.g., 5 or 6).
+# Find the directory containing the SIP bindings shipped by PyQt6.
 #
 # :out __PYQT_BINDINGS_DIR: Path to the directory containing QT*.sip files.
 # :out __PYQT_BINDINGS_FOUND: Boolean indicating if the bindings were located.
 #
-function(__find_qt_sip_files python_qt_binding_QT_MAJOR_VERSION)
-    set(MODULE_NAME "PyQt${python_qt_binding_QT_MAJOR_VERSION}")
+function(__find_qt_sip_files)
+    set(MODULE_NAME "PyQt6")
 
     execute_process(
         COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}.bindings as pb; print(pb.__path__[0])"
@@ -76,9 +74,9 @@ else()
 endif()
 
 # Find Qt's installed SIP files
-__find_qt_sip_files(${python_qt_binding_QT_MAJOR_VERSION})
+__find_qt_sip_files()
 if(NOT __PYQT_BINDINGS_FOUND)
-    message(FATAL_ERROR "PyQt${python_qt_binding_QT_MAJOR_VERSION} SIP bindings are required but were not found.")
+    message(FATAL_ERROR "PyQt6 SIP bindings are required but were not found.")
 endif()
 
 # Extract the sip-abi-version from PyQt
@@ -87,8 +85,8 @@ __find_qt_sip_abi("${__PYQT_BINDINGS_DIR}")
 # Find qmake
 find_program(python_qt_binding_QMAKE_EXECUTABLE
     NAMES
-        qmake${python_qt_binding_QT_MAJOR_VERSION}
-        qmake-qt${python_qt_binding_QT_MAJOR_VERSION}
+        qmake6
+        qmake-qt6
         qmake
     REQUIRED)
 
@@ -162,8 +160,17 @@ function(build_sip_binding PROJECT_NAME SIP_FILE)
         COMMENT "Generating C++ code for ${PROJECT_NAME} Python bindings using sip-build..."
     )
 
+    # Drive the generator from a target of its own.  Generating the code only
+    # needs the sip files and the headers, not the libraries the extension is
+    # later linked against.  Keeping it out of lib${PROJECT_NAME} means it is
+    # not ordered after those libraries have been built and can run
+    # concurrently with them.
+    add_custom_target(${PROJECT_NAME}_codegen DEPENDS ${GENERATED_CPP})
+    set_source_files_properties(${GENERATED_CPP} PROPERTIES GENERATED TRUE)
+
     # Build the cPython extension natively using CMake
     python3_add_library(lib${PROJECT_NAME} MODULE ${GENERATED_CPP})
+    add_dependencies(lib${PROJECT_NAME} ${PROJECT_NAME}_codegen)
 
     # Link project dependencies against this target
     target_include_directories(lib${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${SIP_BUILD_DIR})
