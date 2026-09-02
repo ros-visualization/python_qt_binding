@@ -3,7 +3,7 @@
   <version>2.6.1</version>
   <description>
     This stack provides Python bindings for Qt.
-    There are two providers: pyside and pyqt.  PySide2 is available under
+    There are two providers: pyside and pyqt.  PySide6 is available under
     the GPL, LGPL and a commercial license.  PyQt is released under the GPL.
 
     Both the bindings and tools to build bindings are included from each
@@ -28,11 +28,18 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <!-- TODO: python3-qt-bindings still resolves to the Qt5 stack (pyqt5-dev,
+       libpyside2-dev, qtbase5-dev), but it is the only key that also provides
+       the SIP toolchain this package builds with (python3-sipbuild,
+       python3-pyqtbuild, pyqt6-dev).  Swap it once rosdep gains keys for
+       those; see the Qt6-only migration notes. -->
   <build_depend>python3-qt-bindings</build_depend>
+  <build_depend>qt6-base-dev</build_depend>
+  <build_depend>qt6-qmake</build_depend>
   <build_export_depend>python3-qt-bindings</build_export_depend>
   <build_export_depend>python3-dev</build_export_depend>
 
-  <exec_depend>python3-qt-bindings</exec_depend>
+  <exec_depend>python3-pyqt6</exec_depend>
 
   <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>

@@ -21,37 +21,27 @@ if(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED)
 endif()
 set(__PYTHON_QT_BINDING_SHIBOKEN_HELPER_INCLUDED TRUE)
 
-# In CMake 3.27 and later, FindPythonInterp and FindPythonLibs are deprecated.
-# However, Shiboken2 as packaged in Ubuntu 24.04 still use them, so set CMP0148 to
-# "OLD" to silence this warning.
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.27.0")
-  cmake_policy(SET CMP0148 OLD)
-endif()
-find_package(Shiboken2 QUIET)
-if(Shiboken2_FOUND)
-  message(STATUS "Found Shiboken2 version ${Shiboken2_VERSION}")
-  if(NOT ${Shiboken2_VERSION} VERSION_LESS "5.13")
-    get_property(SHIBOKEN_INCLUDE_DIR TARGET Shiboken2::libshiboken PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-    get_property(SHIBOKEN_LIBRARY TARGET Shiboken2::libshiboken PROPERTY LOCATION)
-    set(SHIBOKEN_BINARY Shiboken2::shiboken2)
-  endif()
+find_package(Shiboken6 QUIET)
+if(Shiboken6_FOUND)
+  message(STATUS "Found Shiboken6 version ${Shiboken6_VERSION}")
+  get_property(SHIBOKEN_INCLUDE_DIR TARGET Shiboken6::libshiboken PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+  get_property(SHIBOKEN_LIBRARY TARGET Shiboken6::libshiboken PROPERTY LOCATION)
+  set(SHIBOKEN_BINARY Shiboken6::shiboken6)
   message(STATUS "Using SHIBOKEN_INCLUDE_DIR: ${SHIBOKEN_INCLUDE_DIR}")
   message(STATUS "Using SHIBOKEN_LIBRARY: ${SHIBOKEN_LIBRARY}")
   message(STATUS "Using SHIBOKEN_BINARY: ${SHIBOKEN_BINARY}")
 endif()
 
-find_package(PySide2 QUIET)
-if(PySide2_FOUND)
-  message(STATUS "Found PySide2 version ${PySide2_VERSION}")
-  if(NOT ${PySide2_VERSION} VERSION_LESS "5.13")
-    get_property(PYSIDE_INCLUDE_DIR TARGET PySide2::pyside2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-    get_property(PYSIDE_LIBRARY TARGET PySide2::pyside2 PROPERTY LOCATION)
-  endif()
+find_package(PySide6 QUIET)
+if(PySide6_FOUND)
+  message(STATUS "Found PySide6 version ${PySide6_VERSION}")
+  get_property(PYSIDE_INCLUDE_DIR TARGET PySide6::pyside6 PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+  get_property(PYSIDE_LIBRARY TARGET PySide6::pyside6 PROPERTY LOCATION)
   message(STATUS "Using PYSIDE_INCLUDE_DIR: ${PYSIDE_INCLUDE_DIR}")
   message(STATUS "Using PYSIDE_LIBRARY: ${PYSIDE_LIBRARY}")
 endif()
 
-if(Shiboken2_FOUND AND PySide2_FOUND)
+if(Shiboken6_FOUND AND PySide6_FOUND)
   message(STATUS "Shiboken binding generator available.")
   set(shiboken_helper_FOUND TRUE)
 else()
@@ -64,7 +54,9 @@ macro(_shiboken_generator_command VAR GLOBAL TYPESYSTEM INCLUDE_PATH BUILD_DIR)
   # Add includes from current directory, Qt, PySide and compiler specific dirs
   get_directory_property(SHIBOKEN_HELPER_INCLUDE_DIRS INCLUDE_DIRECTORIES)
   list(APPEND SHIBOKEN_HELPER_INCLUDE_DIRS
-    ${QT_INCLUDE_DIR}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Gui_INCLUDE_DIRS}
+    ${Qt6Widgets_INCLUDE_DIRS}
     ${PYSIDE_INCLUDE_DIR}
     ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
   # See ticket https://code.ros.org/trac/ros-pkg/ticket/5219
@@ -157,8 +149,9 @@ function(shiboken_target_link_libraries PROJECT_NAME QT_COMPONENTS)
   )
 
   foreach(component ${QT_COMPONENTS})
-    string(TOUPPER ${component} component)
-    set(shiboken_LINK_LIBRARIES ${shiboken_LINK_LIBRARIES} ${QT_${component}_LIBRARY})
+    # QT_COMPONENTS are given as QtCore/QtGui/QtWidgets; Qt6 targets drop the prefix.
+    string(REGEX REPLACE "^Qt" "" component "${component}")
+    set(shiboken_LINK_LIBRARIES ${shiboken_LINK_LIBRARIES} Qt6::${component})
   endforeach()
 
   target_link_libraries(${PROJECT_NAME} ${shiboken_LINK_LIBRARIES})
