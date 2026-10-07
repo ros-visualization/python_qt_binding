@@ -2,6 +2,44 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.6.2 (2026-09-04)
+------------------
+* Removed Qt5 support (`#165 <https://github.com/ros-visualization/python_qt_binding/issues/165>`_)
+* Contributors: Alejandro Hernández Cordero
+
+2.6.1 (2026-07-14)
+------------------
+* Removed Python2 references (`#163 <https://github.com/ros-visualization/python_qt_binding/issues/163>`_)
+* Contributors: Alejandro Hernández Cordero
+
+2.6.0 (2026-05-06)
+------------------
+
+2.5.4 (2026-04-28)
+------------------
+* Pick Qt version at build time, not install time (`#161 <https://github.com/ros-visualization/python_qt_binding/issues/161>`_)
+* Contributors: Shane Loretz
+
+2.5.3 (2026-04-27)
+------------------
+* Re-add exec depend on python3 qt bindings rosdep key (`#160 <https://github.com/ros-visualization/python_qt_binding/issues/160>`_)
+* Contributors: Shane Loretz
+
+2.5.2 (2026-04-21)
+------------------
+* Remove qt6-base-dev from package.xml (`#159 <https://github.com/ros-visualization/python_qt_binding/issues/159>`_)
+* Contributors: Shane Loretz
+
+2.5.1 (2026-04-21)
+------------------
+* Depend on python3-dev (`#158 <https://github.com/ros-visualization/python_qt_binding/issues/158>`_)
+* Contributors: Shane Loretz
+
+2.5.0 (2026-04-13)
+------------------
+* Use sip-build and python3_add_library for Qt5/Qt6 (`#157 <https://github.com/ros-visualization/python_qt_binding/issues/157>`_)
+* Contributors: Shane Loretz, Alejandro Hernández Cordero
+
 2.4.1 (2025-10-08)
 ------------------
 * fix setuptools deprecation (`#151 <https://github.com/ros-visualization/python_qt_binding/issues/151>`_)

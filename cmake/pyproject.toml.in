@@ -1,0 +1,28 @@
+[build-system]
+requires = ["sip >=6, <7"]
+build-backend = "sipbuild.api"
+
+[project]
+name = "@PROJECT_NAME@"
+version = "1.0.0"
+
+[tool.sip]
+project-factory = "pyqtbuild:PyQtProject"
+
+[tool.sip.builder]
+qmake = "@python_qt_binding_QMAKE_EXECUTABLE@"
+
+[tool.sip.project]
+build-dir = "@SIP_BUILD_DIR@"
+sip-files-dir = "@sip_SOURCE_DIR@"
+sip-include-dirs = ["@__PYQT_BINDINGS_DIR@"]
+abi-version = "@__QT_SIP_ABI_VERSION@"
+
+[tool.sip.bindings.@PROJECT_NAME@]
+sip-file = "@SIP_FILE_NAME@"
+
+[tool.sip.metadata]
+name = "@PROJECT_NAME@"
+version = "1.0.0"
+summary = "This stack provides Python bindings for Qt"
+home-page = "https://github.com/ros-visualization/python_qt_binding"
