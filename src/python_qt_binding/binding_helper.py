@@ -32,7 +32,6 @@
 
 import builtins
 import os
-import platform
 import sys
 import traceback
 
