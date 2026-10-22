@@ -2,6 +2,11 @@
 Changelog for package python_qt_binding
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.6.3 (2026-10-22)
+------------------
+* Fix: Standardize Default Qt Binding Order to Prioritize PyQt (`#156 <https://github.com/ros-visualization/python_qt_binding/issues/156>`_)
+* Contributors: Dhruv Patel
+
 2.6.2 (2026-09-04)
 ------------------
 * Removed Qt5 support (`#165 <https://github.com/ros-visualization/python_qt_binding/issues/165>`_)
