@@ -27,6 +27,7 @@
   <author>Stephen Brawner</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
 
   <!-- TODO: python3-qt-bindings still resolves to the Qt5 stack (pyqt5-dev,
        libpyside2-dev, qtbase5-dev), but it is the only key that also provides
@@ -44,6 +45,7 @@
   <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+  <test_depend>python3-pytest</test_depend>
   
   <export>
     <build_type>ament_cmake</build_type>
